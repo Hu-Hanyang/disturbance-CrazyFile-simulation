@@ -1,203 +1,73 @@
-# Phoenix-Drone-Simulation 
+# Quadrotor Stabilization
+This repository contains the implementation of the robust quadrotor stabilization research work.
 
+## Installation
+The simulation environment is based on the [OptimizedDP library](https://github.com/SFU-MARS/optimized_dp) and the [phoenix-drone-simulation](https://github.com/SvenGronauer/phoenix-drone-simulation.git).
 
-An OpenAI [Gym environment](https://gym.openai.com/envs/#classic_control) based 
-on [PyBullet](https://github.com/bulletphysics/bullet3) for learning to control 
-the CrazyFlie quadrotor: 
+0. Install the [pytorch](https://pytorch.org/).
 
-- Can be used for Reinforcement Learning (check out the examples!) or Model 
-  Predictive Control
-- We used this repository for sim-to-real transfer experiments (see publication [1] below)
-- The implemented dynamics model is based on the [Bitcraze's Crazyflie 2.1 nano-quadrotor](https://www.bitcraze.io/documentation/hardware/crazyflie_2_1/crazyflie_2_1-datasheet.pdf)
+1. First, run the following command to create a virtual environment named quadrotor and install the required packages (this process would take some time):
+``conda env create -f environment.yml``
 
+2. Then install the odp package (from the Optimized_DP library ) by:
+```
+cd adversarial_generation
+pip install -e.
+cd ..
+```
 
-Circle Task | TakeOff
---- |  ---
-![Circle](./docs/readme/circle3.gif) |![TakeOff](./docs/readme/takeoff.gif)
-
-
-The following tasks are currently available to fly the little drone:
-- Hover
-- Circle 
-- Take-off *(implemented but not yet working properly: reward function must be tuned!)*
-- ~~Reach~~ (not yet implemented)
-
-
-## Overview of Environments
-
-|                                       | Task         | Controller    | Physics            | Observation Frequency | Domain Randomization |  *Aerodynamic effects*     |  Motor Dynamics   |
-|-------------------------------------: | :----------: | :-----------: | :----------------: | :-------------------: | :------------------: | :------------------------: | :---------------: | 
-| `DroneHoverSimpleEnv-v0`              | Hover        | PWM (100Hz)   | Simple             | 100 Hz                | 10%                  | None                        | Instant force     |
-| `DroneHoverBulletEnv-v0`              | Hover        | PWM (100Hz)   | PyBullet           | 100 Hz                | 10%                  | None                        | First-order       |
-| `DroneCircleSimpleEnv-v0`             | Circle       | PWM (100Hz)   | Simple             | 100 Hz                | 10%                  | None                        | Instant force     |
-| `DroneCircleBulletEnv-v0`             | Circle       | PWM (100Hz)   | PyBullet           | 100 Hz                | 10%                  | None                        | First-order     |
-| `DroneTakeOffSimpleEnv-v0`             | Take-off     | PWM (100Hz)   | Simple             | 100 Hz                | 10%                  | Ground-effect              | Instant force     |
-| `DroneTakeOffBulletEnv-v0`             | Take-off     | PWM (100Hz)   | PyBullet           | 100 Hz                | 10%                  | Ground-effect              | First-order     |
-
-# Installation and Requirements
-
-Here are the (few) steps to follow to get our repository ready to run. Clone the
-repository and install the phoenix-drone-simulation package via pip. Note that 
-everything after a `$` is entered on a terminal, while everything after `>>>` 
-is passed to a Python interpreter. Please, use the following three steps for 
-installation:
+3. One method to install the phoenix-drone-simulation package is to comment out the `mpy4pi` in the `install_requires` in the file `phoenix_drone_simulation/setup.py`, and use the following commands:
 ```
 $ git clone https://github.com/SvenGronauer/phoenix-drone-simulation
 $ cd phoenix-drone-simulation/
 $ pip install -e .
 ```
 
-This package follows OpenAI's [Gym Interface](https://github.com/openai/gym/blob/master/docs/creating-environments.md).
+The other method is to use `git submodule add` command. Unfortunately, I have not tried this before so I can not give any advice.
 
-> Note: if your default `python` is 2.7, in the following, replace `pip` with `pip3` and `python` with `python3`
-
-
-## Supported Systems
-
-We tested this package under *Ubuntu 20.04* and *Mac OS X 11.2* running Python 
-3.7 and 3.8. Other system might work as well but have not been tested yet.
-Note that PyBullet supports Windows as platform only experimentally!. 
-
-
-## Dependencies 
-
-Bullet-Safety-Gym heavily depends on two packages:
-
-+ [Gym](https://github.com/openai/gym)
-+ [PyBullet](https://github.com/bulletphysics/bullet3)
-
-
-## Getting Started
-
-
-After the successful installation of the repository, the Bullet-Safety-Gym 
-environments can be simply instantiated via `gym.make`. See: 
-
+4. Finally install other dependencies:
 ```
->>> import gym
->>> import phoenix_drone_simulation
->>> env = gym.make('DroneHoverBulletEnv-v0')
+pip install joblib
+pip install tensorboard
+conda install mpy4pi [reference](https://stackoverflow.com/questions/74427664/error-could-not-build-wheels-for-mpi4py-which-is-required-to-install-pyproject)
+conda install pandas
 ```
 
-The functional interface follows the API of the OpenAI Gym (Brockman et al., 
-2016) that consists of the three following important functions:
+Sorry for the complex installations, we will sort them up later.
 
-```
->>> observation = env.reset()
->>> random_action = env.action_space.sample()  # usually the action is determined by a policy
->>> next_observation, reward, done, info = env.step(random_action)
-```
+2023.8.29 Update:
+It seems there's something wrong with `pip install heterocl` or `pip install heterocl==0.1` and `pip install heterocl==0.3`.
 
-A minimal code for visualizing a uniformly random policy in a GUI, can be seen 
-in:
+# Working Logs
+2023.8.23
+The trying of the env_id `DroneHoverBulletEnvWithAdversary-v0` failed (both PPO and SAC, both PPO from sb3 and PPO here). 
+Now try the origional command `python -m phoenix_drone_simulation.train --alg ppo --env DroneHoverBulletEnv-v0` in the tmux environment `phonex_base`. Try to make it clear how the algorithm works and where to store the training results, how to display using the stored checkpoints. Then try our environment with its original local PPO.
 
-```
-import gym
-import time
-import phoenix_drone_simulation
+I train our env with no distb in tmux `phoenix_nodistb_oppo`, command: `python adversary_phoenix.py`, pay attention to the save log directory.
 
-env = gym.make('DroneHoverBulletEnv-v0')
-
-while True:
-    done = False
-    env.render()  # make GUI of PyBullet appear
-    x = env.reset()
-    while not done:
-        random_action = env.action_space.sample()
-        x, reward, done, info = env.step(random_action)
-        time.sleep(0.05)
-```
-Note that only calling the render function before the reset function triggers 
-visuals.
-
-# Training Policies
-
-To train an agent with the PPO algorithm call:
-```
-$ python -m phoenix_drone_simulation.train --alg ppo --env DroneHoverBulletEnv-v0
-```
-
-This works with basically every environment that is compatible with the OpenAI 
-Gym interface:
-```
-$ python -m phoenix_drone_simulation.train --alg ppo --env CartPole-v0
-```
-
-After an RL model has been trained and its checkpoint has been saved on your 
-disk, you can visualize the checkpoint:
-```
-$ python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT
-```
-where PATH_TO_CKPT is the path to the checkpoint, e.g.
-`/var/tmp/sven/DroneHoverSimpleEnv-v0/trpo/2021-11-16__16-08-09/seed_51544`
-
-# Examples
-
-### `generate_trajectories.py`
-
-See the `generate_trajectories.py` script which shows how to generate data 
-batches of size N. Use `generate_trajectories.py --play` to visualize the policy
-in PyBullet simulator. 
-
-### `train_drone_hover.py`
-
-Use Reinforcement Learning (RL) to learn the drone holding its position at (0, 0, 1). 
-This canonical example relies on the [RL-safety-Algorithms](https://github.com/SvenGronauer/RL-Safety-Algorithms) 
-repository which is a very strong framework for parallel RL algorithm training.
- 
-### `transfer_learning_drone_hover.py`
-
-Shows a transfer learning approach. We first train a PPO model in the source domain 
-`DroneHoverSimpleEnv-v0` and then re-train the model on a more complex target 
-domain `DroneHoverBulletEnv-v0`.
-Note that the `DroneHoverBulletEnv-v0` environment builds upon an accurate 
-motor modelling of the CrazyFlie drone and includes a motor dead time as well as
-a motor lag.
+Results:
+| environment | algorithm | command | train logdir | test (log and command) | performance |
+| ------------|-----------|------------|-----------| ----------- |----------- |
+|
 
 
-# Tools
+2023.8.24
+Add our custermized environment `DroneHoverBulletEnvWithAdversary-v0` to its original register codes (`phoenix-drone-simulation/phoenix_drone_simulation/__init__.py`) so we do not need to register this environment everytime we use it. The details of the code are in the `phoenix-drone-simulation/phoenix_drone_simulation/envs/hover.py`.
 
-- `convert.py` @ Sven Gronauer
+2023.8.27
+Try command `python -m phoenix_drone_simulation.train --alg ppo --env DroneHoverBulletEnvWithAdversary-v0 --log-dir /localhome/hha160/projects/quadrotor-stabilization/runs/original_ppo `. 
+This works but it takes so long. So just stop.
 
-A function used by Sven to extract the policy networks from
-his trained Actor Critic module and convert the model to a json file format.
-
-
-
-# Version History and Changes
-
-
-| Version | Changes | Date |
-|-------: | :----------------: |  :----------------: |
-| v1.0     | *Public Release*: Simulation parameters as proposed in Publication [1]  | 19.04.2022 | 
-| v0.2     | Add: accurate motor dynamic model and first real-world transfer insights | 21.09.2021 | 
-| v0.1     | Re-factor: of repository  (only Hover task yet implemented)  | 18.05.2021 | 
-| v0.0     | Fork: from [Gym-PyBullet-Drones Repo](https://github.com/utiasDSL/gym-pybullet-drones)  | 01.12.2020 | 
+2023.8.28
+Test command: python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT; # Interesting thing: this test env seems to be different of our codes, like `test_hhy.py` etc. Why?
+Train with our adversaryhover_phoenix.py: `python adversaryhover_phoenix.py`; 
+Compare it with `python -m phoenix_drone_simulation.train --alg ppo --env DroneHoverBulletEnvWithAdversary-v0 --log-dir /localhome/hha160/projects/quadrotor-stabilization/runs/original_ppo/our_distb` (not start yet today). # I think the later one will have a better performance because of the usage of the parallel tool `mpi`.
 
 
-# Publications
+## Transfer sb3
+Xubo's advice:
+1. Pay attention to the range of the action space while using sb3 algorithms!
+If the range is not the same, try to multiply a constant coefficient!
+2. Could also check https://github.com/gsilano/CrazyS
 
-1.  Using Simulation Optimization to Improve Zero-shot Policy Transfer of Quadrotors
-    
-    *Sven Gronauer, Matthias Kissel, Luca Sacchetto, Mathias Korte, Klaus Diepold*
-    
-    https://arxiv.org/abs/2201.01369
-
-
-
------
-Lastly, we want to thank:
-- Jacopo Panerati and his team for contributing the [Gym-PyBullet-Drones Repo](https://github.com/utiasDSL/gym-pybullet-drones) 
-  which was the staring point for this repository.
-
-- Artem Molchanov and collaborators for their hints about the CrazyFlie Firmware and the motor dynamics in their paper "Sim-to-(Multi)-Real: Transfer of Low-Level Robust Control Policies to Multiple Quadrotors"
-
-- Jakob Foerster for this Bachelor Thesis and his insights about the CrazyFlie's parameter values
-
-
-
------
-This repository has been develepod at the
-> [Chair of Data Processing](https://www.ce.cit.tum.de/en/ldv/homepage/)             
-> TUM School of Computation, Information and Technology                    
-> Technical University of Munich        
+## Framework Outline

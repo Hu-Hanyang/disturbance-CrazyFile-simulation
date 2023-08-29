@@ -198,3 +198,53 @@ class SimplePhysics(BasePhysics):
             # PyBullet assumes world frame: local frame -> world frame
             R.T @ rpy_dot
         )
+
+class PybulletPhysicsWithAdversary(PyBulletPhysics):
+    def set_parameters(self, *args, **kwargs):
+        super(PybulletPhysicsWithAdversary, self).set_parameters(*args, **kwargs)
+        # Update PyBullet Physics
+        self.bc.setPhysicsEngineParameter(
+            fixedTimeStep=self.time_step,
+            numSolverIterations=self.number_solver_iterations,
+            deterministicOverlappingPairs=1,
+            numSubSteps=1
+        )
+
+    def step_forward(self, action, dstb, *args, **kwargs):
+        """ PyBullet physics with adversary effect included implementation.
+
+        Parameters
+        ----------
+        action
+        """
+        # calculate current motor forces (incorporates delays with motor speeds)
+        motor_forces, z_torque = self.drone.apply_action(action)
+
+        # Set motor forces (thrust) and yaw torque in PyBullet simulation
+        self.drone.apply_motor_forces(motor_forces)
+        self.drone.apply_z_torque(z_torque)
+
+        # === XL: add adversary effect
+        self.drone.apply_x_torque(dstb[0])
+        self.drone.apply_y_torque(dstb[1])
+
+        # === add drag effect
+        quat = self.drone.quaternion
+        vel = self.drone.xyz_dot
+        base_rot = np.array(pb.getMatrixFromQuaternion(quat)).reshape(3, 3)
+
+        # Simple draft model applied to the base/center of mass
+        rpm = self.drone.x**2 * 25000
+        drag_factors = -1 * self.drone.DRAG_COEFF * np.sum(2*np.pi*rpm/60)
+        drag = np.dot(base_rot, drag_factors*np.array(vel))
+        # print(f'Drag: {drag}')
+        self.drone.apply_force(force=drag)
+
+        # === Ground Effect
+        apply_ground_eff, ge_forces = self.calculate_ground_effect(motor_forces)
+        if apply_ground_eff and self.use_ground_effect:
+            self.drone.apply_motor_forces(forces=ge_forces)
+
+        # step simulation once forward and collect information from PyBullet
+        self.bc.stepSimulation()
+        self.drone.update_information()

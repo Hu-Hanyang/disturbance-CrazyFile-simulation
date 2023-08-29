@@ -16,6 +16,24 @@ register(
     entry_point='phoenix_drone_simulation.envs.hover:DroneHoverBulletEnv',
     max_episode_steps=500,
 )
+#  Hanyang: register our envs here
+register(
+    id = 'DroneHoverBulletEnvWithAdversary-v0',
+    entry_point = 'phoenix_drone_simulation.envs.hover:DroneHoverBulletEnvWithAdversary',
+    max_episode_steps = 500,
+)
+
+register(
+    id = 'DroneHoverBulletEnvWithoutAdversary-v0',
+    entry_point = 'phoenix_drone_simulation.envs.hover:DroneHoverBulletEnvWithoutAdversary',
+    max_episode_steps = 500,
+)
+
+register(
+    id = 'DroneHoverBulletEnvWithRandomAdversary-v0',
+    entry_point = 'phoenix_drone_simulation.envs.hover:DroneHoverBulletEnvWithRandomAdversary',
+    max_episode_steps = 500,
+)
 
 # ==================
 #   Take-off Task

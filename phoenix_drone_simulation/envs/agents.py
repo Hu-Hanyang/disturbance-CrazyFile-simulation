@@ -493,3 +493,41 @@ class CrazyFlieSimpleAgent(CrazyFlieAgent):
             use_motor_dynamics=False,  # disable first-order motor dynamics
             **kwargs
         )
+
+class CrazyFlieBulletAgentWithAdversary(CrazyFlieAgent):
+    def __init__(
+            self,
+            bc: bullet_client.BulletClient,
+            control_mode: str,
+            time_step: float,
+            aggregate_phy_steps: int,
+            **kwargs
+    ):
+        super().__init__(
+            aggregate_phy_steps=aggregate_phy_steps,
+            bc=bc,
+            control_mode=control_mode,
+            file_name='cf21x_bullet.urdf',
+            time_step=time_step,
+            use_latency=True,
+            use_motor_dynamics=True,  # use first-order motor dynamics
+            **kwargs
+        )
+    
+    def apply_x_torque(self, torque):
+        """Apply torque responsible for roll."""
+        self.bc.applyExternalTorque(
+            self.body_unique_id,
+            4,  # center of mass link
+            torqueObj=[torque, 0, 0],
+            flags=pb.LINK_FRAME
+        )
+
+    def apply_y_torque(self, torque):
+        """Apply torque responsible for pitch."""
+        self.bc.applyExternalTorque(
+            self.body_unique_id,
+            4,  # center of mass link
+            torqueObj=[0, torque, 0],
+            flags=pb.LINK_FRAME
+        )

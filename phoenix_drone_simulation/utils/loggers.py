@@ -151,7 +151,7 @@ def colorize(string, color, bold=False, highlight=False):
 def setup_logger_kwargs(
         exp_name='vpg',
         seed=None,
-        base_dir='/var/tmp/',
+        base_dir='/var/tmp/',  # Hanyang: need to change the base_dir
         datestamp=True,
         level=1,
         use_tensor_board=True,
@@ -167,7 +167,7 @@ def setup_logger_kwargs(
         output_dir = data_dir/exp_name/exp_name_s[seed]
     If datestamp is true, amend to
     ::
-        output_dir = data_dir/YY-MM-DD_exp_name/YY-MM-DD_HH-MM-SS_exp_name_s[seed]
+        output_dir = data_dir/YYMMDD_exp_name/YYMMDD_HH-MM_exp_name_s[seed]
     You can force datestamp=True by setting ``FORCE_DATESTAMP=True`` in
     ``spinup/user_config.py``.
     Args:
@@ -181,7 +181,7 @@ def setup_logger_kwargs(
     """
     # Make base path
     if datestamp:
-        relpath = time.strftime("%Y-%m-%d__%H-%M-%S")
+        relpath = time.strftime("%Y%m%d_%H-%M")
     else:
         relpath = ''
 

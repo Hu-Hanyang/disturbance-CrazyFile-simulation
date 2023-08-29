@@ -48,6 +48,7 @@ def get_training_command_line_args(
     physical_cores = 2 ** int(np.log2(psutil.cpu_count(logical=False)))
     # Seed must be < 2**32 => use 2**16 to allow seed += 10000*proc_id() for MPI
     random_seed = int(time.time()) % 2**16
+    absolute_path = os.path.dirname(__file__)
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
@@ -91,9 +92,9 @@ def get_training_command_line_args(
         '--search', action='store_true',
         help='If given search over learning rates.')
 
-    user_name = getpass.getuser()
+    # user_name = getpass.getuser()
     parser.add_argument(
-        '--log-dir', type=str, default=os.path.join('/var/tmp/', user_name),
+        '--log-dir', type=str, default=os.path.join(absolute_path, 'train_results'),
         help='Define a custom directory for logging.')
 
     _args, _unparsed_args = parser.parse_known_args()
