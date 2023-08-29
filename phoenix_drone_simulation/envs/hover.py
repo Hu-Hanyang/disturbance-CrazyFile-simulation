@@ -8,7 +8,7 @@ from phoenix_drone_simulation.envs.physics import PybulletPhysicsWithAdversary
 from phoenix_drone_simulation.envs.base import DroneBaseEnv
 from phoenix_drone_simulation.envs.agents import CrazyFlieSimpleAgent, CrazyFlieBulletAgent, CrazyFlieBulletAgentWithAdversary
 from phoenix_drone_simulation.envs.utils import deg2rad, rad2deg, get_assets_path
-from adversarial_generation.FasTrack_data.distur_gener import distur_gener, quat2euler
+from phoenix_drone_simulation.adversarial_generation.FasTrack_data.distur_gener import distur_gener, quat2euler
 
 
 class DroneHoverBaseEnv(DroneBaseEnv):

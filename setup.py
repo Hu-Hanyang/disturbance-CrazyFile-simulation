@@ -22,13 +22,13 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     python_requires=">=3.6",
     include_package_data=True,
-    install_requires=[
-        'numpy',
-        'gym<=0.20.0',
-        'pybullet',
-        'torch',
-        'scipy>= 1.4',
-        'mpi4py',
-        'psutil',
-    ],
+    # install_requires=[
+    #     'numpy',
+    #     'gym<=0.20.0',
+    #     'pybullet',
+    #     'torch',
+    #     'scipy>= 1.4',
+    #     'mpi4py',
+    #     'psutil',
+    # ],
 )

@@ -206,7 +206,7 @@ def get_default_args(debug_level=0,
     args = parser.parse_args()
     args.log_dir = os.path.abspath(os.path.join(args.log_dir,
                                                 datetime.datetime.now().strftime(
-                                                    "%Y_%m_%d__%H_%M_%S")))
+                                                    "%Y_%m_%d_%H_%M")))
     return args
 
 

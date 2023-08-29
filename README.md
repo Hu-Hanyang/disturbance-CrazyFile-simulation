@@ -39,35 +39,21 @@ Sorry for the complex installations, we will sort them up later.
 It seems there's something wrong with `pip install heterocl` or `pip install heterocl==0.1` and `pip install heterocl==0.3`.
 
 # Working Logs
-2023.8.23
-The trying of the env_id `DroneHoverBulletEnvWithAdversary-v0` failed (both PPO and SAC, both PPO from sb3 and PPO here). 
-Now try the origional command `python -m phoenix_drone_simulation.train --alg ppo --env DroneHoverBulletEnv-v0` in the tmux environment `phonex_base`. Try to make it clear how the algorithm works and where to store the training results, how to display using the stored checkpoints. Then try our environment with its original local PPO.
-
-I train our env with no distb in tmux `phoenix_nodistb_oppo`, command: `python adversary_phoenix.py`, pay attention to the save log directory.
-
-Results:
-| environment | algorithm | command | train logdir | test (log and command) | performance |
-| ------------|-----------|------------|-----------| ----------- |----------- |
+## Basic commands
+### Training: 
+#### Method1 
+`python -m phoenix_drone_simulation.train --alg ppo --env DroneHoverBulletEnvWithAdversary-v0`
+Its default logdir is `/localhome/hha160/projects/disturbance-CrazyFile-simulation/train_results/`.
+Logs of method1:
+| command | environment | algorithm | train logdir | test (log and command) | performance | else | 
+| ------------|-----------|------------|-----------| ----------- |----------- |----------- |
 |
+#### Method2 `python adversaryhover_phoenix.py`
+Its default logdir is `train_results_phoenix`.
+Logs of method2:
+| command | environment | algorithm | train logdir | test (log and command) | performance | else | 
+| ------------|-----------|------------|-----------| ----------- |----------- |----------- |
+### Test: `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT`.
 
 
-2023.8.24
-Add our custermized environment `DroneHoverBulletEnvWithAdversary-v0` to its original register codes (`phoenix-drone-simulation/phoenix_drone_simulation/__init__.py`) so we do not need to register this environment everytime we use it. The details of the code are in the `phoenix-drone-simulation/phoenix_drone_simulation/envs/hover.py`.
 
-2023.8.27
-Try command `python -m phoenix_drone_simulation.train --alg ppo --env DroneHoverBulletEnvWithAdversary-v0 --log-dir /localhome/hha160/projects/quadrotor-stabilization/runs/original_ppo `. 
-This works but it takes so long. So just stop.
-
-2023.8.28
-Test command: python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT; # Interesting thing: this test env seems to be different of our codes, like `test_hhy.py` etc. Why?
-Train with our adversaryhover_phoenix.py: `python adversaryhover_phoenix.py`; 
-Compare it with `python -m phoenix_drone_simulation.train --alg ppo --env DroneHoverBulletEnvWithAdversary-v0 --log-dir /localhome/hha160/projects/quadrotor-stabilization/runs/original_ppo/our_distb` (not start yet today). # I think the later one will have a better performance because of the usage of the parallel tool `mpi`.
-
-
-## Transfer sb3
-Xubo's advice:
-1. Pay attention to the range of the action space while using sb3 algorithms!
-If the range is not the same, try to multiply a constant coefficient!
-2. Could also check https://github.com/gsilano/CrazyS
-
-## Framework Outline

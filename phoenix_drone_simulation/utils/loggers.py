@@ -181,7 +181,7 @@ def setup_logger_kwargs(
     """
     # Make base path
     if datestamp:
-        relpath = time.strftime("%Y%m%d_%H-%M")
+        relpath = time.strftime("%Y_%m_%d_%H_%M")
     else:
         relpath = ''
 

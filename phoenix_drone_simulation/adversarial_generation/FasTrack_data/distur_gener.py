@@ -151,10 +151,12 @@ def distur_gener(states, disturbance):
     
     umax=np.array([5.3*10**-3,  5.3*10**-3,  1.43*10**-4])
     # dmax = 0*umax
-    if disturbance < 2:
-        V = np.load(f'./adversarial_generation/FasTrack_data/fastrack_{disturbance}_15x15.npy')
-    else: 
-        V = np.load('./adversarial_generation/FasTrack_data/fastrack_15x15.npy')
+    assert disturbance <=2  # Hanyang: check the output content
+    V = np.load(f'phoenix_drone_simulation/adversarial_generation/FasTrack_data/fastrack_{disturbance}_15x15.npy')
+    # if disturbance < 2:
+    #     V = np.load(f'./adversarial_generation/FasTrack_data/fastrack_{disturbance}_15x15.npy')
+    # else: 
+    #     V = np.load('./adversarial_generation/FasTrack_data/fastrack_15x15.npy')
     dmax = disturbance * umax
     # if disturbance == 0: 
     #     V = np.load('fastrack_0_15x15.npy')
