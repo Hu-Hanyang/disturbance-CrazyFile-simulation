@@ -45,15 +45,17 @@ It seems there's something wrong with `pip install heterocl` or `pip install het
 `python -m phoenix_drone_simulation.train --alg ppo --env DroneHoverBulletEnvWithAdversary-v0`
 Its default logdir is `/localhome/hha160/projects/disturbance-CrazyFile-simulation/train_results/`.
 Logs of method1:
-| command | environment | algorithm | train logdir | test (log and command) | performance | else | 
-| ------------|-----------|------------|-----------| ----------- |----------- |----------- |
-|
+| time | seed | environment | algorithm | train logdir | test (log and command) | performance | distb level |  else | 
+| ------------|-----------|------------|-----------| ----------- |----------- |----------- |----------- |----------- |
+| | | DroneHoverBulletEnvWithAdversary-v0 | ppo |  | None | Unknown | 1.5 | Nothing. |
 #### Method2 `python adversaryhover_phoenix.py`
 Its default logdir is `train_results_phoenix`.
 Logs of method2:
-| command | environment | algorithm | train logdir | test (log and command) | performance | else | 
-| ------------|-----------|------------|-----------| ----------- |----------- |----------- |
+| time | seed | environment | algorithm | train logdir | test (log and command) | performance | distb level |else | 
+| ------------|-----------|------------|-----------| ----------- |----------- |----------- | ----------- |----------- |
+| 2023_08_31_11_44 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 | None | Unknown | 1.5 | Nothing. |
+| |  | DroneHoverBulletEnvWithAdversary-v0 | ppo |  | None | Unknown | 2.0 | Nothing. |
 ### Test: `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT`.
-
+Notice: the environment in test also needs to change while we want to see different disturbance level.
 
 

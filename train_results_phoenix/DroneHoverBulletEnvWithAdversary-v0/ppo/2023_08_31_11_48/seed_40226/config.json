@@ -28,7 +28,7 @@
     "logger_kwargs":	{
         "exp_name":	"DroneHoverBulletEnvWithAdversary-v0/ppo",
         "level":	1,
-        "log_dir":	"train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_29_15_04/seed_40226",
+        "log_dir":	"train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226",
         "use_tensor_board":	true,
         "verbose":	true
     },

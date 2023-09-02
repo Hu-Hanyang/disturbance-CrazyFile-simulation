@@ -56,7 +56,7 @@ def start_training(algo, env_id):
     env_id = env_id
 
     # Create a seed for the random number generator
-    random_seed = 40226 # int(time.time()) % 2 ** 16
+    random_seed = 40226  # int(time.time()) % 2 ** 16 
 
     # I usually save my results into the following directory:
     default_log_dir = f"train_results_phoenix"
