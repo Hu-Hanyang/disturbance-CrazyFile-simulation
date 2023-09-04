@@ -1,8 +1,9 @@
-r"""Play and render a trained policy.
+"""Play and render a trained policy.
 
 Author:     Sven Gronauer (sven.gronauer@tum.de)
 Added:      16.11.2021
 Updated:    16.04.2022 Purged old function snipptes
+Updated:    4.09.2023 Hanyang, add function 'play_without_control' and some notations
 """
 import gym
 import time
@@ -82,6 +83,31 @@ def random_play(env_id, use_graphics):
               f'\t RetMean:{np.mean(rets)}\t RetStd:{np.std(rets)}')
         print(f'Took: {time.time()-ts:0.2f}')
 
+def play_without_control(actor_critic, env, noise=False):
+    if not noise:
+        actor_critic.eval()  # Set in evaluation mode before playing
+    i = 0
+    # pb.setRealTimeSimulation(1)
+    while True:
+        done = False
+        env.render()
+        x = env.reset()
+        ret = 0.
+        costs = 0.
+        episode_length = 0
+        while not done:
+            env.render()
+            obs = torch.as_tensor(x, dtype=torch.float32)
+            action, *_ = actor_critic(obs)
+            action = np.zeros_like(action)
+            x, r, done, info = env.step(action)
+            costs += info.get('cost', 0.)
+            ret += r
+            episode_length += 1
+            time.sleep(1./120)
+        i += 1
+        print(
+            f'Episode {i}\t Return: {ret}\t Length: {episode_length}\t Costs:{costs}')
 
 if __name__ == '__main__':
     n_cpus = os.cpu_count()
@@ -98,6 +124,8 @@ if __name__ == '__main__':
                         help='Visualize agent with random actions.')
     parser.add_argument('--no-render', action='store_true',
                         help='Disable rendering.')
+    parser.add_argument('--nocontrol', action='store_true',
+                        help='whether to add control inputs')
     args = parser.parse_args()
     env_id = None
     use_graphics = False if args.no_render else True
@@ -107,9 +135,28 @@ if __name__ == '__main__':
         assert env_id or hasattr(args, 'env'), 'Provide --ckpt or --env flag.'
         env_id = args.env if args.env else env_id
         random_play(env_id, use_graphics)
+
+    elif args.nocontrol:
+        # play no policy, that is to say, no control in the environment
+        assert args.ckpt, 'Define a checkpoint for non-random play!'  # Hanyang: maybe not necessary?
+        ac, env = utils.load_actor_critic_and_env_from_disk(args.ckpt)
+        print("-"*200)
+        print(f"The environment is {args.env} and no control inputs.")
+        print("-"*200)
+
+        play_without_control(
+            actor_critic=ac,
+            env=env,
+            noise=args.noise
+        )
+
     else:
         assert args.ckpt, 'Define a checkpoint for non-random play!'
         ac, env = utils.load_actor_critic_and_env_from_disk(args.ckpt)
+        print("-"*200)
+        print(f"The environment is {args.env} and load the trained model form {args.ckpt}.")
+        print("-"*200)
+
 
         play_after_training(
             actor_critic=ac,

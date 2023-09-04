@@ -69,6 +69,7 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
 
         # Environment calls
         # Note: NEW: call gym.make with **kwargs (to allow customization)
+        self.env_id = env_id  # Hanyang: add this variable
         if isinstance(env_id, str):
             self.env = gym.make(env_id, **kwargs)
         else:
@@ -223,7 +224,10 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
 
     def algorithm_specific_logs(self):
         """ Use this method to collect log information. """
-        pass
+        # Hanyang: want to add the self.distblevel to logger
+        if self.env_id == 'DroneHoverBulletEnvWithAdversary-v0':
+            self.logger.log_tabular(key='DistbLevel', val=self.env.disturbance_level)
+        # pass
 
     def check_distributed_parameters(self) -> None:
         """Check if parameters are synchronized across all processes."""

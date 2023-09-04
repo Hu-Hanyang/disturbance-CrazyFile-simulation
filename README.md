@@ -54,10 +54,16 @@ Its default logdir is `train_results_phoenix`.
 Logs of method2:
 | time | seed | environment | algorithm | train logdir | test (log and command) | performance | distb level |else | 
 | ------------|-----------|------------|-----------| ----------- |----------- |----------- | ----------- |----------- |
-| 2023_08_31_11_44 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 | None | Unknown | 1.5 | Nothing. |
+| 2023_08_31_11_44 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 | None | Not bad | 1.5 | Nothing. |
 | 2023_09_02_13_22 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_02_13_22/seed_40226 | None | Unknown | 2.0 | Nothing. |
-|  | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/ | None | Unknown | 1.0 | Nothing. |
-### Test: `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT`.
+| 2023_09_03_12_11 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/ | None | Unknown | 1.0 | Nothing. |
+### Test:
 Notice: the environment in test also needs to change while we want to see different disturbance level.
-
-
+1. Test with HJ disturbance env:
+    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'`
+2. Test with random disturbance env:
+   `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithRandomAdversary-v0'`
+3. Test without disturbance env:
+   `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithoutAdversary-v0'`
+4. Test without control inputs in the HJ disturbance env:
+   `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'  --control False`
