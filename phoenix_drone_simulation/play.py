@@ -104,7 +104,7 @@ def play_without_control(actor_critic, env, noise=False):
             costs += info.get('cost', 0.)
             ret += r
             episode_length += 1
-            time.sleep(1./120)
+            time.sleep(1./120)  # 0.0083 second
         i += 1
         print(
             f'Episode {i}\t Return: {ret}\t Length: {episode_length}\t Costs:{costs}')
