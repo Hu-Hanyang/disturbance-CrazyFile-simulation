@@ -37,9 +37,10 @@ class UAV6D:
         self.uMin = uMin
         self.uMax = uMax
     
-        # Disturbance bounds
-        self.dMin = 2*uMin
-        self.dMax = 2*uMax
+        # Hanyang: Disturbance bounds, change the magnitude to calculate different distb level value functions
+        self.distb_level = 3.0
+        self.dMin = self.distb_level * uMin
+        self.dMax = self.distb_level * uMax
 
         # Dimension 
         self.dims = dims
@@ -289,7 +290,7 @@ class UAVSolution(object):
         self.dyn = UAV6D(uMode="min", dMode="max")  # reaching problem
         self.lookback_length = 2  # Look-back length and time step of computation
         self.t_step = 0.001
-
+        self.distb_level = self.dyn.distb_level
         self.result = None
 
     def FasTrackTarget(self, grid, ignore_dims, center):
@@ -305,6 +306,7 @@ class UAVSolution(object):
         return data
 
     def get_fastrack(self):
+        # Hanyang: add new variable distb_level to generate value function
         self.targ = self.FasTrackTarget(self.grid, [2], np.zeros(6)) 
         small_number = 1e-5
         tau = np.arange(start=0, stop=self.lookback_length + small_number, step=self.t_step)
@@ -312,7 +314,7 @@ class UAVSolution(object):
         slice = int((self.grid_num_1-1)/2)
         self.po = PlotOptions(do_plot=False, plot_type="3d_plot", plotDims=[0,1,2], slicesCut=[int((self.grid_num_1-1)/2),int((self.grid_num_1-1)/2),int((self.grid_num_1-1)/2)])
         self.result = HJSolver(self.dyn, self.grid, self.targ, tau, compMethods, self.po, saveAllTimeSteps=False)
-        np.save("./fastrack_{}x{}.npy".format(self.grid_num_2, self.grid_num_1), self.result)
+        np.save("./fastrack_{}_{}x{}.npy".format(self.distb_level, self.grid_num_2, self.grid_num_1), self.result)
         print("saving the result ..., done!")
 
         return self.result, self.grid, slice
@@ -604,7 +606,7 @@ def evaluation (iteration, threshold):
     for i in range(len(initial_nodu)):
         [opt_traj, opt_u, opt_d, t, v_log] = uavsol.getopt_traj(grid,V,initial_nodu[i])
         # plot optimal control
-        if maxDiff(v_log) >threshold:
+        if maxDiff(v_log) > threshold:
             print ("These initial values lead to an unstable system under disturbance")
             print (initial_nodu[i])
             plot_optimal(opt_traj,v_log,opt_u,opt_d,initial_nodu[i])
@@ -617,17 +619,20 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description ='Calculate Value Function using HJ')
     
-    parser.add_argument('--load_data', type=bool, default=True, help="load precollected data")
-    parser.add_argument('--evaluate', type=bool, default=False, help= "plot evaluation")
+    parser.add_argument('--load_data', action='store_true', help="whether to load precollected data")
+    parser.add_argument('--evaluate', action='store_true', help= "whether to plot evaluation")
     args = parser.parse_args()
     
     uavsol = UAVSolution()
-    if args.load_data is True: 
+    distb_level = uavsol.distb_level
+    if args.load_data: 
+        print("Loading the value function.")
         slicecut = 7  #for 15*15
-        V = np.load('/localhome/xza213/quadrotor-stabilization/adversarial_generation/FasTrack_data/fastrack_1.5_15x15.npy')
+        V = np.load(f'/localhome/hha160/projects/disturbance-CrazyFile-simulation/phoenix_drone_simulation/adversarial_generation/FasTrack_data/fastrack_{distb_level}_15x15.npy')
         grid = Grid(np.array([-math.pi/2.4, -math.pi/2.4, -math.pi/2.4, -math.pi, -math.pi, -math.pi]), np.array([math.pi/2.4, math.pi/2.4, math.pi/2.4, math.pi, math.pi, math.pi]), 6, np.array([15,15,15,15,15,15]), [0,1,2])
         
     else: 
+        print("Calculate new value functioning.")
         [V,grid,slicecut] = uavsol.get_fastrack()
 
     ## if you want to see the 2D value function plot with prelaoding please uncomment the code below
@@ -641,7 +646,7 @@ if __name__ == "__main__":
 
     plot_2d(grid, V, [1,2], slicecut) # we are plotting first two dimensions
     
-    if args.evaluate is True:
+    if args.evaluate:
     ## if you want to evaluate your calculated control/disturbance, please uncomment the following code
     # The code randomly sampled states from the pool, and check whether the control/disturbance gives a stable system
     # It will generate the plots for unstable systems in your broswer
