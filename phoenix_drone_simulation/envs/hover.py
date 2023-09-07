@@ -307,7 +307,7 @@ class DroneHoverBulletEnvWithAdversary(DroneHoverBaseEnv):
                                         high=np.array([1*10**-3,  1*10**-3,  1*10**-4]), 
                                         dtype=np.float32)
         # self.dstb_gen   = lambda x: self.dstb_space.sample() 
-        self.disturbance_level = 0  # 2.0  # 1.5 # Hanyang: tune this! Dmax = uMax * disturbance_level
+        self.disturbance_level = 2.5  # 2.0  # 1.5 # Hanyang: tune this! Dmax = uMax * disturbance_level
         # self.dstb_gen = lambda x: np.array([0,0,0])
 
 

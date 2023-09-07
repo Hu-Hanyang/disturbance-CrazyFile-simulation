@@ -58,7 +58,8 @@ Logs of method2:
 | 2023_09_02_13_22 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_02_13_22/seed_40226 | None | Unknown | 2.0 | Nothing. |
 | 2023_09_03_12_11 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/ | None | Unknown | 1.0 | Nothing. |
 | 2023_09_04_11_24 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_04_11_24/seed_40226 | None | Unknown | 0.5 | Nothing. |
-| 2023_09_ | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo |  | None | Unknown | 0.0 | Nothing. |
+| 2023_09_05_10_18 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_05_10_18/seed_40226 | None | Unknown | 0.0 | Nothing. |
+| 2023_09_05_21_49 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_05_21_49/seed_40226 | None | Bad | 2.5 | Nothing. |
 ### Test:
 Notice: the environment in test also needs to change while we want to see different disturbance level.
 1. Test with HJ disturbance env:

@@ -655,8 +655,3 @@ if __name__ == "__main__":
         iteration = 50 # how many samples you want to generate
         threshold = 5 # max diff of values
         evaluation (iteration, threshold) 
-    
-
-
-
-
