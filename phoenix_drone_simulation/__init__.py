@@ -35,6 +35,11 @@ register(
     max_episode_steps = 500,
 )
 
+register(
+    id='DroneHoverBulletEnvWithAdversaryRender-v0',
+    entry_point = 'phoenix_drone_simulation.env.hover:DroneHoverBulletEnvWithAdversaryRender',
+    max_episode_steps = 500,
+)
 # ==================
 #   Take-off Task
 # ==================

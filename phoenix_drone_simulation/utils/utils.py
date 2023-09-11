@@ -472,6 +472,7 @@ def load_actor_critic_and_env_from_disk(
     print(conf)
     env_id = conf.get('env_id')
     env = gym.make(env_id)
+    print(f"Current env is {env_id}.")
     alg = conf.get('alg', 'ppo')
 
     if alg == 'sac':

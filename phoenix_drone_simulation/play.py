@@ -44,6 +44,8 @@ def play_after_training(actor_critic, env, noise=False):
             ret += r
             episode_length += 1
             time.sleep(1./120)
+        # Hanyang: for video recording
+        env.close()
         i += 1
         print(
             f'Episode {i}\t Return: {ret}\t Length: {episode_length}\t Costs:{costs}')
@@ -154,6 +156,7 @@ if __name__ == '__main__':
         assert args.ckpt, 'Define a checkpoint for non-random play!'
         ac, env = utils.load_actor_critic_and_env_from_disk(args.ckpt)
         print("-"*200)
+        print(f"The mode is playing after training! \n")
         print(f"The environment is {args.env} and load the trained model form {args.ckpt}.")
         print("-"*200)
 
