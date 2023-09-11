@@ -6,6 +6,8 @@ import pybullet_data
 import gym
 from pybullet_utils import bullet_client
 import abc
+from PIL import Image
+from datetime import datetime
 
 # local imports:
 import phoenix_drone_simulation.envs.physics as phoenix_physics
@@ -368,8 +370,6 @@ class DroneBaseEnv(gym.Env, abc.ABC):
                 # Save the current PyBullet instance as save state
                 # => This avoids errors when enabling rendering after training
                 self.stored_state_id = self.bc.saveState()
-        if mode != "rgb_array":
-            return np.array([])
         else:
             raise NotImplementedError
 

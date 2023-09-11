@@ -307,7 +307,7 @@ class DroneHoverBulletEnvWithAdversary(DroneHoverBaseEnv):
                                         high=np.array([1*10**-3,  1*10**-3,  1*10**-4]), 
                                         dtype=np.float32)
         # self.dstb_gen   = lambda x: self.dstb_space.sample() 
-        self.disturbance_level = 2.5  # 2.0  # 1.5 # Hanyang: tune this! Dmax = uMax * disturbance_level
+        self.disturbance_level = 3.0  # 2.0  # 1.5 # Hanyang: tune this! Dmax = uMax * disturbance_level
         # self.dstb_gen = lambda x: np.array([0,0,0])
 
 
@@ -414,8 +414,9 @@ class DroneHoverBulletEnvWithAdversary(DroneHoverBaseEnv):
         # combine angles and angular rates together to form a [6,1] list
         states = np.concatenate((angles, angular_rates), axis=0)
         _, dstb = distur_gener(states, self.disturbance_level) 
-        # Hanyang: try to do not add distb 
+        # Hanyang: try to do not add distb or scale it with a constant
         # dstb = (0.0, 0.0, 0.0)
+        # dstb = 1.0 * distb
 
         for _ in range(self.aggregate_phy_steps):
             # Note:
@@ -441,6 +442,74 @@ class DroneHoverBulletEnvWithAdversary(DroneHoverBaseEnv):
     """
     def render(self, mode="human"):
         super(DroneHoverBulletEnvWithAdversary, self).render(mode)
+        if mode == 'human':
+        # close direct connection to physics server and
+        # create new instance of physics with GUI visuals
+            if not self.use_graphics:
+                self.bc.disconnect()
+                self.use_graphics = True
+                self.bc = self._setup_client_and_physics(graphics=True)
+                self._setup_simulation(
+                    physics=self.input_parameters['physics']
+                )
+                self.drone.show_local_frame()
+                # Save the current PyBullet instance as save state
+                # => This avoids errors when enabling rendering after training
+                self.stored_state_id = self.bc.saveState()
+                
+        elif mode == "rgb_array":
+            # Hanyang: add render picture function
+            if not self.use_graphics:
+                self.bc.disconnect()
+                self.use_graphics = True
+                self.bc = self._setup_client_and_physics(graphics=True)
+                self._setup_simulation(
+                    physics=self.input_parameters['physics']
+                )
+                self.drone.show_local_frame()
+                # Save the current PyBullet instance as save state
+                # => This avoids errors when enabling rendering after training
+                self.stored_state_id = self.bc.saveState()
+                
+            self.CLENT = pb.connect(pb.GUI)
+            # self.CLENT = pb.connect(pb.DIRECT)
+
+            # self.VIDEO_ID = pb.startStateLogging(loggingType=pb.STATE_LOGGING_VIDEO_MP4,
+            #                                     fileName=os.path.dirname(os.path.abspath(__file__))+"/../../files/videos/video-"+datetime.now().strftime("%m.%d.%Y_%H.%M.%S")+".mp4",
+            #                                     physicsClientId=self.CLIENT
+            #                                     )
+            self.VID_WIDTH=int(640)
+            self.VID_HEIGHT=int(480)
+            self.FRAME_PER_SEC = 24
+            self.IMG_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+"test_results_pictures"+datetime.now().strftime("%Y%m%d_%H.%M")+"/"
+            os.makedirs(os.path.dirname(self.IMG_PATH), exist_ok=True)
+            self.CAPTURE_FREQ = int(self.SIM_FREQ/self.FRAME_PER_SEC)
+            self.CAM_VIEW = pb.computeViewMatrixFromYawPitchRoll(distance=3,
+                                                                yaw=-30,
+                                                                pitch=-30,
+                                                                roll=0,
+                                                                cameraTargetPosition=[0, 0, 0],
+                                                                upAxisIndex=2,
+                                                                physicsClientId=self.CLIENT
+                                                                )
+            self.CAM_PRO = pb.computeProjectionMatrixFOV(fov=60.0,
+                                                        aspect=self.VID_WIDTH/self.VID_HEIGHT,
+                                                        nearVal=0.1,
+                                                        farVal=1000.0
+                                                        )
+            [w, h, rgb, dep, seg] = pb.getCameraImage(width=self.VID_WIDTH,
+                                                     height=self.VID_HEIGHT,
+                                                     shadow=1,
+                                                     viewMatrix=self.CAM_VIEW,
+                                                     projectionMatrix=self.CAM_PRO,
+                                                     renderer=pb.ER_TINY_RENDERER,
+                                                     flags=pb.ER_SEGMENTATION_MASK_OBJECT_AND_LINKINDEX,
+                                                     physicsClientId=self.CLIENT
+                                                     )
+            (Image.fromarray(np.reshape(rgb, (h, w, 4)), 'RGBA')).save(self.IMG_PATH+"frame_"+str(self.FRAME_NUM)+".png")
+        else:
+            raise NotImplementedError
+               
 
     """
     XL: Rewrite this method from parent class (DroneBaseEnv), to change the criteria of done

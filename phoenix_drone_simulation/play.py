@@ -3,7 +3,7 @@
 Author:     Sven Gronauer (sven.gronauer@tum.de)
 Added:      16.11.2021
 Updated:    16.04.2022 Purged old function snipptes
-Updated:    4.09.2023 Hanyang, add function 'play_without_control' and some notations
+Updated:    4.09.2023 add function 'play_without_control' and some notations by Hanyang
 """
 import gym
 import time
