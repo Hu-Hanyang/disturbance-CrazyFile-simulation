@@ -149,7 +149,7 @@ def distur_gener(states, disturbance):
             return u,d
 
     
-    umax=np.array([5.3*10**-3,  5.3*10**-3,  1.43*10**-4])
+    umax = np.array([5.3*10**-3,  5.3*10**-3,  1.43*10**-4])  #TODO: experience?
     # dmax = 0*umax
     assert disturbance <= 3.0  # Hanyang: check the output content
     V = np.load(f'phoenix_drone_simulation/adversarial_generation/FasTrack_data/fastrack_{disturbance}_15x15.npy')
@@ -178,7 +178,7 @@ def distur_gener(states, disturbance):
 
     grid = Grid(np.array([-math.pi/2.4, -math.pi/2.4, -math.pi/2.4, -math.pi, -math.pi, -math.pi]), np.array([math.pi/2.4, math.pi/2.4, math.pi/2.4, math.pi, math.pi, math.pi]), 6, np.array([15,15,15,15,15,15]), [0,1,2])
 
-    [opt_u, opt_d] = compute_opt_traj(grid,V,states,umax,dmax)
+    [opt_u, opt_d] = compute_opt_traj(grid, V, states, umax, dmax)
 
     return opt_u, opt_d
     

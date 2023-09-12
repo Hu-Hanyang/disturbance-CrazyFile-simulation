@@ -296,7 +296,7 @@ class DroneHoverBulletEnvWithAdversary(DroneHoverBaseEnv):
             aggregate_phy_steps=aggregate_phy_steps,
             control_mode=control_mode,
             drone_model='cf21x_bullet_adversary',  # CrazyFlieBulletAgentWithAdversary
-            physics='PybulletPhysicsWithAdversary',
+            physics='PybulletPhysicsWithAdversary',  # physics env, not the concept in rl
             observation_frequency=100,  # use 100Hz PWM control loop
             sim_freq=200,  # but step physics with 200Hz
             **kwargs
@@ -308,7 +308,7 @@ class DroneHoverBulletEnvWithAdversary(DroneHoverBaseEnv):
                                         high=np.array([1*10**-3,  1*10**-3,  1*10**-4]), 
                                         dtype=np.float32)
         # self.dstb_gen   = lambda x: self.dstb_space.sample() 
-        self.disturbance_level = 1.5  # 2.0  # 1.5 # Hanyang: tune this! Dmax = uMax * disturbance_level
+        self.disturbance_level = 1.5  # 2.0  # 1.5 # Hanyang: try different values to see the upperbound
         # self.dstb_gen = lambda x: np.array([0,0,0])
 
 
@@ -417,7 +417,7 @@ class DroneHoverBulletEnvWithAdversary(DroneHoverBaseEnv):
         _, dstb = distur_gener(states, self.disturbance_level) 
         # Hanyang: try to do not add distb or scale it with a constant
         # dstb = (0.0, 0.0, 0.0)
-        # dstb = 1.0 * distb
+        # dstb = 0.0 * distb
 
         for _ in range(self.aggregate_phy_steps):
             # Note:
@@ -502,7 +502,7 @@ class DroneHoverBulletEnvWithoutAdversary(DroneHoverBaseEnv):
                                         high=np.array([1*10**-3,  1*10**-3,  1*10**-4]), 
                                         dtype=np.float32)
         # self.dstb_gen   = lambda x: self.dstb_space.sample() 
-        self.disturbance_level = 1.5 # Dmax = uMax * disturbance_level
+        self.disturbance_level = 0.0 # Dmax = uMax * disturbance_level
         # self.dstb_gen = lambda x: np.array([0,0,0])
 
 
@@ -849,9 +849,9 @@ class DroneHoverBulletEnvWithAdversaryRender(DroneHoverBaseEnv):
                                         high=np.array([1*10**-3,  1*10**-3,  1*10**-4]), 
                                         dtype=np.float32)
         # self.dstb_gen   = lambda x: self.dstb_space.sample() 
-        self.disturbance_level = 1.5  # 2.0  # 1.5 # Hanyang: tune this! Dmax = uMax * disturbance_level
+        self.disturbance_level = 1.5  # 2.0  
         # self.dstb_gen = lambda x: np.array([0,0,0]) 
-        # Hanyang: video setting  
+        # Hanyang: video setting and figures
         self.CLIENT = pb.connect(pb.DIRECT)      
         self.VID_WIDTH=int(640)
         self.VID_HEIGHT=int(480)

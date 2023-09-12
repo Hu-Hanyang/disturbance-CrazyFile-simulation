@@ -141,10 +141,11 @@ if __name__ == '__main__':
     elif args.nocontrol:
         # play no policy, that is to say, no control in the environment
         assert args.ckpt, 'Define a checkpoint for non-random play!'  # Hanyang: maybe not necessary?
-        ac, env = utils.load_actor_critic_and_env_from_disk(args.ckpt)
-        print("-"*200)
-        print(f"The environment is {args.env} and no control inputs.")
-        print("-"*200)
+        ac, _ = utils.load_actor_critic_and_env_from_disk(args.ckpt)
+        env = gym.make(args.env)
+        print("-"*150)
+        print(f"The environment is {env} and no control inputs.")
+        print("-"*150)
 
         play_without_control(
             actor_critic=ac,
@@ -154,11 +155,12 @@ if __name__ == '__main__':
 
     else:
         assert args.ckpt, 'Define a checkpoint for non-random play!'
-        ac, env = utils.load_actor_critic_and_env_from_disk(args.ckpt)
-        print("-"*200)
+        ac, _ = utils.load_actor_critic_and_env_from_disk(args.ckpt)
+        env = gym.make(args.env)
+        print("-"*150)
         print(f"The mode is playing after training! \n")
-        print(f"The environment is {args.env} and load the trained model form {args.ckpt}.")
-        print("-"*200)
+        print(f"The environment is {env} and load the trained model form {args.ckpt}.")
+        print("-"*150)
 
 
         play_after_training(

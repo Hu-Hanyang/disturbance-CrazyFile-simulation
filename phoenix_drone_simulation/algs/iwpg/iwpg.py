@@ -58,7 +58,7 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
             verbose: bool = True,
             vf_lr: float = 1e-3,
             weight_initialization: str = 'kaiming_uniform',
-            save_freq: int = 10,
+            save_freq: int = 50,
             seed: int = 0,
             video_freq: int = -1,  # set to positive integer for video recording
             **kwargs  # use to log parameters from child classes
@@ -286,7 +286,7 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
             self.check_distributed_parameters()
         # Save model to disk
         if is_last_epoch or self.epoch % self.save_freq == 0:
-            self.logger.save_state(state_dict={}, itr=None)
+            self.logger.save_state(state_dict={}, itr=self.epoch)  # Hanyang: save the model during training process, former: itr=None
 
     def log(self, epoch: int) -> None:
         # Log info about epoch

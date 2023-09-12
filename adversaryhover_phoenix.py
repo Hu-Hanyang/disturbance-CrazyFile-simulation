@@ -109,4 +109,5 @@ if __name__ == "__main__":
     # test_env(env_id='DroneHoverBulletEnvWithAdversary-v0')
 
     # == start training with ppo
-    start_training(algo="ppo", env_id="DroneHoverBulletEnvWithAdversary-v0")
+    # start_training(algo="ppo", env_id="DroneHoverBulletEnvWithAdversary-v0")
+    start_training(algo='ppo', env_id='DroneHoverBulletEnvWithoutAdversary-v0')  # no disturbance during training
