@@ -37,7 +37,7 @@ register(
 
 register(
     id='DroneHoverBulletEnvWithAdversaryRender-v0',
-    entry_point = 'phoenix_drone_simulation.env.hover:DroneHoverBulletEnvWithAdversaryRender',
+    entry_point = 'phoenix_drone_simulation.envs.hover:DroneHoverBulletEnvWithAdversaryRender',
     max_episode_steps = 500,
 )
 # ==================

@@ -65,6 +65,7 @@ Logs of method2:
 Notice: the environment in test also needs to change while we want to see different disturbance level.
 1. Test with HJ disturbance env:
     `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'`
+    (example: `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'`)
 2. Test with random disturbance env:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithRandomAdversary-v0'`
 3. Test without disturbance env:

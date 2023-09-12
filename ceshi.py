@@ -12,9 +12,10 @@ from phoenix_drone_simulation.utils.mpi_tools import is_root_process
 
 
 
-env_id="DroneHoverBulletEnvWithAdversary-v0"
-env = gym.make(env_id)
-print(f"The env is {env}")
+# env_id='DroneHoverBulletEnvWithAdversaryRender-v0'
+# # env_id = 'DroneHoverBulletEnvWithRandomAdversary-v0'
+# env = gym.make(env_id)
+# print(f"The env is {env}")
 # env.render(mode='rgb_array') 
 # # print(sth)
 
@@ -33,3 +34,15 @@ print(f"The env is {env}")
 # current_path = os.path.dirname(os.path.abspath(__file__))
 # father_path = os.path.dirname(current_path)
 # print(father_path)
+
+# import gym
+# env = gym.make("CartPole-v1")
+# observation = env.reset()
+# for _ in range(1000):
+#    env.render()
+#    action = env.action_space.sample()  # User-defined policy function
+#    observation, reward, done, info = env.step(action)
+#    if done:
+#       break
+
+# env.close()

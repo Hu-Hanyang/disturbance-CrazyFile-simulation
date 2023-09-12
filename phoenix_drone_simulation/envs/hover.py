@@ -1,6 +1,6 @@
 import os
 import gym
-import datetime
+import time
 import numpy as np
 import pybullet as pb
 import pybullet_data
@@ -1103,7 +1103,7 @@ class DroneHoverBulletEnvWithAdversaryRender(DroneHoverBaseEnv):
         # if self.RECORD and self.GUI:
         current_path = os.path.dirname(os.path.abspath(__file__))
         father_path = os.path.dirname(current_path)
-        filename = father_path+"/test_results_videos/video-"+datetime.now().strftime("%Y%m%d_%H.%M")
+        filename = father_path+"/test_results_videos/video-"+time.strftime("%Y%m%d_%H.%M")
         self.VIDEO_ID = pb.startStateLogging(loggingType=pb.STATE_LOGGING_VIDEO_MP4,
                                             fileName= filename+".mp4",
                                             physicsClientId=self.CLIENT
