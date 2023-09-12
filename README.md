@@ -61,6 +61,7 @@ Logs of method2:
 | 2023_09_05_10_18 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_05_10_18/seed_40226 | None | Unknown | 0.0 | Nothing. |
 | 2023_09_05_21_49 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_05_21_49/seed_40226 | None | Bad | 2.5 | Nothing. |
 | 2023_09_07_10_25 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_07_10_25/seed_40226 | None | Bad | 3.0 | Nothing. |
+| 2023_09_12_11_23 | 44165 | DroneHoverBulletEnvWithoutAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2023_09_12_11_23/seed_44165 | None | Good | 0.0 | Nothing. |
 ### Test:
 Notice: the environment in test also needs to change while we want to see different disturbance level.
 1. Test with HJ disturbance env:
