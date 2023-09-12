@@ -499,7 +499,12 @@ def load_actor_critic_and_env_from_disk(
             use_shared_weights=False,
             ac_kwargs=conf['ac_kwargs']
         )
-    model_path = os.path.join(file_name_path, 'torch_save', 'model.pt')
+    if len(os.listdir(os.path.join(file_name_path, 'torch_save'))) > 1:
+        model_path = os.path.join(file_name_path, 'torch_save', 'model299.pt')
+    elif len(os.listdir(os.path.join(file_name_path, 'torch_save'))) == 1:
+        model_path = os.path.join(file_name_path, 'torch_save', 'model.pt')
+    else:
+        print("No trained model!")
     ac.load_state_dict(torch.load(model_path), strict=False)
     print(f'Successfully loaded model from: {model_path}')
     return ac, env
