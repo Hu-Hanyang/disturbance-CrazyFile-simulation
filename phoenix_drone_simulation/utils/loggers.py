@@ -188,8 +188,12 @@ def setup_logger_kwargs(
     if seed is not None:
         subfolder = '_'.join(['seed', str(seed).zfill(5)])
         relpath = os.path.join(relpath, subfolder)
+    
+    logdir = os.path.join(base_dir, exp_name, relpath)
+    if not os.path.exists(logdir):
+        os.makedirs(logdir)
 
-    logger_kwargs = dict(log_dir=os.path.join(base_dir, exp_name, relpath),
+    logger_kwargs = dict(log_dir=logdir,
                          exp_name=exp_name,
                          level=level,
                          use_tensor_board=use_tensor_board,

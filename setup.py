@@ -5,14 +5,14 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="phoenix_drone_simulation",
+    name="disturbance_CrazyFlie_simulation",
     version="1.0",
-    author="Sven Gronauer",
-    author_email="sven.gronauer@tum.de",
-    description="Environments for learning to control the CrazyFlie quadrotor",
+    author="Hanyang Hu, Xubo Lyu, Xilun Zhang, Sven Gronauer",
+    author_email="hha160@sfu.ca",
+    description="Add disturbance to the Reinforcement Learning method in the simulation environments for the CrazyFlie quadrotor. This repository is based on the https://github.com/SvenGronauer/phoenix-drone-simulation",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/SvenGronauer/phoenix-drone-simulation",
+    url="https://github.com/Hu-Hanyang/disturbance-CrazyFile-simulation",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
