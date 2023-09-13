@@ -5,6 +5,7 @@ import numpy as np
 import pybullet as pb
 import pybullet_data
 import phoenix_drone_simulation.envs.physics as phoenix_physics
+from PIL import Image
 from phoenix_drone_simulation.envs.physics import PybulletPhysicsWithAdversary
 from phoenix_drone_simulation.envs.base import DroneBaseEnv
 from phoenix_drone_simulation.envs.agents import CrazyFlieSimpleAgent, CrazyFlieBulletAgent, CrazyFlieBulletAgentWithAdversary
@@ -850,14 +851,18 @@ class DroneHoverBulletEnvWithAdversaryRender(DroneHoverBaseEnv):
                                         dtype=np.float32)
         # self.dstb_gen   = lambda x: self.dstb_space.sample() 
         self.disturbance_level = 1.5  # 2.0  
-        # self.dstb_gen = lambda x: np.array([0,0,0]) 
+
         # Hanyang: video setting and figures
-        self.CLIENT = pb.connect(pb.DIRECT)      
+        # self.bc.disconnect()
+        # self.use_graphics = True
+        # self.CLIENT = self._setup_client_and_physics(graphics=None)
+        self.CLIENT = pb.connect(pb.DIRECT)   
+        # self.CLIENT = self.bc   
         self.VID_WIDTH=int(640)
         self.VID_HEIGHT=int(480)
-        self.FRAME_PER_SEC = 24
-        self.SIM_FREQ = 240
-        self.CAPTURE_FREQ = int(self.SIM_FREQ/self.FRAME_PER_SEC)
+        # self.FRAME_PER_SEC = 24
+        # self.SIM_FREQ = 240
+        # self.CAPTURE_FREQ = int(self.SIM_FREQ/self.FRAME_PER_SEC)
         self.CAM_VIEW = pb.computeViewMatrixFromYawPitchRoll(distance=3,
                                                             yaw=-30,
                                                             pitch=-30,
@@ -1013,6 +1018,23 @@ class DroneHoverBulletEnvWithAdversaryRender(DroneHoverBaseEnv):
         info (dict)
             contains auxiliary diagnostic information such as the cost signal
         """
+        # Hanyang: save images:
+        [w, h, rgb, dep, seg] = pb.getCameraImage(width=self.VID_WIDTH,
+                                                     height=self.VID_HEIGHT,
+                                                     shadow=1,
+                                                     viewMatrix=self.CAM_VIEW,
+                                                     projectionMatrix=self.CAM_PRO,
+                                                     renderer=pb.ER_TINY_RENDERER,
+                                                     flags=pb.ER_SEGMENTATION_MASK_OBJECT_AND_LINKINDEX,
+                                                     physicsClientId=self.CLIENT
+                                                     )
+        (Image.fromarray(np.reshape(rgb, (h, w, 4)), 'RGBA')).save(self.IMG_PATH+"frame_"+str(self.FRAME_NUM)+".png")
+        #### Save the depth or segmentation view instead #######
+        # dep = ((dep-np.min(dep)) * 255 / (np.max(dep)-np.min(dep))).astype('uint8')
+        # (Image.fromarray(np.reshape(dep, (h, w)))).save(self.IMG_PATH+"frame_"+str(self.FRAME_NUM)+".png")
+        # seg = ((seg-np.min(seg)) * 255 / (np.max(seg)-np.min(seg))).astype('uint8')
+        # (Image.fromarray(np.reshape(seg, (h, w)))).save(self.IMG_PATH+"frame_"+str(self.FRAME_NUM)+".png")
+        self.FRAME_NUM += 1
 
         # XL: This is special in our adversary Env for generating 
         # disturbance from HJ reachability
@@ -1102,21 +1124,19 @@ class DroneHoverBulletEnvWithAdversaryRender(DroneHoverBaseEnv):
         """
         # if self.RECORD and self.GUI:
         current_path = os.path.dirname(os.path.abspath(__file__))
-        father_path = os.path.dirname(current_path)
-        filename = father_path+"/test_results_videos/video-"+time.strftime("%Y%m%d_%H.%M")
-        self.VIDEO_ID = pb.startStateLogging(loggingType=pb.STATE_LOGGING_VIDEO_MP4,
-                                            fileName= filename+".mp4",
-                                            physicsClientId=self.CLIENT
-                                            )
-        print(f"Begin to record the video now and the results are saved in {filename}.")
-        # if self.RECORD and not self.GUI:
-        #     self.FRAME_NUM = 0
-        #     self.IMG_PATH = os.path.dirname(os.path.abspath(__file__))+"/../../files/videos/video-"+datetime.now().strftime("%m.%d.%Y_%H.%M.%S")+"/"
-        #     os.makedirs(os.path.dirname(self.IMG_PATH), exist_ok=True)
+        father_path = os.path.dirname(os.path.dirname(current_path)) 
+        filename = father_path+"/test_results_images/images-" + time.strftime("%Y_%m_%d_%H_%M")
+        # self.VIDEO_ID = pb.startStateLogging(loggingType=pb.STATE_LOGGING_VIDEO_MP4,
+        #                                     fileName= filename+".mp4",
+        #                                     physicsClientId=self.CLIENT
+        #                                     )
+        # print(f"Begin to record the video now and the results are saved in {filename}.")
+        self.FRAME_NUM = 0
+        self.IMG_PATH = filename + "/"
+        os.makedirs(os.path.dirname(self.IMG_PATH), exist_ok=True)
     
-    def close(self):
-        """Terminates the environment.
-        """
-        if self.RECORD and self.GUI:
-            pb.stopStateLogging(self.VIDEO_ID, physicsClientId=self.CLIENT)
-        pb.disconnect(physicsClientId=self.CLIENT)
+    # def close(self):
+    #     """Terminates the environment.
+    #     """
+    #     pb.stopStateLogging(self.VIDEO_ID, physicsClientId=self.CLIENT)
+    #     pb.disconnect(physicsClientId=self.CLIENT)

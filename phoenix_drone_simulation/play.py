@@ -45,7 +45,7 @@ def play_after_training(actor_critic, env, noise=False):
             episode_length += 1
             time.sleep(1./120)
         # Hanyang: for video recording
-        env.close()
+        # env.close()
         i += 1
         print(
             f'Episode {i}\t Return: {ret}\t Length: {episode_length}\t Costs:{costs}')
