@@ -150,6 +150,10 @@ class DroneBaseEnv(gym.Env, abc.ABC):
         # stepping information
         self.old_potential = self.compute_potential()
 
+        # Hanyang: set parameters for the render rgb_array
+        self._render_width = 320
+        self._render_height = 240
+
     def _setup_client_and_physics(
             self,
             graphics=False
@@ -370,6 +374,46 @@ class DroneBaseEnv(gym.Env, abc.ABC):
                 # Save the current PyBullet instance as save state
                 # => This avoids errors when enabling rendering after training
                 self.stored_state_id = self.bc.saveState()
+            return np.array([])
+
+        elif mode == 'rgb_array':
+            # Hanyang: add this part to generate image and video
+            if self.use_graphics:
+                self.bc.disconnect()
+                self.use_graphics = False
+                self.bc = self._setup_client_and_physics(graphics=False)
+                self.stored_state_id = self.bc.saveState()
+                self._setup_simulation(
+                    physics=self.input_parameters['physics']
+                )
+                self.drone.show_local_frame()
+
+            base_pos = [0, 0, 0]
+            all_states = self.drone.get_state()
+            base_pos = all_states[:3]
+
+            view_matrix = self.bc.computeViewMatrixFromYawPitchRoll(
+                cameraTargetPosition=base_pos, 
+                distance=1.8, 
+                yaw=10, 
+                pitch=-50, 
+                roll=0, 
+                upAxisIndex=2)
+            
+            proj_matrix = self.bc.computeProjectionMatrixFOV(
+                fov=60, aspect=float(self._render_width)/self._render_height,
+                nearVal=0.1, farVal=100.0)
+            
+            (_, _, px, _, _) = self.bc.getCameraImage(
+            width = self._render_width, height=self._render_height, viewMatrix=view_matrix,
+                projectionMatrix=proj_matrix,
+                renderer=pb.ER_BULLET_HARDWARE_OPENGL
+                )
+            rgb_array = np.array(px)
+            rgb_array = rgb_array[:, :, :3]
+            
+            return rgb_array
+        
         else:
             raise NotImplementedError
 
@@ -466,3 +510,8 @@ class DroneBaseEnv(gym.Env, abc.ABC):
     def task_specific_reset(self):
         """Inheriting child classes define reset environment reset behavior."""
         raise NotImplementedError
+    
+    def close(self):
+        # if self.stored_state_id < 0:
+        #     self.bc.disconnect()
+        pass

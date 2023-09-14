@@ -12,6 +12,7 @@ import os
 import torch
 import numpy as np
 import warnings
+from gym.wrappers import Monitor
 
 # local imports
 from phoenix_drone_simulation.utils import utils
@@ -28,6 +29,8 @@ def play_after_training(actor_critic, env, noise=False):
         actor_critic.eval()  # Set in evaluation mode before playing
     i = 0
     # pb.setRealTimeSimulation(1)
+    # env = Monitor(env, 'test_results_videos', force=True)
+
     while True:
         done = False
         env.render()
