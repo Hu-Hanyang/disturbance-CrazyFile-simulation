@@ -38,7 +38,7 @@ class UAV6D:
         self.uMax = uMax
     
         # Hanyang: Disturbance bounds, change the magnitude to calculate different distb level value functions
-        self.distb_level = 3.0
+        self.distb_level = 1.3
         self.dMin = self.distb_level * uMin
         self.dMax = self.distb_level * uMax
 
@@ -633,7 +633,7 @@ if __name__ == "__main__":
         
     else: 
         print("Calculate new value functioning.")
-        [V,grid,slicecut] = uavsol.get_fastrack()
+        [V, grid, slicecut] = uavsol.get_fastrack()
 
     ## if you want to see the 2D value function plot with prelaoding please uncomment the code below
     # you should comment out the line where we calculated the [V,grid,slicecut] if you want to plot pre-calculated data

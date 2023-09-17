@@ -822,7 +822,7 @@ class DroneHoverBulletEnvWithAdversaryInitial(DroneHoverBaseEnv):
                                         high=np.array([1*10**-3,  1*10**-3,  1*10**-4]), 
                                         dtype=np.float32)
         # self.dstb_gen   = lambda x: self.dstb_space.sample() 
-        self.disturbance_level = 1.5  # 2.0  # 1.5 # Hanyang: try different values to see the upperbound
+        self.disturbance_level = 2.0  # 2.0  # 1.5 # Hanyang: try different values to see the upperbound
         # self.dstb_gen = lambda x: np.array([0,0,0])
 
 
@@ -972,7 +972,7 @@ class DroneHoverBulletEnvWithAdversaryInitial(DroneHoverBaseEnv):
     def task_specific_reset(self):
         # set random offset for position
         # Note: use copy() to avoid chaning original initial values
-        print("Let's try different range of initial states:")
+        # print("Let's try different range of initial states:")
         pos = self.init_xyz.copy()
         xyz_dot = self.init_xyz_dot.copy()
         rpy_dot = self.init_rpy_dot.copy()

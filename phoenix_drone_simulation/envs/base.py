@@ -515,3 +515,31 @@ class DroneBaseEnv(gym.Env, abc.ABC):
         # if self.stored_state_id < 0:
         #     self.bc.disconnect()
         pass
+
+    def _save_camera_images(self):
+        #TODO: Hanyang: save every image during every step
+        if not self.use_graphics:
+            base_pos = [0, 0, 0]
+            all_states = self.drone.get_state()
+            base_pos = all_states[:3]
+
+            view_matrix = self.bc.computeViewMatrixFromYawPitchRoll(
+                cameraTargetPosition=base_pos, 
+                distance=1.8, 
+                yaw=10, 
+                pitch=-50, 
+                roll=0, 
+                upAxisIndex=2)
+            
+            proj_matrix = self.bc.computeProjectionMatrixFOV(
+                fov=60, aspect=float(self._render_width)/self._render_height,
+                nearVal=0.1, farVal=100.0)
+            
+            (_, _, px, _, _) = self.bc.getCameraImage(
+            width = self._render_width, height=self._render_height, viewMatrix=view_matrix,
+                projectionMatrix=proj_matrix,
+                renderer=pb.ER_BULLET_HARDWARE_OPENGL
+                )
+            rgb_array = np.array(px)
+            rgb_array = rgb_array[:, :, :3]
+            # save and tranfer to image and save?
