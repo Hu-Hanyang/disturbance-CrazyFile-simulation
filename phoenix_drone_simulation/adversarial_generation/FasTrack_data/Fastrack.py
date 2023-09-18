@@ -38,7 +38,7 @@ class UAV6D:
         self.uMax = uMax
     
         # Hanyang: Disturbance bounds, change the magnitude to calculate different distb level value functions
-        self.distb_level = 1.3
+        self.distb_level = 1.2
         self.dMin = self.distb_level * uMin
         self.dMax = self.distb_level * uMax
 

@@ -73,7 +73,7 @@ Logs of the env 'DroneHoverBulletEnvWithAdversaryInitial':
 | ------------|-----------|------------|-----------| ----------- |----------- |----------- | ----------- |----------- |
 | 2023_09_14_16_00 | 37007 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_14_16_00/seed_37007 | None | Unknown | 1.5 | Nothing. |
 | 2023_09_15_13_42 | 49593 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_15_13_42/seed_49593 | None | Unknown | 1.0 | Nothing. |
-
+| 2023_09_17_10_41 | 14929 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_17_10_41/seed_14929 | None | Unknown | 2.0 | Nothing. |
 ### Test:
 Notice: the environment in test also needs to change while we want to see different disturbance level.
 1. Test with HJ disturbance env:
