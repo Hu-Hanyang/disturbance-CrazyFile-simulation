@@ -150,9 +150,9 @@ class DroneBaseEnv(gym.Env, abc.ABC):
         # stepping information
         self.old_potential = self.compute_potential()
 
-        # Hanyang: set parameters for the render rgb_array
-        self._render_width = 320
-        self._render_height = 240
+        # Hanyang: set parameters for the render rgb_array, the shape of the image is (self._render_height, self._render_width, 3)
+        self.render_width = 320
+        self.render_height = 240
 
     def _setup_client_and_physics(
             self,
@@ -177,7 +177,7 @@ class DroneBaseEnv(gym.Env, abc.ABC):
         if graphics or self.use_graphics:
             bc = bullet_client.BulletClient(connection_mode=pb.GUI)
         else:
-            bc = bullet_client.BulletClient(connection_mode=pb.DIRECT)
+            bc = bullet_client.BulletClient()  # connection_mode=pb.DIRECT
 
         # add open_safety_gym/envs/data to the PyBullet data path
         bc.setAdditionalSearchPath(get_assets_path())
@@ -393,19 +393,19 @@ class DroneBaseEnv(gym.Env, abc.ABC):
             base_pos = all_states[:3]
 
             view_matrix = self.bc.computeViewMatrixFromYawPitchRoll(
-                cameraTargetPosition=base_pos, 
-                distance=1.8, 
+                cameraTargetPosition= (0.0, 0.0, 0.0),  # base_pos, 
+                distance=2.0,  # 1.5, 
                 yaw=10, 
                 pitch=-50, 
                 roll=0, 
                 upAxisIndex=2)
             
             proj_matrix = self.bc.computeProjectionMatrixFOV(
-                fov=60, aspect=float(self._render_width)/self._render_height,
+                fov=60, aspect=float(self.render_width)/self.render_height,
                 nearVal=0.1, farVal=100.0)
             
             (_, _, px, _, _) = self.bc.getCameraImage(
-            width = self._render_width, height=self._render_height, viewMatrix=view_matrix,
+            width = self.render_width, height=self.render_height, viewMatrix=view_matrix,
                 projectionMatrix=proj_matrix,
                 renderer=pb.ER_BULLET_HARDWARE_OPENGL
                 )
@@ -516,30 +516,30 @@ class DroneBaseEnv(gym.Env, abc.ABC):
         #     self.bc.disconnect()
         pass
 
-    def _save_camera_images(self):
-        #TODO: Hanyang: save every image during every step
-        if not self.use_graphics:
-            base_pos = [0, 0, 0]
-            all_states = self.drone.get_state()
-            base_pos = all_states[:3]
+    # def _save_camera_images(self):
+    #     #TODO: Hanyang: save every image during every step
+    #     if not self.use_graphics:
+    #         base_pos = [0, 0, 0]
+    #         all_states = self.drone.get_state()
+    #         base_pos = all_states[:3]
 
-            view_matrix = self.bc.computeViewMatrixFromYawPitchRoll(
-                cameraTargetPosition=base_pos, 
-                distance=1.8, 
-                yaw=10, 
-                pitch=-50, 
-                roll=0, 
-                upAxisIndex=2)
+    #         view_matrix = self.bc.computeViewMatrixFromYawPitchRoll(
+    #             cameraTargetPosition=base_pos, 
+    #             distance=1.8, 
+    #             yaw=10, 
+    #             pitch=-50, 
+    #             roll=0, 
+    #             upAxisIndex=2)
             
-            proj_matrix = self.bc.computeProjectionMatrixFOV(
-                fov=60, aspect=float(self._render_width)/self._render_height,
-                nearVal=0.1, farVal=100.0)
+    #         proj_matrix = self.bc.computeProjectionMatrixFOV(
+    #             fov=60, aspect=float(self._render_width)/self._render_height,
+    #             nearVal=0.1, farVal=100.0)
             
-            (_, _, px, _, _) = self.bc.getCameraImage(
-            width = self._render_width, height=self._render_height, viewMatrix=view_matrix,
-                projectionMatrix=proj_matrix,
-                renderer=pb.ER_BULLET_HARDWARE_OPENGL
-                )
-            rgb_array = np.array(px)
-            rgb_array = rgb_array[:, :, :3]
-            # save and tranfer to image and save?
+    #         (_, _, px, _, _) = self.bc.getCameraImage(
+    #         width = self._render_width, height=self._render_height, viewMatrix=view_matrix,
+    #             projectionMatrix=proj_matrix,
+    #             renderer=pb.ER_BULLET_HARDWARE_OPENGL
+    #             )
+    #         rgb_array = np.array(px)
+    #         rgb_array = rgb_array[:, :, :3]
+    #         # save and tranfer to image and save?

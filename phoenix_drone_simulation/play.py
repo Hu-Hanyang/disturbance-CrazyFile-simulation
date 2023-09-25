@@ -5,7 +5,9 @@ Added:      16.11.2021
 Updated:    16.04.2022 Purged old function snipptes
 Updated:    4.09.2023 add function 'play_without_control' and some notations by Hanyang
 """
+import cv2
 import gym
+import time
 import time
 import argparse
 import os
@@ -23,6 +25,7 @@ try:
 except ImportError:
     if is_root_process():
         warnings.warn('pybullet_envs package not found.')
+
 
 def play_after_training(actor_critic, env, noise=False):
     if not noise:
@@ -114,6 +117,66 @@ def play_without_control(actor_critic, env, noise=False):
         print(
             f'Episode {i}\t Return: {ret}\t Length: {episode_length}\t Costs:{costs}')
 
+def save_videos(images, env, id):
+    """Hanyang
+    Input:
+        images: list, a list contains a sequence of numpy ndarrays
+        env: the quadrotor and task environment
+    """
+    # Define the output video parameters
+    fps = 50  # Frames per second
+    frame_width, frame_height = env.render_width, env.render_height
+    save_path = 'test_results_videos'
+
+    # Define the codec and create VideoWriter object
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # You can use other codecs as well (e.g., 'XVID')
+    out = cv2.VideoWriter(save_path+'/'+f'episode{id+1}-{time.strftime("%Y_%m_%d_%H_%M")}.mp4', fourcc, fps, (frame_width, frame_height))
+
+    # Write frames to the video file
+    for image in images:
+        image = np.asarray(image, dtype=np.uint8)
+        out.write(image)
+
+    print(f"The video episode{id+1}.mp4 is saved at {save_path}.")
+    # Release the VideoWriter object
+    out.release()
+
+    # Destroy any OpenCV windows if they were opened
+    cv2.destroyAllWindows()
+
+def play_and_save(actor_critic, env, episodes=2, noise=False):
+    # Hanyang: add function to save the images and generate videos, not finished, 2023.9.20
+    if not noise:
+        actor_critic.eval()  # Set in evaluation mode before playing
+    episode = 0
+    images = [ [] for _ in range(episodes)]
+    # pb.setRealTimeSimulation(1)
+    while episode < episodes:
+        done = False
+        images[episode].append(env.render(mode='rgb_array')) # initial image
+        x = env.reset()
+        ret = 0.
+        costs = 0.
+        episode_length = 0
+        while not done:
+            images[episode].append(env.render(mode='rgb_array'))
+            obs = torch.as_tensor(x, dtype=torch.float32)
+            action, *_ = actor_critic(obs)
+            action = np.zeros_like(action)
+            x, r, done, info = env.step(action)
+            costs += info.get('cost', 0.)
+            ret += r
+            episode_length += 1
+            time.sleep(1./120)  # 0.0083 second
+        
+        episode += 1
+        print(f'Episode {episode}\t Return: {ret}\t Length: {episode_length}\t Costs:{costs}')
+    
+    for i in range(len(images)):
+        save_videos(images[i], env, i)
+
+    print(f"{episode} videos has been saved in the folder test_results_videos")
+        
 if __name__ == '__main__':
     n_cpus = os.cpu_count()
     parser = argparse.ArgumentParser(
@@ -131,6 +194,8 @@ if __name__ == '__main__':
                         help='Disable rendering.')
     parser.add_argument('--nocontrol', action='store_true',
                         help='whether to add control inputs')
+    parser.add_argument('--save', action='store_true',
+                        help='whether to save the images and generate videos')
     args = parser.parse_args()
     env_id = None
     use_graphics = False if args.no_render else True
@@ -155,6 +220,17 @@ if __name__ == '__main__':
             env=env,
             noise=args.noise
         )
+
+    elif args.save:
+        # save the images using render function
+        assert args.ckpt, 'Define a checkpoint for non-random play!'  # Hanyang: maybe not necessary?
+        ac, _ = utils.load_actor_critic_and_env_from_disk(args.ckpt)
+        env = gym.make(args.env)
+        print("-"*150)
+        print(f"The environment is {env} and save the videos.")
+        print("-"*150)
+
+        play_and_save(actor_critic=ac, env=env, episodes=2, noise=args.noise)
 
     else:
         assert args.ckpt, 'Define a checkpoint for non-random play!'
