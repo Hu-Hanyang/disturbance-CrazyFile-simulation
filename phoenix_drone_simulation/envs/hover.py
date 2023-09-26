@@ -197,6 +197,7 @@ class DroneHoverBaseEnv(DroneBaseEnv):
         return reward
 
     def task_specific_reset(self):
+        """Initialize task states. Called by reset()."""
         # set random offset for position
         # Note: use copy() to avoid chaning original initial values
         pos = self.init_xyz.copy()
@@ -310,7 +311,6 @@ class DroneHoverBulletEnvWithAdversary(DroneHoverBaseEnv):
                                         dtype=np.float32)
         # self.dstb_gen   = lambda x: self.dstb_space.sample() 
         self.disturbance_level = 1.0  # 2.0  # 1.5 # Hanyang: try different values to see the upperbound
-        # self.dstb_gen = lambda x: np.array([0,0,0])
 
 
     """
@@ -822,8 +822,12 @@ class DroneHoverBulletEnvWithAdversaryInitial(DroneHoverBaseEnv):
                                         high=np.array([1*10**-3,  1*10**-3,  1*10**-4]), 
                                         dtype=np.float32)
         # self.dstb_gen   = lambda x: self.dstb_space.sample() 
-        self.disturbance_level = 2.0  # 2.0  # 1.5 # Hanyang: try different values to see the upperbound
-        # self.dstb_gen = lambda x: np.array([0,0,0])
+        self.disturbance_level = 0.5  # 2.0  # 1.5 # Hanyang: try different values to see the upperbound
+        
+        # change the varibale here to save the config in env_config.jason
+        self.initial_angle = np.pi/6
+        self.vel_lim = 0.1
+        self.rpy_dot_limit = deg2rad(200)
 
 
     """
@@ -983,17 +987,17 @@ class DroneHoverBulletEnvWithAdversaryInitial(DroneHoverBaseEnv):
 
             pos += np.random.uniform(-pos_lim, pos_lim, size=3)
 
-            init_angle = np.pi/3  # original: pi/6
+            init_angle = self.initial_angle  # original: pi/6
             rpy = np.random.uniform(-init_angle, init_angle, size=3)
             yaw_init = 2 * np.pi
             rpy[2] = np.random.uniform(-yaw_init, yaw_init)
             quat = self.bc.getQuaternionFromEuler(rpy)
 
             # set random initial velocities
-            vel_lim = 0.2  # original: 0.1
+            vel_lim = self.vel_lim  # original: 0.1
             xyz_dot = xyz_dot + np.random.uniform(-vel_lim, vel_lim, size=3)
 
-            rpy_dot_lim = deg2rad(400)  # original: 200
+            rpy_dot_lim = self.rpy_dot_limit  # original: 200
             rpy_dot = rpy_dot + np.random.uniform(-rpy_dot_lim, rpy_dot_lim, size=3)
             rpy_dot[2] = np.random.uniform(-deg2rad(20), deg2rad(20))
 

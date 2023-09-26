@@ -127,17 +127,18 @@ def save_videos(images, env, id):
     fps = 50  # Frames per second
     frame_width, frame_height = env.render_width, env.render_height
     save_path = 'test_results_videos'
+    filename = f'episode{id+1}-{time.strftime("%Y_%m_%d_%H_%M")}.mp4'
 
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # You can use other codecs as well (e.g., 'XVID')
-    out = cv2.VideoWriter(save_path+'/'+f'episode{id+1}-{time.strftime("%Y_%m_%d_%H_%M")}.mp4', fourcc, fps, (frame_width, frame_height))
+    out = cv2.VideoWriter(save_path+'/'+filename, fourcc, fps, (frame_width, frame_height))
 
     # Write frames to the video file
     for image in images:
         image = np.asarray(image, dtype=np.uint8)
         out.write(image)
 
-    print(f"The video episode{id+1}.mp4 is saved at {save_path}.")
+    print(f"The video episode{id+1}.mp4 is saved at {save_path+'/'+filename}.")
     # Release the VideoWriter object
     out.release()
 
@@ -152,17 +153,18 @@ def play_and_save(actor_critic, env, episodes=2, noise=False):
     images = [ [] for _ in range(episodes)]
     # pb.setRealTimeSimulation(1)
     while episode < episodes:
+        # env.render()
         done = False
-        images[episode].append(env.render(mode='rgb_array')) # initial image
+        images[episode].append(env.capture_image()) # initial image
         x = env.reset()
         ret = 0.
         costs = 0.
         episode_length = 0
         while not done:
-            images[episode].append(env.render(mode='rgb_array'))
+            # env.render()
+            images[episode].append(env.capture_image())
             obs = torch.as_tensor(x, dtype=torch.float32)
             action, *_ = actor_critic(obs)
-            action = np.zeros_like(action)
             x, r, done, info = env.step(action)
             costs += info.get('cost', 0.)
             ret += r
@@ -175,8 +177,7 @@ def play_and_save(actor_critic, env, episodes=2, noise=False):
     for i in range(len(images)):
         save_videos(images[i], env, i)
 
-    print(f"{episode} videos has been saved in the folder test_results_videos")
-        
+    
 if __name__ == '__main__':
     n_cpus = os.cpu_count()
     parser = argparse.ArgumentParser(

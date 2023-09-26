@@ -71,9 +71,10 @@ Logs of the env 'DroneHoverBulletEnvWithoutAdversary':
 Logs of the env 'DroneHoverBulletEnvWithAdversaryInitial':
 | time | seed | environment | algorithm | train logdir | test (log and command) | performance | distb level |else | 
 | ------------|-----------|------------|-----------| ----------- |----------- |----------- | ----------- |----------- |
-| 2023_09_14_16_00 | 37007 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_14_16_00/seed_37007 | None | Unknown | 1.5 | Nothing. |
-| 2023_09_15_13_42 | 49593 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_15_13_42/seed_49593 | None | Unknown | 1.0 | Nothing. |
-| 2023_09_17_10_41 | 14929 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_17_10_41/seed_14929 | None | Unknown | 2.0 | Nothing. |
+| 2023_09_14_16_00 | 37007 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_14_16_00/seed_37007 | None | not work | 1.5 | Nothing. |
+| 2023_09_15_13_42 | 49593 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_15_13_42/seed_49593 | None | not work | 1.0 | Nothing. |
+| 2023_09_17_10_41 | 14929 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_17_10_41/seed_14929 | None | not work | 2.0 | Nothing. |
+| 2023_09_25_14_10 | 63293 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_25_14_10/seed_63293 | None | unknowning | 0.5 | Nothing. |
 ### Test:
 Notice: the environment in test also needs to change while we want to see different disturbance level.
 1. Test with HJ disturbance env:
@@ -88,3 +89,5 @@ Notice: the environment in test also needs to change while we want to see differ
 5. Debugging function render: 
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversaryRender-v0'`
    (example: `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversaryRender-v0'`)
+6. Test with different initial states env:
+   `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversaryInitial-v0'`

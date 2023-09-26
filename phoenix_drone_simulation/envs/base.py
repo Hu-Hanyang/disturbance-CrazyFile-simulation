@@ -150,9 +150,9 @@ class DroneBaseEnv(gym.Env, abc.ABC):
         # stepping information
         self.old_potential = self.compute_potential()
 
-        # Hanyang: set parameters for the render rgb_array, the shape of the image is (self._render_height, self._render_width, 3)
-        self.render_width = 320
-        self.render_height = 240
+        # Hanyang: set parameters for video generation, the shape of the image is (self.render_height, self.render_width, 3)
+        self.render_width = 1920
+        self.render_height = 1080
 
     def _setup_client_and_physics(
             self,
@@ -377,7 +377,7 @@ class DroneBaseEnv(gym.Env, abc.ABC):
             return np.array([])
 
         elif mode == 'rgb_array':
-            # Hanyang: add this part to generate image and video
+            # Hanyang: don't use this, use method 'capture_image()' instead
             if self.use_graphics:
                 self.bc.disconnect()
                 self.use_graphics = False
@@ -516,30 +516,40 @@ class DroneBaseEnv(gym.Env, abc.ABC):
         #     self.bc.disconnect()
         pass
 
-    # def _save_camera_images(self):
-    #     #TODO: Hanyang: save every image during every step
-    #     if not self.use_graphics:
-    #         base_pos = [0, 0, 0]
-    #         all_states = self.drone.get_state()
-    #         base_pos = all_states[:3]
+    def capture_image(self):        
+        base_pos = [0, 0, 0]
+        all_states = self.drone.get_state()
+        base_pos = all_states[:3]
 
-    #         view_matrix = self.bc.computeViewMatrixFromYawPitchRoll(
-    #             cameraTargetPosition=base_pos, 
-    #             distance=1.8, 
-    #             yaw=10, 
-    #             pitch=-50, 
-    #             roll=0, 
-    #             upAxisIndex=2)
-            
-    #         proj_matrix = self.bc.computeProjectionMatrixFOV(
-    #             fov=60, aspect=float(self._render_width)/self._render_height,
-    #             nearVal=0.1, farVal=100.0)
-            
-    #         (_, _, px, _, _) = self.bc.getCameraImage(
-    #         width = self._render_width, height=self._render_height, viewMatrix=view_matrix,
-    #             projectionMatrix=proj_matrix,
-    #             renderer=pb.ER_BULLET_HARDWARE_OPENGL
-    #             )
-    #         rgb_array = np.array(px)
-    #         rgb_array = rgb_array[:, :, :3]
-    #         # save and tranfer to image and save?
+        # camera_id = self.bc.addUserDebugCamera(cameraDistance=2.0,
+        #                          cameraYaw=90,
+        #                          cameraPitch=-10,
+        #                          cameraTargetPosition=[0,0,0],
+        #                          width=self.render_width,
+        #                          height=self.render_height,
+        #                          flags=self.bc.ER_SEGMENTATION_MASK_OBJECT_AND_LINKINDEX,
+        #                          renderer=self.bc.ER_BULLET_HARDWARE_OPENGL,
+        #                          lightDirection=[1,1,1],
+        #                          lightDistance=10)
+
+
+        view_matrix = self.bc.computeViewMatrixFromYawPitchRoll(
+            cameraTargetPosition=base_pos,  # (0.0, 0.0, 0.0), 
+            distance=1.8, 
+            yaw=10, 
+            pitch=-20, 
+            roll=0, 
+            upAxisIndex=2)
+        
+        proj_matrix = self.bc.computeProjectionMatrixFOV(
+            fov=60, aspect=float(self.render_width)/self.render_height,
+            nearVal=0.1, farVal=100.0)
+        
+        (_, _, px, _, _) = self.bc.getCameraImage(
+        width = self.render_width, height=self.render_height, viewMatrix=view_matrix,
+            projectionMatrix=proj_matrix,
+            renderer=pb.ER_BULLET_HARDWARE_OPENGL
+            )
+        rgb_array = np.array(px)
+        rgb_array = rgb_array[:, :, :3]
+        return rgb_array
