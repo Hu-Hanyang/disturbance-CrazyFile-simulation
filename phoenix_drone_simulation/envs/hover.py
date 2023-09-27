@@ -825,9 +825,9 @@ class DroneHoverBulletEnvWithAdversaryInitial(DroneHoverBaseEnv):
         self.disturbance_level = 0.5  # 2.0  # 1.5 # Hanyang: try different values to see the upperbound
         
         # change the varibale here to save the config in env_config.jason
-        self.initial_angle = np.pi/6
+        self.initial_angle = np.pi/4
         self.vel_lim = 0.1
-        self.rpy_dot_limit = deg2rad(200)
+        self.rpy_dot_limit = deg2rad(300)
 
 
     """
@@ -1011,3 +1011,16 @@ class DroneHoverBulletEnvWithAdversaryInitial(DroneHoverBaseEnv):
                 np.random.normal(self.drone.HOVER_ACTION, 0.02,
                                  size=self.drone.action_buffer.shape), -1, 1)
             self.drone.last_action = self.drone.action_buffer[-1, :]
+
+        self.bc.resetBasePositionAndOrientation(
+            self.drone.body_unique_id,
+            posObj=pos,
+            ornObj=quat
+        )
+        R = np.array(self.bc.getMatrixFromQuaternion(quat)).reshape(3, 3)
+        self.bc.resetBaseVelocity(
+            self.drone.body_unique_id,
+            linearVelocity=xyz_dot,
+            # PyBullet assumes world frame, so local frame -> world frame
+            angularVelocity=R.T @ rpy_dot
+        )

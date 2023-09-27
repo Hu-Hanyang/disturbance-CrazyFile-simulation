@@ -521,18 +521,6 @@ class DroneBaseEnv(gym.Env, abc.ABC):
         all_states = self.drone.get_state()
         base_pos = all_states[:3]
 
-        # camera_id = self.bc.addUserDebugCamera(cameraDistance=2.0,
-        #                          cameraYaw=90,
-        #                          cameraPitch=-10,
-        #                          cameraTargetPosition=[0,0,0],
-        #                          width=self.render_width,
-        #                          height=self.render_height,
-        #                          flags=self.bc.ER_SEGMENTATION_MASK_OBJECT_AND_LINKINDEX,
-        #                          renderer=self.bc.ER_BULLET_HARDWARE_OPENGL,
-        #                          lightDirection=[1,1,1],
-        #                          lightDistance=10)
-
-
         view_matrix = self.bc.computeViewMatrixFromYawPitchRoll(
             cameraTargetPosition=base_pos,  # (0.0, 0.0, 0.0), 
             distance=1.8, 
