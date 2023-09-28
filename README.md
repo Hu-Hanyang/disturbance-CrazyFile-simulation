@@ -77,17 +77,21 @@ Logs of the env 'DroneHoverBulletEnvWithAdversaryInitial':
 | 2023_09_25_14_10 | 63293 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_25_14_10/seed_63293 | None | unknowning | 0.5 | Nothing. |
 ### Test:
 Notice: the environment in test also needs to change while we want to see different disturbance level.
-1. Test with HJ disturbance env:
-    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'`
-    (example: `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'`)
-2. Test with random disturbance env:
+
+1. Test with random disturbance env:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithRandomAdversary-v0'`
-3. Test without disturbance env:
+2. Test without disturbance env:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithoutAdversary-v0'`
-4. Test without control inputs in the HJ disturbance env:
+3. Test without control inputs in the HJ disturbance env:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'  --nocontrol`
-5. Debugging function render: 
-   `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversaryRender-v0'`
-   (example: `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversaryRender-v0'`)
-6. Test with different initial states env:
+
+4. Test with different initial states env:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversaryInitial-v0'`
+
+5. Test with trained model in different envs and display:
+   `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'`
+   example: `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'`
+   
+6. Test with trained model in different envs and save the videos:
+   `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'  --save`
+   example: `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' --save`

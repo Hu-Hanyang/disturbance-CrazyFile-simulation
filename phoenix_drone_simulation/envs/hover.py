@@ -311,6 +311,7 @@ class DroneHoverBulletEnvWithAdversary(DroneHoverBaseEnv):
                                         dtype=np.float32)
         # self.dstb_gen   = lambda x: self.dstb_space.sample() 
         self.disturbance_level = 1.0  # 2.0  # 1.5 # Hanyang: try different values to see the upperbound
+        self.id = 'DroneHoverBulletEnvWithAdversary'
 
 
     """
@@ -475,7 +476,7 @@ class DroneHoverBulletEnvWithoutAdversary(DroneHoverBaseEnv):
                                         dtype=np.float32)
         # self.dstb_gen   = lambda x: self.dstb_space.sample() 
         self.disturbance_level = 0.0 # Dmax = uMax * disturbance_level
-        # self.dstb_gen = lambda x: np.array([0,0,0])
+        self.id = 'DroneHoverBulletEnvWithoutAdversary'
 
 
     """
@@ -647,8 +648,7 @@ class DroneHoverBulletEnvWithRandomAdversary(DroneHoverBaseEnv):
                                         high=np.array([1*10**-3,  1*10**-3,  1*10**-4]), 
                                         dtype=np.float32)
         self.dstb_gen   = lambda x: self.dstb_space.sample() 
-        # self.disturbance_level = 1.5 # Dmax = uMax * disturbance_level
-        # self.dstb_gen = lambda x: np.array([0,0,0])
+        self.id = 'DroneHoverBulletEnvWithRandomAdversary'
 
 
     """
@@ -823,7 +823,8 @@ class DroneHoverBulletEnvWithAdversaryInitial(DroneHoverBaseEnv):
                                         dtype=np.float32)
         # self.dstb_gen   = lambda x: self.dstb_space.sample() 
         self.disturbance_level = 0.5  # 2.0  # 1.5 # Hanyang: try different values to see the upperbound
-        
+        self.id = 'DroneHoverBulletEnvWithAdversaryInitial'
+
         # change the varibale here to save the config in env_config.jason
         self.initial_angle = np.pi/4
         self.vel_lim = 0.1

@@ -35,7 +35,7 @@ def start_training(algo, env_id):
     model.fit(epochs=300)
 
     duration = time.perf_counter() - start_time
-    print(f"The time of training is {duration}. \n")
+    print(f"The time of training is {duration/3600}h. \n")
     # 3) Benchmark the f
     # inal policy and save results into `returns.csv`
     model.eval()
