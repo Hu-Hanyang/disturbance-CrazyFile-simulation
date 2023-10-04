@@ -117,7 +117,7 @@ def play_without_control(actor_critic, env, noise=False):
         print(
             f'Episode {i}\t Return: {ret}\t Length: {episode_length}\t Costs:{costs}')
 
-def save_videos(images, env, id, trained_env):
+def save_videos(images, env, id, trained_env, trained_distb):
     """Hanyang
     Input:
         images: list, a list contains a sequence of numpy ndarrays
@@ -127,7 +127,7 @@ def save_videos(images, env, id, trained_env):
     fps = 50  # Frames per second
     frame_width, frame_height = env.render_width, env.render_height
     save_path = 'test_results_videos'
-    filename = f'Trained-{trained_env.id}-{trained_env.disturbance_level}-test-{env.id}-{env.disturbance_level}-episode{id+1}-{time.strftime("%Y_%m_%d_%H_%M")}.mp4'
+    filename = f'Trained-{trained_env.id}-{trained_distb}-test-{env.id}-{env.disturbance_level}-episode{id+1}-{time.strftime("%Y_%m_%d_%H_%M")}.mp4'
 
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # You can use other codecs as well (e.g., 'XVID')
@@ -145,7 +145,7 @@ def save_videos(images, env, id, trained_env):
     # Destroy any OpenCV windows if they were opened
     cv2.destroyAllWindows()
 
-def play_and_save(actor_critic, env, trained_env, episodes=2, noise=False):
+def play_and_save(actor_critic, env, trained_env, trained_distb, episodes=2, noise=False):
     # Hanyang: add function to save the images and generate videos, not finished, 2023.9.20
     if not noise:
         actor_critic.eval()  # Set in evaluation mode before playing
@@ -175,7 +175,7 @@ def play_and_save(actor_critic, env, trained_env, episodes=2, noise=False):
         print(f'Episode {episode}\t Return: {ret}\t Length: {episode_length}\t Costs:{costs}')
     
     for i in range(len(images)):
-        save_videos(images[i], env, i, trained_env)
+        save_videos(images[i], env, i, trained_env, trained_distb)
 
     
 if __name__ == '__main__':
@@ -210,10 +210,10 @@ if __name__ == '__main__':
     elif args.nocontrol:
         # play no policy, that is to say, no control in the environment
         assert args.ckpt, 'Define a checkpoint for non-random play!'  # Hanyang: maybe not necessary?
-        ac, trained_env = utils.load_actor_critic_and_env_from_disk(args.ckpt)
+        ac, trained_env, env_distb = utils.load_actor_critic_and_env_from_disk(args.ckpt)
         env = gym.make(args.env)
         print("-"*150)
-        print(f"The trained environement is {trained_env.id} with {trained_env.disturbance_level} disturbance. \n ")
+        print(f"The trained environement is {trained_env.id} with {env_distb} disturbance. \n ")
         print(f"The testing environment is {env.id} with {env.disturbance_level} disturbance. \n ")
         print(f"Now we are testing the model without control inputs.")        
         print("-"*150)
@@ -223,22 +223,22 @@ if __name__ == '__main__':
     elif args.save:
         # save the images using render function
         assert args.ckpt, 'Define a checkpoint for non-random play!'  # Hanyang: maybe not necessary?
-        ac, trained_env = utils.load_actor_critic_and_env_from_disk(args.ckpt)
+        ac, trained_env, env_distb = utils.load_actor_critic_and_env_from_disk(args.ckpt)
         env = gym.make(args.env)
         print("-"*150)
-        print(f"The trained environement is {trained_env.id} with {trained_env.disturbance_level} disturbance from {args.ckpt}. \n ")
+        print(f"The trained environement is {trained_env.id} with {env_distb} disturbance from {args.ckpt}. \n ")
         print(f"The testing environment is {env.id} with {env.disturbance_level} disturbance. \n ")
         print(f"Now we are saving the videos.")
         print("-"*150)
 
-        play_and_save(actor_critic=ac, env=env, trained_env=trained_env, episodes=2, noise=args.noise)
+        play_and_save(actor_critic=ac, env=env, trained_env=trained_env, trained_distb=env_distb, episodes=2, noise=args.noise)
 
     else:  # display
         assert args.ckpt, 'Define a checkpoint for non-random play!'
-        ac, trained_env = utils.load_actor_critic_and_env_from_disk(args.ckpt)
+        ac, trained_env, env_distb = utils.load_actor_critic_and_env_from_disk(args.ckpt)
         env = gym.make(args.env)
         print("-"*150)
-        print(f"The trained environement is {trained_env.id} with {trained_env.disturbance_level} disturbance. \n ")
+        print(f"The trained environement is {trained_env.id} with {env_distb} disturbance. \n ")
         print(f"The testing environment is {env.id} with {env.disturbance_level} disturbance. \n ")
         print(f"Now we are showing the performances of the trained model from {args.ckpt}.")        
         print("-"*150)

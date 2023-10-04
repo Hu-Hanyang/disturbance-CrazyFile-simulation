@@ -33,7 +33,7 @@ if __name__ == '__main__':
         export.convert_to_onxx_file_format(args.ckpt)
     elif args.output == 'json':
         # Convert PyTorch module to JSON file and save to disk.
-        ac, env = utils.load_actor_critic_and_env_from_disk(args.ckpt)
+        ac, env, _ = utils.load_actor_critic_and_env_from_disk(args.ckpt)
         print(f'file_name_path=args.ckpt: {args.ckpt}')
         export.convert_actor_critic_to_json(
             actor_critic=ac,

@@ -32,7 +32,7 @@ def main(control_mode: str):
     # === Create model.json files
     for run_dir in list(sorted(run_directories)):
         print(f'===\nCurrent Dir: {run_dir}')
-        ac, env = utils.load_actor_critic_and_env_from_disk(run_dir)
+        ac, env, _ = utils.load_actor_critic_and_env_from_disk(run_dir)
         seed_string = control_mode + '_' + run_dir.split(os.sep)[-1]
         file_name = seed_string + '_model.json'  # e.g. PWM_seed_00XX_model.json
         file_path = f'/var/tmp/models/{control_mode}'

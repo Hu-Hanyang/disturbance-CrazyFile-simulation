@@ -467,13 +467,16 @@ def load_actor_critic_and_env_from_disk(
         holding (actor_critic, env)
     """
     config_file_path = os.path.join(file_name_path, 'config.json')
+    env_file_path = os.path.join(file_name_path, 'env_config.json')
     conf = get_file_contents(config_file_path)
-    print('Loaded config file:')
-    print(conf)
+    env_conf = get_file_contents(env_file_path)
+    # print('Loaded config file:')
+    # print(conf)
     env_id = conf.get('env_id')
     env = gym.make(env_id)
-    print(f"Current env is {env_id}.")
+    # print(f"Current env is {env_id}.")
     alg = conf.get('alg', 'ppo')
+    env_distb = env_conf.get("disturbance_level")
 
     if alg == 'sac':
         from phoenix_drone_simulation.algs.sac.sac import MLPActorCritic
@@ -507,7 +510,7 @@ def load_actor_critic_and_env_from_disk(
         print("No trained model!")
     ac.load_state_dict(torch.load(model_path), strict=False)
     print(f'Successfully loaded model from: {model_path}')
-    return ac, env
+    return ac, env, env_distb
 
 
 def test():

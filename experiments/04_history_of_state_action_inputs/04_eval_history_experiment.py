@@ -38,7 +38,7 @@ def main(args):
     #       indices 60:75 - observation history = 8
     # for run_dir in list(sorted(run_directories))[60:75]:
     #     print(f'===\nCurrent Dir: {run_dir}')
-    #     ac, env = utils.load_actor_critic_and_env_from_disk(run_dir)
+    #     ac, env, _ = utils.load_actor_critic_and_env_from_disk(run_dir)
     #     export.convert_actor_critic_to_json(actor_critic=ac,
     #                                         file_name_path=run_dir)
 

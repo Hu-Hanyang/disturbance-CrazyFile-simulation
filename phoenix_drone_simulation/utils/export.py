@@ -105,7 +105,7 @@ def convert_to_onxx_file_format(file_name_path):
     checkpoints to the ONXX format.
 
     """
-    ac, env = load_actor_critic_and_env_from_disk(file_name_path)
+    ac, env, _ = load_actor_critic_and_env_from_disk(file_name_path)
 
     # Actor network is of shape:
     # --------------------------

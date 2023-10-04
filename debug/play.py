@@ -192,7 +192,7 @@ def play_after_training(actor_critic, env, noise=False):
 
 def main(args):
     # load actor-critic and environment from disk
-    ac, env = utils.load_actor_critic_and_env_from_disk(args.ckpt)
+    ac, env, _ = utils.load_actor_critic_and_env_from_disk(args.ckpt)
 
     # adjustments to env...
     # Deactivate Domain Randomization and Noise...
