@@ -43,4 +43,5 @@ from phoenix_drone_simulation.utils.mpi_tools import is_root_process
 # print(images)
 
 
-print(f"The trained env is xx; \n The test env is xxx")
+# print(f"The trained env is xx; \n The test env is xxx")
+

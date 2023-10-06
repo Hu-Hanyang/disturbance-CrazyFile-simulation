@@ -32,10 +32,10 @@ def start_training(algo, env_id):
     start_time = time.perf_counter()
 
     # 2) Train model - it takes typically at least 100 epochs for training
-    model.fit(epochs=300)
+    model.fit(epochs=301)
 
     duration = time.perf_counter() - start_time
-    print(f"The time of training is {duration/3600}h. \n")
+    print(f"The time of training is {duration//3600}hours-{(duration%3600)//60}minutes-{(duration%3600)%60}seconds. \n")
     # 3) Benchmark the f
     # inal policy and save results into `returns.csv`
     model.eval()
@@ -44,5 +44,6 @@ if __name__ == "__main__":
     algorithm = 'ppo'
     # env_id = 'DroneHoverBulletEnvWithAdversary-v0'
     # env_id = 'DroneHoverBulletEnvWithoutAdversary-v0'
-    env_id = 'DroneHoverBulletEnvWithAdversaryInitial-v0'
+    # env_id = 'DroneHoverBulletEnvWithAdversaryInitial-v0'
+    env_id = 'DroneHoverBulletEnvWithRandomHJAdversary-v0'
     start_training(algo=algorithm, env_id=env_id)

@@ -24,6 +24,12 @@ register(
 )
 
 register(
+    id='DroneHoverBulletEnvWithRandomHJAdversary-v0',
+    entry_point='phoenix_drone_simulation.envs.hover:DroneHoverBulletEnvWithRandomHJAdversary',
+    max_episode_steps=500,
+)
+
+register(
     id = 'DroneHoverBulletEnvWithoutAdversary-v0',
     entry_point = 'phoenix_drone_simulation.envs.hover:DroneHoverBulletEnvWithoutAdversary',
     max_episode_steps = 500,
