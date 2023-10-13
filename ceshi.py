@@ -79,26 +79,42 @@ def Boltzmann1():
 
 # print(f"Randomly selected state: {random_state}")
 
+
+def Boltzmann(low=0.0, high=2.1, accuracy=0.1):
+    energies = np.array(np.arange(low, high, accuracy))  # Example energy levels
+    beta = 1.0  # Inverse temperature (1/kT)
+
+    # Calculate Boltzmann weights
+    weights = np.exp(-beta * energies)
+
+    # Normalize to get probabilities
+    probabilities = weights / np.sum(weights)
+
+    # Generate random samples from the Boltzmann distribution
+    random_state = np.around(np.random.choice(energies, p=probabilities), 1)  
+    return random_state
+
 N = 10000
 result = np.zeros(N)
 for i in range(N):
-    result[i] = Boltzmann1()
+    # result[i] = Boltzmann1()
+    result[i] = Boltzmann()
 
-plt.figure()
-plt.scatter(range(N), result)
-# plt.plot(result)
-plt.show()
-
-
-# plt.hist(np.around(result, 1), bins=210, edgecolor='black')
-
-# # Add labels and title
-# plt.xlabel('Value')
-# plt.ylabel('Frequency')
-# plt.title('Distribution of Data')
-
-# # Show the plot
+# plt.figure()
+# plt.scatter(range(N), result)
+# # plt.plot(result)
 # plt.show()
+
+
+plt.hist(np.around(result, 1), bins=210, edgecolor='black')
+
+# Add labels and title
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.title('Distribution of Data')
+
+# Show the plot
+plt.show()
 
 # a = np.array(np.arange(0.00, 2.10, 0.01))
 # print(a)
