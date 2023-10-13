@@ -1,16 +1,32 @@
 r""""Environment utilities for Project Phoenix.
 
-Author:     Sven Gronauer
+Author:     Sven Gronauer, Hanyang Hu
 Created:    17.05.2021
 
 Updates:
     14.07.2021: Added low-pass filter and sensor noise (according to USC)
     05.08.2021: Added transformation function for quaternions, rotation matrices
     14.04.2022: Add depreciation warnings for future clean-ups
+    11th, October, 2023: Add function 'Boltzmann' by Hanyang
 """
 import os
 import numpy as np
 from math import exp
+
+
+def Boltzmann(low=0.0, high=2.1, accuracy=0.1):
+    energies = np.array(np.arange(low, high, accuracy))  # Example energy levels
+    beta = 1.0  # Inverse temperature (1/kT)
+
+    # Calculate Boltzmann weights
+    weights = np.exp(-beta * energies)
+
+    # Normalize to get probabilities
+    probabilities = weights / np.sum(weights)
+
+    # Generate random samples from the Boltzmann distribution
+    random_state = np.around(np.random.choice(energies, p=probabilities), 1)  
+    return random_state
 
 
 def rad2deg(x):

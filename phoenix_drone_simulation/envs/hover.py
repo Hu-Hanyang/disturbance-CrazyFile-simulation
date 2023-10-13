@@ -9,7 +9,7 @@ from PIL import Image
 from phoenix_drone_simulation.envs.physics import PybulletPhysicsWithAdversary
 from phoenix_drone_simulation.envs.base import DroneBaseEnv
 from phoenix_drone_simulation.envs.agents import CrazyFlieSimpleAgent, CrazyFlieBulletAgent, CrazyFlieBulletAgentWithAdversary
-from phoenix_drone_simulation.envs.utils import deg2rad, rad2deg, get_assets_path
+from phoenix_drone_simulation.envs.utils import deg2rad, rad2deg, get_assets_path, Boltzmann
 from phoenix_drone_simulation.adversarial_generation.FasTrack_data.distur_gener import distur_gener, quat2euler
 
 
@@ -477,7 +477,10 @@ class DroneHoverBulletEnvWithRandomHJAdversary(DroneHoverBaseEnv):
                                         dtype=np.float32)
         
         # Hanyang: generate random number in the range of [0.0, 2.0] with 1 decimal place and use it as the distburance level
-        self.disturbance_level = round(np.random.uniform(0.0, 2.1), 1)
+        # self.disturbance_level = round(np.random.uniform(0.0, 2.1), 1)
+        # self.disturbance_level = 0.0
+        self.disturbance_level = Boltzmann()
+
         self.id = 'DroneHoverBulletEnvWithRandomHJAdversary'
 
 
@@ -583,6 +586,10 @@ class DroneHoverBulletEnvWithRandomHJAdversary(DroneHoverBaseEnv):
         # yaw_angle and yaw_rate are not used in the disturbance model
         # combine angles and angular rates together to form a [6,1] list
         states = np.concatenate((angles, angular_rates), axis=0)
+        # Hanyang: add Boltzmann distribution to generate random disturbance level
+        # self.disturbance_level = Boltzmann()
+        # self.disturbance_level = round(np.random.uniform(0.0, 2.1), 1)
+
         _, dstb = distur_gener(states, self.disturbance_level) 
 
         for _ in range(self.aggregate_phy_steps):

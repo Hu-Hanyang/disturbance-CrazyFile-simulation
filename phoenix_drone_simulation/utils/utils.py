@@ -503,7 +503,7 @@ def load_actor_critic_and_env_from_disk(
             ac_kwargs=conf['ac_kwargs']
         )
     if len(os.listdir(os.path.join(file_name_path, 'torch_save'))) > 1:
-        model_path = os.path.join(file_name_path, 'torch_save', 'model299.pt')
+        model_path = os.path.join(file_name_path, 'torch_save', 'model300.pt')
     elif len(os.listdir(os.path.join(file_name_path, 'torch_save'))) == 1:
         model_path = os.path.join(file_name_path, 'torch_save', 'model.pt')
     else:

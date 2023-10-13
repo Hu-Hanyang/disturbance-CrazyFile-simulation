@@ -143,7 +143,7 @@ def save_videos(images, env, id, trained_env, trained_distb):
     out.release()
 
     # Destroy any OpenCV windows if they were opened
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
 
 def play_and_save(actor_critic, env, trained_env, trained_distb, episodes=2, noise=False):
     # Hanyang: add function to save the images and generate videos, not finished, 2023.9.20

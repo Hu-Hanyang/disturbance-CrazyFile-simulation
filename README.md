@@ -75,6 +75,15 @@ Logs of the env 'DroneHoverBulletEnvWithAdversaryInitial':
 | 2023_09_15_13_42 | 49593 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_15_13_42/seed_49593 | None | not work | 1.0 | Nothing. |
 | 2023_09_17_10_41 | 14929 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_17_10_41/seed_14929 | None | not work | 2.0 | Nothing. |
 | 2023_09_25_14_10 | 63293 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_25_14_10/seed_63293 | None | unknowning | 0.5 | Nothing. |
+
+
+Logs of the env 'DroneHoverBulletEnvWithRandomHJAdversaryInitial':
+| time | seed | environment | algorithm | train logdir | test (log and command) | performance | episodic random uniform distb level |else | 
+| ------------|-----------|------------|-----------| ----------- |----------- |----------- | ----------- |----------- |
+| 2023_10_11_12_04 | 61897 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_11_12_04/seed_61897 | None | Unknown | step Boltzmann distb level | Nothing. |
+| 2023_10_11_12_07 | 62086 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_11_12_07/seed_62086 | None | Unknown | step random uniform distb level | Nothing. |
+| 2023_10_11_12_33 | 63596 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_11_12_33/seed_63596 | None | Unknown | episodic Boltzmann distb level | Nothing. |
+
 ### Test:
 Notice: the environment in test also needs to change while we want to see different disturbance level.
 
