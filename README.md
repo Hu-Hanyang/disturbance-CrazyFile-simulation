@@ -83,7 +83,7 @@ Logs of the env 'DroneHoverBulletEnvWithRandomHJAdversaryInitial':
 | 2023_10_11_12_04 | 61897 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_11_12_04/seed_61897 | None | Unknown | step Boltzmann distb level | Nothing. |
 | 2023_10_11_12_07 | 62086 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_11_12_07/seed_62086 | None | Unknown | step random uniform distb level | Nothing. |
 | 2023_10_11_12_33 | 63596 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_11_12_33/seed_63596 | None | Unknown | episodic Boltzmann distb level | Nothing. |
-
+| 2023_10_14_23_13 | 33562 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_14_23_13/seed_33562 | None | Unknown | episodic Boltzmann distb level | Add implementations to the reset function |
 ### Test:
 Notice: the environment in test also needs to change while we want to see different disturbance level.
 

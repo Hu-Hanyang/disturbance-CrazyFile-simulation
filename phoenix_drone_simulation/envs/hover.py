@@ -483,6 +483,53 @@ class DroneHoverBulletEnvWithRandomHJAdversary(DroneHoverBaseEnv):
 
         self.id = 'DroneHoverBulletEnvWithRandomHJAdversary'
 
+    def reset(self) -> np.ndarray:
+        """Reset environment to initial state.
+
+        This function is called after agent encountered terminal state.
+
+        Returns
+        -------
+        array
+            holding the observation of the initial state
+        """
+        self.iteration = 0
+        # disable rendering before resetting
+        self.bc.configureDebugVisualizer(self.bc.COV_ENABLE_RENDERING, 0)
+        if self.stored_state_id >= 0:
+            self.bc.restoreState(self.stored_state_id)
+        else:
+            # Restoring a saved state circumvents the necessity to load all
+            # bodies again..
+            self.stored_state_id = self.bc.saveState()
+        self.drone.reset()  # resets only internals such as x, y, last action
+        self.task_specific_reset()
+        self.apply_domain_randomization()
+
+        # init low pass filter(s) with new values:
+        self.gyro_lpf.set(x=self.drone.rpy_dot)
+
+        # collect information from PyBullet simulation
+        """Gather information from PyBullet about drone's current state."""
+        self.drone.update_information()
+        self.old_potential = self.compute_potential()
+        self.state = self.drone.get_state()
+        if self.use_graphics:  # enable rendering again after resetting
+            self.bc.configureDebugVisualizer(self.bc.COV_ENABLE_RENDERING, 1)
+        obs = self.compute_observation()
+
+        # fill history buffers
+        # add observation and action to history..
+        N = self.observation_history.maxlen
+        [self.observation_history.append(obs) for _ in range(N)]
+        action = self.drone.last_action
+        [self.action_history.append(action) for _ in range(N)]
+        self.last_action = action
+        obs = self.compute_history()
+        # Hanyang: set the disturbance level to a random number in the range of [0.0, 2.0] with 1 decimal place
+        self.disturbance_level = Boltzmann()
+
+        return obs
 
     """
     XL: Rewrite this method from parent class
