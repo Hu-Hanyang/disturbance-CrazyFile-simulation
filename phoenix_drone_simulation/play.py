@@ -171,11 +171,12 @@ def play_and_save(actor_critic, env, trained_env, trained_distb, episodes=2, noi
             episode_length += 1
             time.sleep(1./120)  # 0.0083 second
         
+        save_videos(images[episode], env, episode, trained_env, trained_distb)
         episode += 1
         print(f'Episode {episode}\t Return: {ret}\t Length: {episode_length}\t Costs:{costs}')
     
-    for i in range(len(images)):
-        save_videos(images[i], env, i, trained_env, trained_distb)
+    # for i in range(len(images)):
+    #     save_videos(images[i], env, i, trained_env, trained_distb)
 
     
 if __name__ == '__main__':
@@ -231,7 +232,7 @@ if __name__ == '__main__':
         print(f"Now we are saving the videos.")
         print("-"*150)
 
-        play_and_save(actor_critic=ac, env=env, trained_env=trained_env, trained_distb=env_distb, episodes=2, noise=args.noise)
+        play_and_save(actor_critic=ac, env=env, trained_env=trained_env, trained_distb=env_distb, episodes=4, noise=args.noise)
 
     else:  # display
         assert args.ckpt, 'Define a checkpoint for non-random play!'
