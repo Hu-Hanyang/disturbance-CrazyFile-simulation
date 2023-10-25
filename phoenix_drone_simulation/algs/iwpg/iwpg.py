@@ -109,6 +109,8 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
         self.use_standardized_advantages = use_standardized_advantages
         self.video_freq = video_freq
         self.vf_lr = vf_lr
+        # Hanyang: record the information in each episode
+        self.num_episodes = 0
 
         # ==== Call assertions....
         self._sanity_checks()
@@ -384,6 +386,11 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
                 self.buf.finish_path(v)
                 if terminal:  # only save EpRet / EpLen if trajectory finished
                     self.logger.store(EpRet=ep_ret, EpLen=ep_len)
+                
+                # Hanyang: record the information in each episode
+                self.num_episodes += 1
+                self.logger.log_episode(self.num_episodes, self.env.disturbance_level, ep_len, ep_ret)
+
                 o, ep_ret, ep_len = self.env.reset(), 0., 0
 
     def update_running_statistics(self, data) -> None:

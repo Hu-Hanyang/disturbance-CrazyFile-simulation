@@ -14,6 +14,7 @@ import os.path as osp
 import time
 import atexit
 import os
+import csv
 import gym
 import numpy as np
 import json
@@ -247,6 +248,15 @@ class Logger:
             atexit.register(self.output_file.close)
             print(colorize(f"Logging data to {self.output_file.name}",
                            'cyan', bold=True))
+            # Hanyang: log the information in each episode with a csv file
+            self.episodic_file = osp.join(self.log_dir, "episodic_data.csv")
+            with open(self.episodic_file, mode='w', newline='') as csv_file:
+                writer = csv.writer(csv_file)
+                header = ['Episode', 'disturbance_level', 'Steps', 'Returns']
+                # Write the header to the CSV file
+                writer.writerow(header)
+            csv_file.close()
+            print(f"The {self.episodic_file} is created. \n")
         else:
             self.output_file = None
 
@@ -572,3 +582,11 @@ class EpochLogger(Logger):
                 super().log_tabular(key + '/Min', stats[2])
                 super().log_tabular(key + '/Max', stats[3])
         self.epoch_dict[key] = []
+
+    # Hanyang: add log_episode method to log the information of each episode
+    def log_episode(self, num_episodes, distb_level, steps, returns):
+        episode_data = [num_episodes, distb_level, steps, returns]
+        with open(self.episodic_file, mode='a', newline='') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow(episode_data)
+        csv_file.close()

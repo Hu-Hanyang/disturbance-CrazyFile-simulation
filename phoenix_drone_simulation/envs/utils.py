@@ -13,6 +13,16 @@ import os
 import numpy as np
 from math import exp
 
+def Uniform(total_epoch, current_epoch):
+    distb_levels = np.arange(low=0.0, high=2.1, accuracy=0.1)
+    total_numbers = len(distb_levels)
+    interval = total_epoch // total_numbers
+    remainder = total_epoch % total_numbers
+    if current_epoch < total_epoch - remainder:
+        distb_level = np.around((current_epoch // interval), 1)
+    else:
+        distb_level = np.random.choice(distb_levels)
+    return distb_level
 
 def Boltzmann(low=0.0, high=2.1, accuracy=0.1):
     energies = np.array(np.arange(low, high, accuracy))  # Example energy levels
