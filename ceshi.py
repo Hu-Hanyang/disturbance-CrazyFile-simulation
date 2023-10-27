@@ -131,19 +131,43 @@ import matplotlib.pyplot as plt
 #         writer.writerow(episode_data)
 #     file.close()
 
-def generate_output(N):
-    distb_level = np.arange(0.0, 2.1, 0.1)
-    total_numbers = 21
-    interval = N // total_numbers
-    remainder = N % total_numbers
+# def generate_output(N):
+#     distb_level = np.arange(0.0, 2.1, 0.1)
+#     total_numbers = 21
+#     interval = N // total_numbers
+#     remainder = N % total_numbers
 
-    for i in range(N-remainder):
-        integer = i // interval
-        print(f"{distb_level[integer]:.1f}")
-        # if i % interval == 0:
-        #     print(f'{current_number / 10:.1f}')
-        #     current_number += 1
+#     for i in range(N-remainder):
+#         integer = i // interval
+#         print(f"{distb_level[integer]:.1f}")
+#         # if i % interval == 0:
+#         #     print(f'{current_number / 10:.1f}')
+#         #     current_number += 1
 
-N = 60  # 这里可以替换成你想要的N值
-generate_output(N)
+# N = 60  # 这里可以替换成你想要的N值
+# generate_output(N)
 
+import csv
+
+# Assuming you have three lists: ep_lengths, returns, and distbs
+
+ep_lengths = [10, 15, 20, 25]
+returns = [100, 150, 200, 250]
+distbs = [0.5, 0.6, 0.7, 0.8]
+
+# Combine the lists into a list of tuples for easier writing to CSV
+data = list(zip(ep_lengths, returns, distbs))
+
+# Specify the file name and open the CSV file in write mode
+file_name = 'episode_data.csv'
+
+with open(file_name, 'w', newline='') as file:
+    writer = csv.writer(file)
+    
+    # Write the header
+    writer.writerow(['Episode Length', 'Returns', 'Distbs'])
+    
+    # Write the data
+    writer.writerows(data)
+
+print(f'Data has been written to {file_name}')

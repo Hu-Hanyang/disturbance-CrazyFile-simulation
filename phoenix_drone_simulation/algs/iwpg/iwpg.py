@@ -12,7 +12,9 @@ import gym
 import time
 import torch
 import os
+import imageio
 from copy import deepcopy
+from PIL import Image
 
 # local imports
 from phoenix_drone_simulation.algs import core
@@ -61,6 +63,7 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
             save_freq: int = 50,
             seed: int = 0,
             video_freq: int = -1,  # set to positive integer for video recording
+            val_freq: int = 50,  # Hanyang: set to positive integer for validation
             **kwargs  # use to log parameters from child classes
     ):
 
@@ -85,6 +88,7 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
         self.check_freq = check_freq
         self.entropy_coef = entropy_coef if use_entropy else 0.0
         self.epoch = 0  # iterated in learn method
+        self.num_epoch = 0
         self.epochs = epochs
         self.gamma = gamma
         self.lam = lam
@@ -95,6 +99,7 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
         self.num_mini_batches = num_mini_batches
         self.pi_lr = pi_lr
         self.save_freq = save_freq
+        self.val_freq = val_freq  # Hanyang: set to positive integer for evaluation
         self.seed = seed
         self.steps_per_epoch = steps_per_epoch
         self.target_kl = target_kl
@@ -122,6 +127,9 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
         # save environment settings to disk
         self.logger.save_env_config(env=self.env)
         loggers.set_level(loggers.INFO)
+
+        # Hanyang: initialize validation files etc
+
 
         # === Seeding
         seed += 10000 * mpi_tools.proc_id()
@@ -286,9 +294,17 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
         # Check if all models own the same parameter values
         if self.epoch % self.check_freq == 0:
             self.check_distributed_parameters()
+        # Hanyang: evaluate the current plicy, the same to validation
+        if self.epoch % self.val_freq == 0:
+            self.ac.eval()
+            self.validate()
+            self.ac.train()  # back to train mode
         # Save model to disk
         if is_last_epoch or self.epoch % self.save_freq == 0:
             self.logger.save_state(state_dict={}, itr=self.epoch)  # Hanyang: save the model during training process, former: itr=None
+
+        # Hanyang: record the current epoch number
+        self.num_epoch += 1
 
     def log(self, epoch: int) -> None:
         # Log info about epoch
@@ -492,6 +508,61 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
             'Loss/DeltaValue': np.mean(val_losses) - self.loss_v_before,
             'Loss/Value': self.loss_v_before,
         })
+    
+    # Hanyang: add two methods to validate the current policy during training process
+    def val_once(self, episode):
+        frames = []
+        done = False
+        x = self.env.reset()
+        ret = 0.
+        costs = 0.
+        episode_length = 0
+        distb_level = self.env.disturbance_level
+
+        while not done:
+            frames.append(self.env.capture_image().astype(np.uint8))
+            obs = torch.as_tensor(x, dtype=torch.float32)
+            action, value, *_ = self.ac(obs)  # in evaluation mode, the self.ac is deterministic (see method predict() in core.py)
+            x, r, done, info = self.env.step(action)
+            ret += r
+            costs += info.get('cost', 0.)
+            episode_length += 1
+
+        self.save_gif(frames, episode, distb_level)
+
+        return ret, episode_length, costs, distb_level
+    
+    def validate(self, num_evaluations: int = 8):
+        assert not self.ac.training, 'Use actor_critic.eval() beforehand.'
+
+        # size = mpi_tools.num_procs()
+        # num_local_evaluations = num_evaluations // size
+        num_local_evaluations = num_evaluations
+
+        epochs = [self.num_epoch for _ in range(num_local_evaluations)]
+        returns = np.zeros(num_local_evaluations, dtype=np.float32)
+        costs = np.zeros(num_local_evaluations, dtype=np.float32)
+        ep_lengths = np.zeros(num_local_evaluations, dtype=np.float32)
+        distb_levels = np.zeros(num_local_evaluations, dtype=np.float32)
+
+        for i in range(num_local_evaluations):
+            returns[i], ep_lengths[i], costs[i], distb_levels[i] = self.val_once(i)
+
+        self.logger.log_validation(epochs, distb_levels.tolist(), ep_lengths.tolist(), returns.tolist(), costs.tolist())
+    
+    def save_gif(self, frames, episode, distb_level):
+        # create png files
+        for i, frame in enumerate(frames):
+            img = Image.fromarray(frame)
+            img.save(f"{self.logger.validation_gifs}/frame_{i}.png")
+        
+        # read png files and create gif
+        images = [imageio.imread(f'{self.logger.validation_gifs}/frame_{i}.png') for i in range(len(frames))]
+        imageio.mimsave(f'{self.logger.validation_gifs}/{self.num_epoch}-{episode}-{distb_level}.gif', images, duration=0.5)  # 'duration' is in seconds
+
+        # remove png files
+        for i in range(len(frames)):
+            os.remove(f"{self.logger.validation_gifs}/frame_{i}.png")
 
 
 def get_alg(env_id, **kwargs) -> core.Algorithm:

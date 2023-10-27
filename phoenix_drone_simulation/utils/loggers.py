@@ -248,15 +248,30 @@ class Logger:
             atexit.register(self.output_file.close)
             print(colorize(f"Logging data to {self.output_file.name}",
                            'cyan', bold=True))
-            # Hanyang: log the information in each episode with a csv file
+            # Hanyang: log the information in each episode with a csv file 
             self.episodic_file = osp.join(self.log_dir, "episodic_data.csv")
-            with open(self.episodic_file, mode='w', newline='') as csv_file:
-                writer = csv.writer(csv_file)
+            with open(self.episodic_file, mode='w', newline='') as episodic_csv:
+                writer = csv.writer(episodic_csv)
                 header = ['Episode', 'disturbance_level', 'Steps', 'Returns']
                 # Write the header to the CSV file
                 writer.writerow(header)
-            csv_file.close()
+            episodic_csv.close()
             print(f"The {self.episodic_file} is created. \n")
+
+            # Hanyang: log the validation results with a csv file
+            self.validation_file = osp.join(self.log_dir, "validation_results.csv")
+            with open(self.validation_file, mode='w', newline='') as validation_csv:
+                writer = csv.writer(validation_csv)
+                header = ['Training_Epoch', 'disturbance_level', 'Steps', 'Returns', 'Costs']
+                # Write the header to the CSV file
+                writer.writerow(header)
+            validation_csv.close()
+            print(f"The {self.validation_file} is created. \n")
+
+            # Hanyang: mkdir to store the gifs of validation
+            os.makedirs(os.path.join(self.log_dir, 'validation_gifs'), exist_ok=True)
+            self.validation_gifs = os.path.join(self.log_dir, 'validation_gifs')
+
         else:
             self.output_file = None
 
@@ -583,10 +598,20 @@ class EpochLogger(Logger):
                 super().log_tabular(key + '/Max', stats[3])
         self.epoch_dict[key] = []
 
-    # Hanyang: add log_episode method to log the information of each episode
+    # Hanyang: add log_episode and log_validation method to log the information of each episode and validation results
     def log_episode(self, num_episodes, distb_level, steps, returns):
+        # all inputs are scalars
         episode_data = [num_episodes, distb_level, steps, returns]
         with open(self.episodic_file, mode='a', newline='') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(episode_data)
+        csv_file.close()
+
+    def log_validation(self, current_epoch, distb_level, steps, returns, costs):
+        # current_epoch is a sclar, others are lists
+        validation_data = list(zip(current_epoch, distb_level, steps, returns, costs))
+        # validation_data = [current_epoch, distb_level, steps, returns, costs]
+        with open(self.validation_file, mode='a', newline='') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerows(validation_data)
         csv_file.close()

@@ -40,7 +40,7 @@ It seems there's something wrong with `pip install heterocl` or `pip install het
 
 # Working Logs
 ## Basic commands
-### Training: 
+### 1. Training: 
 #### Method1 
 `python -m phoenix_drone_simulation.train --alg ppo --env DroneHoverBulletEnvWithAdversary-v0`
 Its default logdir is `/localhome/hha160/projects/disturbance-CrazyFile-simulation/train_results/`.
@@ -85,7 +85,7 @@ Logs of the env 'DroneHoverBulletEnvWithRandomHJAdversaryInitial':
 | 2023_10_11_12_33 | 63596 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_11_12_33/seed_63596 | None | Unknown | episodic Boltzmann distb level | Nothing. |
 | 2023_10_14_23_13 | 33562 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_14_23_13/seed_33562 | None | Unknown | episodic Boltzmann distb level | Add implementations to the reset function |
 | 2023_10_16_12_30 | 36701 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_16_12_30/seed_36701 | None | Unknown | episodic Boltzmann distb level | Add implementations to the reset function |
-### Test:
+### 2. Test:
 Notice: the environment in test also needs to change while we want to see different disturbance level.
 
 1. Test with random disturbance env:
@@ -105,3 +105,6 @@ Notice: the environment in test also needs to change while we want to see differ
 6. Test with trained model in different envs and save the videos:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'  --save`
    example: `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' --save`
+
+### 3. Modifications of the environment
+#### 

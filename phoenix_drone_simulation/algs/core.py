@@ -258,11 +258,12 @@ class MLPGaussianActor(Actor):
         # Last axis sum needed for Torch Normal distribution
         return pi.log_prob(act).sum(axis=-1)
 
+    # Hanyang: check the performance using evaluation during the training process 
     def sample(self, obs):
         pi = self.dist(obs)
         a = pi.sample()
         logp_a = self.log_prob_from_dist(pi, a)
-
+        
         return a, logp_a
 
     def set_log_std(self, frac):

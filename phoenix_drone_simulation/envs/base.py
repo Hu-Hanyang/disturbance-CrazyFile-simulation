@@ -516,6 +516,7 @@ class DroneBaseEnv(gym.Env, abc.ABC):
         #     self.bc.disconnect()
         pass
 
+    # Hanyang: save numpy array to save image
     def capture_image(self):        
         base_pos = [0, 0, 0]
         all_states = self.drone.get_state()
