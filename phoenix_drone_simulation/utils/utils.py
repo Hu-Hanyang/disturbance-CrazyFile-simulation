@@ -502,11 +502,12 @@ def load_actor_critic_and_env_from_disk(
             use_shared_weights=False,
             ac_kwargs=conf['ac_kwargs']
         )
+    
     if len(os.listdir(os.path.join(file_name_path, 'torch_save'))) > 1:
-        if os.path.isfile(os.path.join(file_name_path+'/torch_save', 'model300.pt')):                                    
-            model_path = os.path.join(file_name_path, 'torch_save', 'model300.pt')
-        else:
-            model_path = os.path.join(file_name_path, 'torch_save', 'model299.pt')
+        model_folder = os.listdir(os.path.join(file_name_path, 'torch_save'))
+        model_files = [file for file in model_folder if file.startswith("model") and file.endswith(".pt")]
+        max_suffix = max([int(f.split('model')[1].split('.pt')[0]) for f in model_files if f != 'model.pt'])
+        model_path = os.path.join(file_name_path, 'torch_save', f'model{max_suffix}.pt')
     elif len(os.listdir(os.path.join(file_name_path, 'torch_save'))) == 1:
         model_path = os.path.join(file_name_path, 'torch_save', 'model.pt')
     else:

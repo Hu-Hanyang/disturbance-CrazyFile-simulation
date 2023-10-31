@@ -248,6 +248,7 @@ class Logger:
             atexit.register(self.output_file.close)
             print(colorize(f"Logging data to {self.output_file.name}",
                            'cyan', bold=True))
+            
             # Hanyang: log the information in each episode with a csv file 
             self.episodic_file = osp.join(self.log_dir, "episodic_data.csv")
             with open(self.episodic_file, mode='w', newline='') as episodic_csv:
@@ -267,6 +268,15 @@ class Logger:
                 writer.writerow(header)
             validation_csv.close()
             print(f"The {self.validation_file} is created. \n")
+
+            # Hanyang: log the penalty (reward components) in each step with a csv file
+            self.penalty_file = osp.join(self.log_dir, "penalty_data.csv")
+            with open(self.penalty_file, mode='w', newline='') as penalty_csv:
+                writer = csv.writer(penalty_csv)
+                header = ['Step', 'Penalty_crash', 'Penalty_rpy', 'Penalty_rpy_dot', 'Penalty']
+                writer.writerow(header)
+            penalty_csv.close()
+            print(f"The {self.penalty_file} is created. \n")
 
             # Hanyang: mkdir to store the gifs of validation
             os.makedirs(os.path.join(self.log_dir, 'validation_gifs'), exist_ok=True)
@@ -614,4 +624,11 @@ class EpochLogger(Logger):
         with open(self.validation_file, mode='a', newline='') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerows(validation_data)
+        csv_file.close()
+    
+    def log_penalty(self, step, penalty_crash, penalty_rpy, penalty_rpy_dot, penalty):
+        penalty_data = [step, penalty_crash, penalty_rpy, penalty_rpy_dot, penalty]
+        with open(self.penalty_file, mode='a', newline='') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow(penalty_data)
         csv_file.close()

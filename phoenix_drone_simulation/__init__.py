@@ -52,6 +52,15 @@ register(
     entry_point = 'phoenix_drone_simulation.envs.hover:DroneHoverBulletEnvWithCurriculumHJAdversary',
     max_episode_steps = 500,
 )
+
+# Hanyang: below are envs with free hover tasks
+register(
+    id='DroneHoverFreeBulletEnvWithoutAdversary-v0',
+    entry_point='phoenix_drone_simulation.envs.hover:DroneHoverFreeBulletEnvWithoutAdversary',
+    max_episode_steps=500,
+)
+
+
 # ==================
 #   Take-off Task
 # ==================

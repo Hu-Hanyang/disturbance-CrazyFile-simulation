@@ -147,27 +147,50 @@ import matplotlib.pyplot as plt
 # N = 60  # 这里可以替换成你想要的N值
 # generate_output(N)
 
-import csv
+# import csv
 
-# Assuming you have three lists: ep_lengths, returns, and distbs
+# # Assuming you have three lists: ep_lengths, returns, and distbs
 
-ep_lengths = [10, 15, 20, 25]
-returns = [100, 150, 200, 250]
-distbs = [0.5, 0.6, 0.7, 0.8]
+# ep_lengths = [10, 15, 20, 25]
+# returns = [100, 150, 200, 250]
+# distbs = [0.5, 0.6, 0.7, 0.8]
 
-# Combine the lists into a list of tuples for easier writing to CSV
-data = list(zip(ep_lengths, returns, distbs))
+# # Combine the lists into a list of tuples for easier writing to CSV
+# data = list(zip(ep_lengths, returns, distbs))
 
-# Specify the file name and open the CSV file in write mode
-file_name = 'episode_data.csv'
+# # Specify the file name and open the CSV file in write mode
+# file_name = 'episode_data.csv'
 
-with open(file_name, 'w', newline='') as file:
-    writer = csv.writer(file)
+# with open(file_name, 'w', newline='') as file:
+#     writer = csv.writer(file)
     
-    # Write the header
-    writer.writerow(['Episode Length', 'Returns', 'Distbs'])
+#     # Write the header
+#     writer.writerow(['Episode Length', 'Returns', 'Distbs'])
     
-    # Write the data
-    writer.writerows(data)
+#     # Write the data
+#     writer.writerows(data)
 
-print(f'Data has been written to {file_name}')
+# print(f'Data has been written to {file_name}')
+
+
+
+folder_path = "train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_18_11_29/seed_09209/torch_save"
+files = os.listdir(folder_path)
+model_files = [file for file in files if file.startswith("model") and file.endswith(".pt")]
+print(model_files)
+largest_suffix = 0
+selected_model = ""
+
+# choose the maximum suffix number in the model_files
+
+
+suffixes = [int(f.split('model')[1].split('.pt')[0]) for f in model_files if f != 'model.pt']
+max_suffix = max(suffixes)
+
+model_path = os.path.join(folder_path, f'model{max_suffix}.pt')
+
+print(model_path)
+
+
+
+
