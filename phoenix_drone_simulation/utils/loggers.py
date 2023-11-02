@@ -273,7 +273,7 @@ class Logger:
             self.penalty_file = osp.join(self.log_dir, "penalty_data.csv")
             with open(self.penalty_file, mode='w', newline='') as penalty_csv:
                 writer = csv.writer(penalty_csv)
-                header = ['Step', 'Penalty_crash', 'Penalty_rpy', 'Penalty_rpy_dot', 'Penalty']
+                header = ['Step', 'Penalty_crash', 'Penalty_rpy', 'Penalty_rpy_dot', 'Penalty_z', 'Penalty']
                 writer.writerow(header)
             penalty_csv.close()
             print(f"The {self.penalty_file} is created. \n")
@@ -626,8 +626,8 @@ class EpochLogger(Logger):
             writer.writerows(validation_data)
         csv_file.close()
     
-    def log_penalty(self, step, penalty_crash, penalty_rpy, penalty_rpy_dot, penalty):
-        penalty_data = [step, penalty_crash, penalty_rpy, penalty_rpy_dot, penalty]
+    def log_penalty(self, step, penalty_crash, penalty_rpy, penalty_rpy_dot, penalty_z, penalty):
+        penalty_data = [step, penalty_crash, penalty_rpy, penalty_rpy_dot, penalty_z, penalty]
         with open(self.penalty_file, mode='a', newline='') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(penalty_data)

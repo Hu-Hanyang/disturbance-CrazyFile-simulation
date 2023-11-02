@@ -34,7 +34,7 @@ class DroneHoverFreeEnv(DroneBaseEnv):
             penalty_spin: float = 1e-2,  # Hanayng: original is 1e-4
             penalty_terminal: float = 1000,  # Hanyang: try larger crash penalty,original is 100
             penalty_velocity: float = 0.,  # Hanyang: original is 0
-            penalty_z: float = 1e-2,  # Hanyang: original is 0
+            penalty_z: float = 1.0,  # Hanyang: original is 0
             **kwargs
     ):
         # === Hover task specific attributes
@@ -51,9 +51,11 @@ class DroneHoverFreeEnv(DroneBaseEnv):
         self.penalty_spin = penalty_spin
         self.penalty_terminal = penalty_terminal
         self.penalty_velocity = penalty_velocity
+        self.penalty_z = penalty_z
         self.penalty_crash = 0.0
         self.penalty = 0.0
         self.penalty_rpy = 0.0
+        self.penalty_rpy_dot = 0.0
 
         # === Costs: The following constants are used for cost calculation:
         self.vel_limit = 0.25  # [m/s]
@@ -210,12 +212,17 @@ class DroneHoverFreeEnv(DroneBaseEnv):
         penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_spin,
                             penalty_velocity, penalty_action, penalty_terminal])
         
-        self.penalty = penalties
-        self.penalty_rpy = penalty_rpy
-        self.penalty_crash = penalty_terminal
         # L2 norm:
         distance = self.penalty_z * np.linalg.norm(self.drone.xyz[2] - self.target_pos[2])
         reward = -penalties - distance
+
+        # Hanyang: log penalty terms for debugging
+        self.penalty_log = penalties
+        self.penalty_rpy_log = penalty_rpy
+        self.penalty_crash_log = penalty_terminal
+        self.penalty_z_log = distance
+        self.penalty_rpy_dot_log = penalty_spin
+
         return reward
 
     def task_specific_reset(self):
@@ -300,7 +307,7 @@ class DroneHoverBulletFreeEnvWithAdversary(DroneHoverFreeEnv):
                                         high=np.array([1*10**-3,  1*10**-3,  1*10**-4]), 
                                         dtype=np.float32)
         # self.dstb_gen   = lambda x: self.dstb_space.sample() 
-        self.disturbance_level = 0.0 # 2.0  # 1.5 # Hanyang: try different values to see the upperbound
+        self.disturbance_level = 1.0 # 2.0  # 1.5 # Hanyang: try different values to see the upperbound
         self.id = 'DroneHoverBulletFreeEnvWithAdversary'
 
 

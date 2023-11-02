@@ -373,7 +373,6 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
         """collect data and store to experience buffer."""
         o, ep_ret, ep_len = self.env.reset(), 0., 0
 
-        num_step = 0
         for t in range(self.local_steps_per_epoch):
             a, v, logp = self.ac.step(
                 torch.as_tensor(o, dtype=torch.float32))
@@ -381,11 +380,6 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
             next_o, r, d, info = self.env.step(a)
             ep_ret += r
             ep_len += 1
-
-            # Hanyang: record the penalty in each step
-            num_step += 1
-            self.logger.log_penalty(num_step, self.env.penalty_crash, self.env.penalty_rpy, 
-                                    (self.env.penalty-self.env.penalty_crash-self.env.penalty_rpy), self.env.penalty)
 
             # save and log
             # Notes:
@@ -410,7 +404,6 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
                     self.logger.store(EpRet=ep_ret, EpLen=ep_len)
                 
                 # Hanyang: record the information in each episode
-                num_step = 0
                 self.num_episodes += 1
                 self.logger.log_episode(self.num_episodes, self.env.disturbance_level, ep_len, ep_ret)
 
@@ -534,6 +527,9 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
             ret += r
             costs += info.get('cost', 0.)
             episode_length += 1
+            # Hanyang: record the penalty in each step
+            self.logger.log_penalty(episode_length, self.env.penalty_crash_log, self.env.penalty_rpy_log, 
+                                    self.env.penalty_rpy_dot_log, self.env.penalty_z_log, self.env.penalty_log)
 
         self.save_gif(frames, episode, distb_level)
 
