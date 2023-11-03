@@ -47,6 +47,7 @@ if __name__ == "__main__":
     # env_id = 'DroneHoverBulletEnvWithAdversaryInitial-v0'
     # env_id = 'DroneHoverBulletEnvWithRandomHJAdversary-v0'
 
-    # env_id = 'DroneHoverBulletFreeEnvWithAdversary-v0'
-    env_id = 'DroneHoverBulletFreeEnvWithoutAdversary-v0'
+    env_id = 'DroneHoverBulletFreeEnvWithAdversary-v0'
+    # env_id = 'DroneHoverBulletFreeEnvWithoutAdversary-v0'
+    # env_id = 'DroneHoverBulletFreeEnvWithRandomHJAdversary-v0'
     start_training(algo=algorithm, env_id=env_id)
