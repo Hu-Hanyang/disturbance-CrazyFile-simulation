@@ -33,7 +33,7 @@ class DroneHoverFreeEnv(DroneBaseEnv):
             penalty_angle: float = 1e-2,  # Hanyang: original is 0
             penalty_spin: float = 1e-2,  # Hanayng: original is 1e-4
             penalty_terminal: float = 1000,  # Hanyang: try larger crash penalty,original is 100
-            penalty_velocity: float = 0.,  # Hanyang: original is 0
+            penalty_velocity: float = 1e-2,  # Hanyang: original is 0
             penalty_z: float = 1.0,  # Hanyang: original is 0
             **kwargs
     ):
@@ -56,6 +56,13 @@ class DroneHoverFreeEnv(DroneBaseEnv):
         self.penalty = 0.0
         self.penalty_rpy = 0.0
         self.penalty_rpy_dot = 0.0
+
+        self.penalty_log = 0.0
+        self.penalty_rpy_log = 0.0
+        self.penalty_crash_log = 0.0
+        self.penalty_z_log = 0.0
+        self.penalty_rpy_dot_log = 0.0
+        self.penalty_velocity_log = 0.0
 
         # === Costs: The following constants are used for cost calculation:
         self.vel_limit = 0.25  # [m/s]
@@ -209,6 +216,7 @@ class DroneHoverFreeEnv(DroneBaseEnv):
         penalty_velocity = self.penalty_velocity * np.linalg.norm(
             self.drone.xyz_dot)
 
+        # Hanyang: the current valid rewards are: penalty_rpy, penalty_spin, penalty_velocity and penalty_terminal
         penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_spin,
                             penalty_velocity, penalty_action, penalty_terminal])
         
@@ -222,6 +230,7 @@ class DroneHoverFreeEnv(DroneBaseEnv):
         self.penalty_crash_log = penalty_terminal
         self.penalty_z_log = distance
         self.penalty_rpy_dot_log = penalty_spin
+        self.penalty_velocity_log = penalty_velocity
 
         return reward
 

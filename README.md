@@ -100,11 +100,16 @@ Notice: the environment in test also needs to change while we want to see differ
 
 5. Test with trained model in different envs and display:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'`
-   example: `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'`
+   example: 
+   `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'`
+   `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletFreeEnvWithRandomHJAdversary-v0/ppo/2023_11_02_12_42/seed_64424 --env 'DroneHoverBulletFreeEnvWithoutAdversary-v0'`
    
 6. Test with trained model in different envs and save the videos:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'  --save`
-   example: `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' --save`
+   example: 
+   `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' --save`
+   ` python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletFreeEnvWithRandomHJAdversary-v0/ppo/2023_11_02_12_42/seed_64424 --env 'DroneHoverBulletFreeEnvWithoutAdversary-v0' --save `
 
+   
 ### 3. Modifications of the environment
 #### 

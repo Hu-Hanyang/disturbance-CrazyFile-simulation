@@ -626,8 +626,8 @@ class EpochLogger(Logger):
             writer.writerows(validation_data)
         csv_file.close()
     
-    def log_penalty(self, step, penalty_crash, penalty_rpy, penalty_rpy_dot, penalty_z, penalty):
-        penalty_data = [step, penalty_crash, penalty_rpy, penalty_rpy_dot, penalty_z, penalty]
+    def log_penalty(self, step, penalty_crash, penalty_rpy, penalty_rpy_dot, penalty_z, penalty_velocity, penalty):
+        penalty_data = [step, penalty_crash, penalty_rpy, penalty_rpy_dot, penalty_z, penalty_velocity, penalty]
         with open(self.penalty_file, mode='a', newline='') as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow(penalty_data)

@@ -529,7 +529,7 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
             episode_length += 1
             # Hanyang: record the penalty in each step
             self.logger.log_penalty(episode_length, self.env.penalty_crash_log, self.env.penalty_rpy_log, 
-                                    self.env.penalty_rpy_dot_log, self.env.penalty_z_log, self.env.penalty_log)
+                                    self.env.penalty_rpy_dot_log, self.env.penalty_z_log, self.env.penalty_velocity_log, self.env.penalty_log)
 
         self.save_gif(frames, episode, distb_level)
 
