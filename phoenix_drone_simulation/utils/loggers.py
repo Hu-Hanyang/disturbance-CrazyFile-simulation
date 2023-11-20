@@ -273,7 +273,7 @@ class Logger:
             self.penalty_file = osp.join(self.log_dir, "penalty_data.csv")
             with open(self.penalty_file, mode='w', newline='') as penalty_csv:
                 writer = csv.writer(penalty_csv)
-                header = ['Step', 'Penalty_crash', 'Penalty_rpy', 'Penalty_rpy_dot', 'Penalty_z', 'Penalty']
+                header = ['Step', 'Penalty_crash', 'Penalty_rpy', 'Penalty_rpy_dot', 'Penalty_z', 'Penalty_velocity', 'Penalty']
                 writer.writerow(header)
             penalty_csv.close()
             print(f"The {self.penalty_file} is created. \n")
