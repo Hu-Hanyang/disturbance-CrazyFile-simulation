@@ -103,13 +103,58 @@ Notice: the environment in test also needs to change while we want to see differ
    example: 
    `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'`
    `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletFreeEnvWithRandomHJAdversary-v0/ppo/2023_11_02_12_42/seed_64424 --env 'DroneHoverBulletFreeEnvWithoutAdversary-v0'`
+   ` python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletFreeEnvWithRandomHJAdversary-v0/ppo/2023_11_19_22_12/seed_63665 --env 'DroneHoverBulletFreeEnvWithoutAdversary-v0' `
    
 6. Test with trained model in different envs and save the videos:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'  --save`
    example: 
    `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' --save`
-   ` python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletFreeEnvWithRandomHJAdversary-v0/ppo/2023_11_02_12_42/seed_64424 --env 'DroneHoverBulletFreeEnvWithoutAdversary-v0' --save `
+   ` python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletFreeEnvWithRandomHJAdversary-v0/ppo/2023_11_19_22_12/seed_63665 --env 'DroneHoverBulletFreeEnvWithoutAdversary-v0' --save `
 
    
 ### 3. Modifications of the environment
-#### 
+#### 3.1 Reward Function Design
+Reward Formulation:
+```
+# Hanyang: the current valid rewards are: penalty_rpy, penalty_spin, penalty_velocity and penalty_terminal
+penalty_rpy = self.penalty_angle * np.linalg.norm(self.drone.rpy - self.target_rpy)
+penalty_spin = self.penalty_spin * np.linalg.norm(self.drone.rpy_dot - self.target_rpy_dot)
+penalty_terminal = self.penalty_terminal if self.compute_done() else 0.  # Hanyang: try larger crash penalty
+penalty_velocity = self.penalty_velocity * np.linalg.norm(self.drone.xyz_dot)
+penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_spin,
+                     penalty_velocity, penalty_action, penalty_terminal])
+
+# L2 norm:
+distance = self.penalty_z * np.linalg.norm(self.drone.xyz[2] - self.target_pos[2])
+reward = -penalties - distance```
+
+##### 3.1.1 Test 1
+```
+penalty_action: float = 0.,  # Hanyang: original is 1e-4
+penalty_angle: float = 1e-2,  # Hanyang: original is 0
+penalty_spin: float = 1e-2,  # Hanayng: original is 1e-4
+penalty_terminal: float = 1000,  # Hanyang: try larger crash penalty,original is 100
+penalty_velocity: float = 1e-2,  # Hanyang: original is 0
+penalty_z: float = 1.0,  # Hanyang: original is 0
+```
+Performance:
+distb = 0.0
+| Algorithm | move? | rise? | spin? | crash? |
+| ------------|-----------|------------|-----------| ----------- |
+| Boltzmann distb | Yes | Yes | Yes | Yes (small distb) |
+
+
+#### 3.1.2 Test 2
+```
+penalty_action: float = 0.,  # Hanyang: original is 1e-4
+penalty_angle: float = 1.0,  # Hanyang: original is 0
+penalty_spin: float = 1.0,  # Hanayng: original is 1e-4
+penalty_terminal: float = 1000,  # Hanyang: try larger crash penalty,original is 100
+penalty_velocity: float = 1.0,  # Hanyang: original is 0
+penalty_z: float = 1.0,  # Hanyang: original is 0
+```
+Performance:
+distb = 0.0
+| Algorithm | move? | rise? | spin? | crash? |
+| ------------|-----------|------------|-----------| ----------- |
+| Boltzmann distb | Yes | Some yes | No | Little |
