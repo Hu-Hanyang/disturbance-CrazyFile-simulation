@@ -34,7 +34,7 @@ class DroneHoverFreeEnv(DroneBaseEnv):
             penalty_spin: float = 1.0,  # Hanayng: original is 1e-4
             penalty_terminal: float = 1000,  # Hanyang: try larger crash penalty,original is 100
             penalty_velocity: float = 1.0,  # Hanyang: original is 0
-            penalty_z: float = 1.0,  # Hanyang: original is 0
+            penalty_z: float = 0.0,  # Hanyang: original is 1.0
             **kwargs
     ):
         # === Hover task specific attributes

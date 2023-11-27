@@ -104,6 +104,9 @@ Notice: the environment in test also needs to change while we want to see differ
    `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'`
    `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletFreeEnvWithRandomHJAdversary-v0/ppo/2023_11_02_12_42/seed_64424 --env 'DroneHoverBulletFreeEnvWithoutAdversary-v0'`
    ` python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletFreeEnvWithRandomHJAdversary-v0/ppo/2023_11_19_22_12/seed_63665 --env 'DroneHoverBulletFreeEnvWithoutAdversary-v0' `
+   ` python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletFreeEnvWithAdversary-v0/ppo/2023_11_21_15_24/seed_15431 --env 'DroneHoverBulletFreeEnvWithAdversary-v0' `
+   ` python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletFreeEnvWithRandomHJAdversary-v0/ppo/2023_11_24_10_45/seed_61267 --env 'DroneHoverBulletFreeEnvWithAdversary-v0' `
+   
    
 6. Test with trained model in different envs and save the videos:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'  --save`
@@ -139,7 +142,7 @@ penalty_z: float = 1.0,  # Hanyang: original is 0
 ```
 Performance:
 distb = 0.0
-| Algorithm | move? | rise? | spin? | crash? |
+| Trained Algorithm | move? | rise? | spin? | crash? |
 | ------------|-----------|------------|-----------| ----------- |
 | Boltzmann distb | Yes | Yes | Yes | Yes (small distb) |
 
@@ -155,6 +158,24 @@ penalty_z: float = 1.0,  # Hanyang: original is 0
 ```
 Performance:
 distb = 0.0
-| Algorithm | move? | rise? | spin? | crash? |
+| Trained Algorithm | move? | rise? | spin? | crash? |
 | ------------|-----------|------------|-----------| ----------- |
 | Boltzmann distb | Yes | Some yes | No | Little |
+| distb=1.5 | \ | \ | \ | Yes |
+
+#### 3.1.3 Test 3 failed
+```
+```
+penalty_action: float = 0.,  # Hanyang: original is 1e-4
+penalty_angle: float = 1.0,  # Hanyang: original is 0
+penalty_spin: float = 1.0,  # Hanayng: original is 1e-4
+penalty_terminal: float = 1000,  # Hanyang: try larger crash penalty,original is 100
+penalty_velocity: float = 1.0,  # Hanyang: original is 0
+penalty_z: float = 0.0,  # Hanyang: original is 0
+```
+Performance:
+distb = 0.0
+| Trained Algorithm | move? | rise? | spin? | crash? |
+| ------------|-----------|------------|-----------| ----------- |
+| Boltzmann distb | Yes | Yes!!!! | No | No |
+| distb=1.5 | \ | \ | \ | Yes |
