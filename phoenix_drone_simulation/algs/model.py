@@ -134,7 +134,7 @@ class Model(object):
         # fit() can also take a custom env, e.g. a virtual environment
         env_id = self.env_id if env is None else env
 
-        learn_func = utils.get_learn_function(self.alg)
+        learn_func = utils.get_learn_function(self.alg)  # the learn_func is outside the class of the algorithm
         ac, env = learn_func(
             env_id=env_id,
             logger_kwargs=self.logger_kwargs,

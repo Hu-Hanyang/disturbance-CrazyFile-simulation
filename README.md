@@ -38,6 +38,12 @@ Sorry for the complex installations, we will sort them up later.
 2023.8.29 Update:
 It seems there's something wrong with `pip install heterocl` or `pip install heterocl==0.1` and `pip install heterocl==0.3`.
 
+## Information
+### Agent 
+class CrazyFlieAgent:
+obs_dim = 22
+act_dim = 4
+
 # Working Logs
 ## Basic commands
 ### 1. Training: 
