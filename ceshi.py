@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt
 # plt.show()
 
 
-env_id='DroneHoverBulletEnvWithAdversary-v0'
+env_id='DroneHoverBulletEnvWithRandomHJAdversary-v0'
 env = gym.make(env_id)
 # env = Monitor(env, 'test_results_videos', force=True)
 # frame_width, frame_height = env.render_width, env.render_height
