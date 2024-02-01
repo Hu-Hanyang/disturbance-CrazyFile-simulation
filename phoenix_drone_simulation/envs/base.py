@@ -41,7 +41,7 @@ class DroneBaseEnv(gym.Env, abc.ABC):
             motor_time_constant: float = 0.080,  # [s]
             motor_thrust_noise: float = 0.05,  # noise in % added to thrusts
             observation_frequency: int = 100,
-            observation_history_size: int = 2,
+            observation_history_size: int = 2,  # Hanyang: the number of history to be used for observation to the policy input
             observation_noise=0.0,  # default: no noise added to obs
             sim_freq: int = 200
     ):
@@ -447,7 +447,7 @@ class DroneBaseEnv(gym.Env, abc.ABC):
         """Gather information from PyBullet about drone's current state."""
         self.drone.update_information()
         self.old_potential = self.compute_potential()
-        self.state = self.drone.get_state()
+        self.state = self.drone.get_state()  # Hanyang: the number of drone state is 17
         if self.use_graphics:  # enable rendering again after resetting
             self.bc.configureDebugVisualizer(self.bc.COV_ENABLE_RENDERING, 1)
         obs = self.compute_observation()

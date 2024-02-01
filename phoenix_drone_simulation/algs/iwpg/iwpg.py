@@ -375,7 +375,7 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
 
         for t in range(self.local_steps_per_epoch):
             a, v, logp = self.ac.step(
-                torch.as_tensor(o, dtype=torch.float32))
+                torch.as_tensor(o, dtype=torch.float32))  # Hanyang: take the observation as the input to the policy network
 
             next_o, r, d, info = self.env.step(a)
             ep_ret += r

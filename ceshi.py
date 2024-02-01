@@ -32,9 +32,9 @@ import matplotlib.pyplot as plt
 # plt.show()
 
 
-# env_id='DroneHoverBulletEnvWithAdversary-v0'
-# env = gym.make(env_id)
-# # env = Monitor(env, 'test_results_videos', force=True)
+env_id='DroneHoverBulletEnvWithAdversary-v0'
+env = gym.make(env_id)
+# env = Monitor(env, 'test_results_videos', force=True)
 # frame_width, frame_height = env.render_width, env.render_height
 # print(frame_width, frame_height)
 
@@ -45,16 +45,29 @@ import matplotlib.pyplot as plt
 # image = Image.fromarray(image)
 # image.show()
 
+# observation = env.reset()
+# action = env.action_space.sample()  # Random action, replace this with your policy
+# # print(f"The action space is: {action}")
+# # print(f"The action space shape is: {action.shape}")
+# observation, reward, done, _ = env.step(action)
 
-# for episode in range(10):
-#     env.render()
-#     observation = env.reset()
-#     done = False
-#     while not done:
-#         action = env.action_space.sample()  # Random action, replace this with your policy
-#         observation, reward, done, _ = env.step(action)
+for episode in range(10):
+    # env.render()
+    observation = env.reset()
+    # print(f"The observation space in the {episode} is: {observation}")
+    print(f"The observation space shape in the {episode} is: {observation.shape}")
 
-# env.close()
+    done = False
+    while not done:
+        action = env.action_space.sample()  # Random action, replace this with your policy
+        # print(f"The action space in the {episode} is: {action}")
+        # print(f"The action space shape is: {action.shape}") 
+        observation, reward, done, _ = env.step(action)
+        print(f"The observation space shape in the {episode} is: {observation.shape}")
+
+        # print(done)
+
+env.close()
 
 # images = [ [] for _ in range(5)]
 # print(len(images))
@@ -174,22 +187,22 @@ import matplotlib.pyplot as plt
 
 
 
-folder_path = "train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_18_11_29/seed_09209/torch_save"
-files = os.listdir(folder_path)
-model_files = [file for file in files if file.startswith("model") and file.endswith(".pt")]
-print(model_files)
-largest_suffix = 0
-selected_model = ""
+# folder_path = "train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_18_11_29/seed_09209/torch_save"
+# files = os.listdir(folder_path)
+# model_files = [file for file in files if file.startswith("model") and file.endswith(".pt")]
+# print(model_files)
+# largest_suffix = 0
+# selected_model = ""
 
-# choose the maximum suffix number in the model_files
+# # choose the maximum suffix number in the model_files
 
 
-suffixes = [int(f.split('model')[1].split('.pt')[0]) for f in model_files if f != 'model.pt']
-max_suffix = max(suffixes)
+# suffixes = [int(f.split('model')[1].split('.pt')[0]) for f in model_files if f != 'model.pt']
+# max_suffix = max(suffixes)
 
-model_path = os.path.join(folder_path, f'model{max_suffix}.pt')
+# model_path = os.path.join(folder_path, f'model{max_suffix}.pt')
 
-print(model_path)
+# print(model_path)
 
 
 
