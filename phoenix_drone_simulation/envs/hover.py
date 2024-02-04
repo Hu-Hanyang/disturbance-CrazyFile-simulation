@@ -28,12 +28,13 @@ class DroneHoverBaseEnv(DroneBaseEnv):
             sim_freq=200,  # in Hz
             aggregate_phy_steps=2,  # sub-steps used to calculate motor dynamics
             observation_frequency=100,  # in Hz
-            penalty_action_rate: float = 1e-3,  # Hanyang: penalty for action changing rate
-            penalty_angle: float = 1e-2,  # Hanyang: penalty for rpy rate (roll rate, pitch rate, yaw rate)
-            penality_angle_rate: float = 1e-3,  # Hanyang: penalty for rpy rate (roll rate, pitch rate, yaw rate)
-            penalty_spin: float = 0.0,  # Hanyang: penalty for yaw rate
-            penalty_terminal: float = 1.0,  # Hanyang: try larger crash penalty,original is 100
-            penalty_velocity: float = 1e-3,  # Hanyang: penalty for velocity (dot(x, y, z))
+            penalty_action: float = 1e-4,  # Hanyang: penalty for action
+            penalty_action_rate: float = 0.0,  # Hanyang: penalty for action changing rate
+            penalty_angle: float = 0.0,  # Hanyang: penalty for rpy rate (roll rate, pitch rate, yaw rate)
+            penality_angle_rate: float = 0.0,  # Hanyang: penalty for rpy rate (roll rate, pitch rate, yaw rate)
+            penalty_spin: float = 1e-4,  # Hanyang: penalty for yaw rate
+            penalty_terminal: float = 100,  # Hanyang: try larger crash penalty,original is 100
+            penalty_velocity: float = 0.0,  # Hanyang: penalty for velocity (dot(x, y, z))
             penalty_z: float = 0.0,  # Hanyang: penalty for the z position
             **kwargs
     ):
@@ -46,6 +47,7 @@ class DroneHoverBaseEnv(DroneBaseEnv):
 
         # Hanyang: penalty parameters and penalty logs
         self.ARP = penalty_action_rate
+        self.penalty_action = penalty_action
         self.penalty_angle = penalty_angle
         self.penalty_angle_rate = penality_angle_rate
         self.penalty_spin = penalty_spin
@@ -209,7 +211,7 @@ class DroneHoverBaseEnv(DroneBaseEnv):
         act_diff = action - self.drone.last_action
         normed_clipped_a = 0.5 * (np.clip(action, -1, 1) + 1)
 
-        # penalty_action = self.penalty_action * np.linalg.norm(normed_clipped_a)
+        penalty_action = self.penalty_action * np.linalg.norm(normed_clipped_a)
         penalty_action_rate = self.ARP * np.linalg.norm(act_diff)
         penalty_rpy = self.penalty_angle * np.linalg.norm(self.drone.rpy)
         penalty_rpy_dot = self.penalty_angle_rate * np.linalg.norm(self.drone.rpy_dot)
@@ -218,17 +220,17 @@ class DroneHoverBaseEnv(DroneBaseEnv):
         penalty_velocity = self.penalty_velocity * np.linalg.norm(
             self.drone.xyz_dot)
         
-        # Hanyang: split the reward function to 2 stages
-        # Stage 1: penalize the large rpy and the action rate
-        threshold_rpy = 15*np.pi/180  # 15 degree
-        if np.any(np.abs(self.drone.rpy) > threshold_rpy):
-            penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_terminal])
-        else:
-            penalties = np.sum([-penalty_rpy, -penalty_velocity, -penalty_rpy_dot, penalty_terminal])
+        # # Hanyang: split the reward function to 2 stages
+        # threshold_rpy = 15*np.pi/180  # 15 degree
+        # if np.any(np.abs(self.drone.rpy) > threshold_rpy):
+        #     penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_terminal])
+        # else:
+        #     penalties = np.sum([-penalty_rpy, -penalty_velocity, -penalty_rpy_dot, penalty_terminal])
             
-        # # Hanyang: the current valid rewards are: penalty_rpy, penalty_spin, penalty_velocity and penalty_terminal
-        # penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_spin,
-        #                     penalty_velocity, penalty_action_rate, penalty_terminal])
+        # Hanyang: the current valid rewards are: penalty_rpy, penalty_spin, penalty_velocity and penalty_terminal
+        
+        penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_spin,
+                            penalty_velocity, penalty_action, penalty_terminal])
         
         # L2 norm:
         dist = np.linalg.norm(self.drone.xyz - self.target_pos)
