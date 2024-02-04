@@ -184,7 +184,7 @@ class DroneHoverBaseEnv(DroneBaseEnv):
                 self.state = np.concatenate(
                     [xyz, quat, vel, omega, self.drone.last_action])
             else:
-                print("The iteration is: ", self.iteration)
+                # print("The iteration is: ", self.iteration)
                 # === 200 Hz Part ===
                 # This part is run with 200Hz, re-use Kalman Filter values:
                 xyz, quat, vel = self.state[0:3], self.state[3:7], self.state[7:10]
