@@ -28,12 +28,13 @@ class DroneHoverBaseEnv(DroneBaseEnv):
             sim_freq=200,  # in Hz
             aggregate_phy_steps=2,  # sub-steps used to calculate motor dynamics
             observation_frequency=100,  # in Hz
-            penalty_action: float = 1e-6,
-            penalty_angle: float = 1e-2,  # Hanyang: 
-            penalty_spin: float = 1e-2,
+            penalty_action_rate: float = 1e-3,  # Hanyang: penalty for action changing rate
+            penalty_angle: float = 1e-2,  # Hanyang: penalty for rpy rate (roll rate, pitch rate, yaw rate)
+            penality_angle_rate: float = 1e-3,  # Hanyang: penalty for rpy rate (roll rate, pitch rate, yaw rate)
+            penalty_spin: float = 0.0,  # Hanyang: penalty for yaw rate
             penalty_terminal: float = 1.0,  # Hanyang: try larger crash penalty,original is 100
-            penalty_velocity: float = 1e-2,
-            penalty_z: float = 0.0,  # Hanyang: original is 1.0
+            penalty_velocity: float = 1e-3,  # Hanyang: penalty for velocity (dot(x, y, z))
+            penalty_z: float = 0.0,  # Hanyang: penalty for the z position
             **kwargs
     ):
         # === Hover task specific attributes
@@ -44,15 +45,9 @@ class DroneHoverBaseEnv(DroneBaseEnv):
         self.target_rpy_dot = target_rpy_dot
 
         # Hanyang: penalty parameters and penalty logs
-        self.ARP = 0
-        self.penalty_action = penalty_action
+        self.ARP = penalty_action_rate
         self.penalty_angle = penalty_angle
-        self.penalty_spin = penalty_spin
-        self.penalty_terminal = penalty_terminal
-        self.penalty_velocity = penalty_velocity# Hanyang: penalty parameters and penalty logs
-        self.ARP = 0
-        self.penalty_action = penalty_action
-        self.penalty_angle = penalty_angle
+        self.penalty_angle_rate = penality_angle_rate
         self.penalty_spin = penalty_spin
         self.penalty_terminal = penalty_terminal
         self.penalty_velocity = penalty_velocity
@@ -189,6 +184,7 @@ class DroneHoverBaseEnv(DroneBaseEnv):
                 self.state = np.concatenate(
                     [xyz, quat, vel, omega, self.drone.last_action])
             else:
+                print("The iteration is: ", self.iteration)
                 # === 200 Hz Part ===
                 # This part is run with 200Hz, re-use Kalman Filter values:
                 xyz, quat, vel = self.state[0:3], self.state[3:7], self.state[7:10]
@@ -208,22 +204,31 @@ class DroneHoverBaseEnv(DroneBaseEnv):
         """Euclidean distance from current ron position to target position."""
         return np.linalg.norm(self.drone.xyz - self.target_pos)
 
-    def compute_reward(self, action) -> float:  # Hanyang: redesign, 10.23
+    def compute_reward(self, action) -> float:  # Hanyang: redesign, 2.2.2024
         # Determine penalties
         act_diff = action - self.drone.last_action
         normed_clipped_a = 0.5 * (np.clip(action, -1, 1) + 1)
 
-        penalty_action = self.penalty_action * np.linalg.norm(normed_clipped_a)
+        # penalty_action = self.penalty_action * np.linalg.norm(normed_clipped_a)
         penalty_action_rate = self.ARP * np.linalg.norm(act_diff)
         penalty_rpy = self.penalty_angle * np.linalg.norm(self.drone.rpy)
+        penalty_rpy_dot = self.penalty_angle_rate * np.linalg.norm(self.drone.rpy_dot)
         penalty_spin = self.penalty_spin * np.linalg.norm(self.drone.rpy_dot)
         penalty_terminal = self.penalty_terminal if self.compute_done() else 0.  # Hanyang: try larger crash penalty
         penalty_velocity = self.penalty_velocity * np.linalg.norm(
             self.drone.xyz_dot)
         
-        # Hanyang: the current valid rewards are: penalty_rpy, penalty_spin, penalty_velocity and penalty_terminal
-        penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_spin,
-                            penalty_velocity, penalty_action, penalty_terminal])
+        # Hanyang: split the reward function to 2 stages
+        # Stage 1: penalize the large rpy and the action rate
+        threshold_rpy = 15*np.pi/180  # 15 degree
+        if np.any(np.abs(self.drone.rpy) > threshold_rpy):
+            penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_terminal])
+        else:
+            penalties = np.sum([-penalty_rpy, -penalty_velocity, -penalty_rpy_dot, penalty_terminal])
+            
+        # # Hanyang: the current valid rewards are: penalty_rpy, penalty_spin, penalty_velocity and penalty_terminal
+        # penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_spin,
+        #                     penalty_velocity, penalty_action_rate, penalty_terminal])
         
         # L2 norm:
         dist = np.linalg.norm(self.drone.xyz - self.target_pos)

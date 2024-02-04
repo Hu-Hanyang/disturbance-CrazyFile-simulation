@@ -32,8 +32,8 @@ import matplotlib.pyplot as plt
 # plt.show()
 
 
-env_id='DroneHoverBulletEnvWithRandomHJAdversary-v0'
-env = gym.make(env_id)
+# env_id='DroneHoverBulletEnvWithRandomHJAdversary-v0'
+# env = gym.make(env_id)
 # env = Monitor(env, 'test_results_videos', force=True)
 # frame_width, frame_height = env.render_width, env.render_height
 # print(frame_width, frame_height)
@@ -51,23 +51,23 @@ env = gym.make(env_id)
 # # print(f"The action space shape is: {action.shape}")
 # observation, reward, done, _ = env.step(action)
 
-for episode in range(10):
-    # env.render()
-    observation = env.reset()
-    # print(f"The observation space in the {episode} is: {observation}")
-    print(f"The observation space shape in the {episode} is: {observation.shape}")
+# for episode in range(10):
+#     # env.render()
+#     observation = env.reset()
+#     # print(f"The observation space in the {episode} is: {observation}")
+#     print(f"The observation space shape in the {episode} is: {observation.shape}")
 
-    done = False
-    while not done:
-        action = env.action_space.sample()  # Random action, replace this with your policy
-        # print(f"The action space in the {episode} is: {action}")
-        # print(f"The action space shape is: {action.shape}") 
-        observation, reward, done, _ = env.step(action)
-        print(f"The observation space shape in the {episode} is: {observation.shape}")
+#     done = False
+#     while not done:
+#         action = env.action_space.sample()  # Random action, replace this with your policy
+#         # print(f"The action space in the {episode} is: {action}")
+#         # print(f"The action space shape is: {action.shape}") 
+#         observation, reward, done, _ = env.step(action)
+#         print(f"The observation space shape in the {episode} is: {observation.shape}")
 
-        # print(done)
+#         # print(done)
 
-env.close()
+# env.close()
 
 # images = [ [] for _ in range(5)]
 # print(len(images))
@@ -205,5 +205,7 @@ env.close()
 # print(model_path)
 
 
-
+# Test reward functions
+rpy = np.zeros(3, dtype=np.float64)
+print(rpy)
 
