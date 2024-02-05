@@ -29,12 +29,11 @@ class DroneHoverBaseEnv(DroneBaseEnv):
             aggregate_phy_steps=2,  # sub-steps used to calculate motor dynamics
             observation_frequency=100,  # in Hz
             penalty_action: float = 1e-4,  # Hanyang: penalty for action
-            penalty_action_rate: float = 0.0,  # Hanyang: penalty for action changing rate
-            penalty_angle: float = 0.0,  # Hanyang: penalty for rpy rate (roll rate, pitch rate, yaw rate)
-            penality_angle_rate: float = 0.0,  # Hanyang: penalty for rpy rate (roll rate, pitch rate, yaw rate)
-            penalty_spin: float = 1e-4,  # Hanyang: penalty for yaw rate
+            penalty_action_rate: float = 1e-3,  # Hanyang: penalty for action changing rate
+            penalty_angle: float = 1e-2,  # Hanyang: penalty for rpy angle (roll, pitch, yaw)
+            penality_angle_rate: float = 1e-3,  # Hanyang: penalty for rpy rate (roll rate, pitch rate, yaw rate)
             penalty_terminal: float = 100,  # Hanyang: try larger crash penalty,original is 100
-            penalty_velocity: float = 0.0,  # Hanyang: penalty for velocity (dot(x, y, z))
+            penalty_velocity: float = 1e-3,  # Hanyang: penalty for velocity (dot(x, y, z))
             penalty_z: float = 0.0,  # Hanyang: penalty for the z position
             **kwargs
     ):
@@ -50,15 +49,14 @@ class DroneHoverBaseEnv(DroneBaseEnv):
         self.penalty_action = penalty_action
         self.penalty_angle = penalty_angle
         self.penalty_angle_rate = penality_angle_rate
-        self.penalty_spin = penalty_spin
         self.penalty_terminal = penalty_terminal
         self.penalty_velocity = penalty_velocity
         self.penalty_z = penalty_z
+
         self.penalty_crash = 0.0
         self.penalty = 0.0
         self.penalty_rpy = 0.0
         self.penalty_rpy_dot = 0.0
-
         self.penalty_log = 0.0
         self.penalty_rpy_log = 0.0
         self.penalty_crash_log = 0.0
@@ -215,22 +213,20 @@ class DroneHoverBaseEnv(DroneBaseEnv):
         penalty_action_rate = self.ARP * np.linalg.norm(act_diff)
         penalty_rpy = self.penalty_angle * np.linalg.norm(self.drone.rpy)
         penalty_rpy_dot = self.penalty_angle_rate * np.linalg.norm(self.drone.rpy_dot)
-        penalty_spin = self.penalty_spin * np.linalg.norm(self.drone.rpy_dot)
         penalty_terminal = self.penalty_terminal if self.compute_done() else 0.  # Hanyang: try larger crash penalty
         penalty_velocity = self.penalty_velocity * np.linalg.norm(
             self.drone.xyz_dot)
         
-        # # Hanyang: split the reward function to 2 stages
-        # threshold_rpy = 15*np.pi/180  # 15 degree
-        # if np.any(np.abs(self.drone.rpy) > threshold_rpy):
-        #     penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_terminal])
-        # else:
-        #     penalties = np.sum([-penalty_rpy, -penalty_velocity, -penalty_rpy_dot, penalty_terminal])
+        # Hanyang: split the reward function to 2 stages
+        threshold_rpy = 15*np.pi/180  # 15 degree
+        if np.any(np.abs(self.drone.rpy) > threshold_rpy):
+            penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_terminal])
+        else:
+            penalties = np.sum([-penalty_rpy, -penalty_velocity, -penalty_rpy_dot, penalty_terminal])
             
-        # Hanyang: the current valid rewards are: penalty_rpy, penalty_spin, penalty_velocity and penalty_terminal
-        
-        penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_spin,
-                            penalty_velocity, penalty_action, penalty_terminal])
+        # # Hanyang: the current valid rewards are: penalty_rpy, penalty_spin, penalty_velocity and penalty_terminal
+        # penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_rpy_dot,
+        #                     penalty_velocity, penalty_action, penalty_terminal])
         
         # L2 norm:
         dist = np.linalg.norm(self.drone.xyz - self.target_pos)
