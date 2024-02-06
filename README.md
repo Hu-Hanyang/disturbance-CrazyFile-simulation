@@ -108,15 +108,35 @@ Notice: the environment in test also needs to change while we want to see differ
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'`
    example: 
    `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'`
- 
-   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2024_02_04_15_51/seed_08984 --env 'DroneHoverBulletEnvWithoutAdversary-v0'
+
+   original reward + with 34 input in 0 disturbance env benchmark:
+   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2023_09_12_11_23/seed_44165 --env 'DroneHoverBulletEnvWithoutAdversary-v0'
    
+   original reward + with 17 input in 0 disturbance env:
+   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2024_02_04_15_51/seed_08984 --env 'DroneHoverBulletEnvWithoutAdversary-v0'
+
+   original reward + with 34 input in distb=1.5 env:
+   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'
+
+   original reward + with 34 input in distb=1.0 env:
+   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_03_12_11/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'
+
+   original reward + with 34 input in Boltzman distb env:
+   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_16_12_30/seed_36701 --env 'DroneHoverBulletEnvWithAdversary-v0'
+   
+   
+
 6. Test with trained model in different envs and save the videos:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'  --save`
    example: 
    `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' --save`
    ` python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletFreeEnvWithRandomHJAdversary-v0/ppo/2023_11_19_22_12/seed_63665 --env 'DroneHoverBulletFreeEnvWithoutAdversary-v0' --save `
 
+   original reward + with 34 input in distb=1.0 env:
+   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_03_12_11/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' --save
+
+   original reward + with 34 input in Boltzman distb env:
+   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_16_12_30/seed_36701 --env 'DroneHoverBulletEnvWithAdversary-v0' --save
    
 ### 3. Modifications of the environment
 #### 3.1 Reward Function Design
