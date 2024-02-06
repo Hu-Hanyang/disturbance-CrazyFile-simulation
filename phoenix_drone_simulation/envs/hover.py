@@ -218,11 +218,14 @@ class DroneHoverBaseEnv(DroneBaseEnv):
             self.drone.xyz_dot)
         
         # Hanyang: split the reward function to 2 stages
-        threshold_rpy = 15*np.pi/180  # 15 degree
-        if np.any(np.abs(self.drone.rpy) > threshold_rpy):
-            penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_terminal])
-        else:
-            penalties = np.sum([-penalty_rpy, -penalty_velocity, -penalty_rpy_dot, penalty_terminal])
+        # threshold_rpy = 15*np.pi/180  # 15 degree
+        # if np.any(np.abs(self.drone.rpy) > threshold_rpy):
+        #     penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_terminal])
+        # else:
+        #     penalties = np.sum([-penalty_rpy, -penalty_velocity, -penalty_rpy_dot, penalty_terminal])
+        
+        # Hanyang: test reward function
+        penalties = np.sum([penalty_rpy_dot, penalty_action, penalty_terminal])
             
         # # Hanyang: the current valid rewards are: penalty_rpy, penalty_spin, penalty_velocity and penalty_terminal
         # penalties = np.sum([penalty_rpy, penalty_action_rate, penalty_rpy_dot,
