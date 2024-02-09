@@ -124,8 +124,13 @@ Notice: the environment in test also needs to change while we want to see differ
    original reward + with 34 input in Boltzman distb env:
    python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_16_12_30/seed_36701 --env 'DroneHoverBulletEnvWithAdversary-v0'
    
-   test reward + with 17 input in 0 disturbance env:  # why this happens???
-   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2024_02_05_10_07/seed_09177 --env 'DroneHoverBulletEnvWithoutAdversary-v0'
+   test reward + with 17 input in 0 disturbance env: 
+   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2024_02_06_15_50/seed_50658 --env 'DroneHoverBulletEnvWithoutAdversary-v0'
+
+   test reward + with 17 input in Boltzman distb env:
+   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2024_02_08_15_47/seed_26655 --env 'DroneHoverBulletEnvWithAdversary-v0'
+   
+   
 
 6. Test with trained model in different envs and save the videos:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'  --save`
