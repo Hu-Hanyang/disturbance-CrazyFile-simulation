@@ -128,7 +128,7 @@ Notice: the environment in test also needs to change while we want to see differ
    python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2024_02_06_15_50/seed_50658 --env 'DroneHoverBulletEnvWithoutAdversary-v0'
 
    test reward + with 17 input in Boltzman distb env:
-   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2024_02_08_15_47/seed_26655 --env 'DroneHoverBulletEnvWithAdversary-v0'
+   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2024_02_12_12_58/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'
    
    
 
