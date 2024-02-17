@@ -7,7 +7,8 @@ Updat: 2023-9-12
 Location: SFU Mars Lab
 """
 import time
-from phoenix_drone_simulation.algs.model import Model
+from phoenix_drone_simulation.algs.model_rarl import Model
+
 
 
 def start_training(algo, agent_id, adversary_id, training_iterations=1):
@@ -66,8 +67,8 @@ if __name__ == "__main__":
     # env_id = 'DroneHoverBulletEnvWithAdversary-v0'
     # env_id = 'DroneHoverBulletEnvWithoutAdversary-v0'
     # env_id = 'DroneHoverBulletEnvWithAdversaryInitial-v0'
-    agent_id = 'DroneHoverBulletEnvWithRandomHJAdversary-v0'
-    adversary_id = 'DroneHoverBulletEnvWithRandomHJAdversary-v0'
+    agent_id = 'Drone_Hover_Agent'
+    adversary_id = 'Drone_Hover_Adversary'
 
     # env_id = 'DroneHoverBulletFreeEnvWithAdversary-v0'
     # env_id = 'DroneHoverBulletFreeEnvWithoutAdversary-v0'
