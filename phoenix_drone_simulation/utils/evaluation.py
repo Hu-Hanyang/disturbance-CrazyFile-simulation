@@ -49,7 +49,7 @@ class EnvironmentEvaluator(object):
             if self.log_costs:
                 self.costs_file.close()
 
-    def eval(self, env, ac, num_evaluations):
+    def eval(self, env, ac, num_evaluations, adv_policy=None):
         r""" Evaluate actor critic module for given number of evaluations."""
         self.ac = ac
         self.ac.eval()  # disable exploration noise
@@ -68,7 +68,7 @@ class EnvironmentEvaluator(object):
         ep_lengths = np.zeros(num_local_evaluations, dtype=np.float32)
 
         for i in range(num_local_evaluations):
-            returns[i], ep_lengths[i], costs[i] = self.eval_once()
+            returns[i], ep_lengths[i], costs[i] = self.eval_once(adv_policy)
         # Gather returns from all processes
         # Note: only root process owns valid data...
         returns = list(mpi_tools.gather_and_stack(returns))
@@ -87,7 +87,7 @@ class EnvironmentEvaluator(object):
         self.ac.train()  # back to train mode
         return np.array(returns), np.array(ep_lengths), np.array(costs)
 
-    def eval_once(self):
+    def eval_once(self, adv_policy=None):
         assert not self.ac.training, 'Call actor_critic.eval() beforehand.'
         done = False
         x = self.env.reset()
@@ -98,7 +98,8 @@ class EnvironmentEvaluator(object):
         while not done:
             obs = torch.as_tensor(x, dtype=torch.float32)
             action, value, *_ = self.ac(obs)
-            x, r, done, info = self.env.step(action)
+            adv_action, adv_value, *_ = adv_policy(obs) if adv_policy else np.zeros_like(action)
+            x, r, done, info = self.env.step(action, adv_action)
             ret += r
             costs += info.get('cost', 0.)
             episode_length += 1

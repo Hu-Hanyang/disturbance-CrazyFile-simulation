@@ -384,7 +384,7 @@ class Drone_Hover_Adversary(DroneHoverFreeEnv):
     def step(
             self,
             action: np.ndarray,
-            disturabnce: np.ndarray,
+            disturbance: np.ndarray,
     ) -> tuple:
         """Step the simulation's dynamics once forward.
 
@@ -424,7 +424,7 @@ class Drone_Hover_Adversary(DroneHoverFreeEnv):
             # Note:
             #   calculate observations aggregate_phy_steps-times to correctly
             #   estimate drone state (due to gyro filter)
-            self.physics.step_forward(disturabnce, action)
+            self.physics.step_forward(action, disturbance)
 
             # Note: do not delete the following line due to >100 Hz sensor noise
             self.compute_observation()
@@ -494,7 +494,7 @@ class Drone_Hover_Adversary(DroneHoverFreeEnv):
         self.penalty_rpy_dot_log = penalty_spin
         self.penalty_velocity_log = penalty_velocity
 
-        return reward
+        return -reward
     
     
 class Drone_Hover_Agent(DroneHoverFreeEnv):
@@ -514,11 +514,9 @@ class Drone_Hover_Agent(DroneHoverFreeEnv):
 
 
         self.id = 'Drone_Hover_Agent'
+        self.adversary_agent = True
 
 
-    """
-    XL: Rewrite this method from parent class
-    """
     def _setup_task_specifics(self):
         super(Drone_Hover_Agent, self)._setup_task_specifics()
 
