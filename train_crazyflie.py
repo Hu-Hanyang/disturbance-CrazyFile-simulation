@@ -14,8 +14,8 @@ def start_training(algo, env_id):
     env_id = env_id
 
     # Create a seed for the random number generator
-    # random_seed = int(time.time()) % 2 ** 16   # 40226 
-    random_seed = 40226
+    random_seed = int(time.time()) % 2 ** 16   # 40226 
+    # random_seed = 40226
 
     # I usually save my results into the following directory:
     default_log_dir = f"train_results_phoenix"
@@ -28,7 +28,7 @@ def start_training(algo, env_id):
         log_dir=default_log_dir,
         init_seed=random_seed,
     )
-    model.compile()
+    model.compile()  # set up the logger and the parallelized environment
 
     start_time = time.perf_counter()
 
@@ -43,10 +43,10 @@ def start_training(algo, env_id):
     
 if __name__ == "__main__":
     algorithm = 'ppo'
-    # env_id = 'DroneHoverBulletEnvWithAdversary-v0'
+    env_id = 'DroneHoverBulletEnvWithAdversary-v0'
     # env_id = 'DroneHoverBulletEnvWithoutAdversary-v0'
     # env_id = 'DroneHoverBulletEnvWithAdversaryInitial-v0'
-    env_id = 'DroneHoverBulletEnvWithRandomHJAdversary-v0'
+    # env_id = 'DroneHoverBulletEnvWithRandomHJAdversary-v0'
 
     # env_id = 'DroneHoverBulletFreeEnvWithAdversary-v0'
     # env_id = 'DroneHoverBulletFreeEnvWithoutAdversary-v0'
