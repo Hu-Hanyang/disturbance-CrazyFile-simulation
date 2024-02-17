@@ -21,6 +21,7 @@ class Model(object):
                  init_seed: int,
                  algorithm_kwargs: dict = {},
                  use_mpi: bool = False,
+                 adversary_model = None
                  ) -> None:
         """ Class Constructor  """
         self.alg = alg
@@ -44,11 +45,12 @@ class Model(object):
         # assigned by class methods
         self.actor_critic = None
         self.env = None
+        self.adversary_policy = adversary_model
 
     def _evaluate_model(self) -> None:
         from phoenix_drone_simulation.utils.evaluation import EnvironmentEvaluator
         evaluator = EnvironmentEvaluator(log_dir=self.logger_kwargs['log_dir'])
-        evaluator.eval(env=self.env, ac=self.actor_critic, num_evaluations=128)
+        evaluator.eval(env=self.env, ac=self.actor_critic, num_evaluations=128 ,adv_policy=self.adversary_policy)
         # Close opened files to avoid number of open files overflow
         evaluator.close()
 
@@ -144,6 +146,8 @@ class Model(object):
         self.actor_critic = ac
         self.env = env
         self.trained = True
+        
+        return self.actor_critic, self.env
 
     def play(self) -> None:
         """ Visualize model after training."""
