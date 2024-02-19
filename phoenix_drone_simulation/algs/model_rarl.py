@@ -12,7 +12,7 @@ from phoenix_drone_simulation.utils.loggers import setup_logger_kwargs
 from phoenix_drone_simulation.utils import utils
 
 
-class Model(object):
+class RARL_Model(object):
 
     def __init__(self,
                  alg: str,

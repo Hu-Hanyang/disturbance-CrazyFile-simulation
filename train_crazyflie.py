@@ -18,12 +18,12 @@ def start_training(algo, env_id):
     # random_seed = 40226
 
     # I usually save my results into the following directory:
-    default_log_dir = f"train_results_phoenix"
+    default_log_dir = f"train_crazyflie_results"
 
     # NEW: use algorithms implemented in phoenix_drone_simulation:
     # 1) Setup learning model
     model = Model(
-        alg=algo,  # choose between: trpo, ppo
+        alg=algo, 
         env_id=env_id,
         log_dir=default_log_dir,
         init_seed=random_seed,
