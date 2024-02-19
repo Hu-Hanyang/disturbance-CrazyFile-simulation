@@ -48,6 +48,7 @@ class RARL_Model(object):
         self.adversary_policy = adversary_model
 
     def _evaluate_model(self) -> None:
+        #TODO: Check whether to make another new file for evaluation
         from phoenix_drone_simulation.utils.evaluation import EnvironmentEvaluator
         evaluator = EnvironmentEvaluator(log_dir=self.logger_kwargs['log_dir'])
         evaluator.eval(env=self.env, ac=self.actor_critic, num_evaluations=128 ,adv_policy=self.adversary_policy)

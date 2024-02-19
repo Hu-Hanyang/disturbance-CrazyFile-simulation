@@ -15,8 +15,9 @@ def start_rarl_training(algo, protagonist_id, adversary_id, training_iterations=
     random_seed = int(time.time()) % 2 ** 16   # 40226 
     default_log_dir = f"rarl_crazyflie_results"
     
-    protagonist_model = None
-    adversary_model = None
+    #TODO: the model initialization should be a torch model rather than only None
+    protagonist_policy = None
+    adversary_policy = None
 
     for _ in range(training_iterations):
 
@@ -30,12 +31,12 @@ def start_rarl_training(algo, protagonist_id, adversary_id, training_iterations=
         )
         protagonist_model.compile()
 
-        start_time = time.perf_counter()
+        protagonist_start_time = time.perf_counter()
 
         # 2) Train model - it takes typically at least 100 epochs for training
         protagonist_policy, _ = protagonist_model.fit(epochs=protagonist_iterations)
 
-        protagonist_duration = time.perf_counter() - start_time
+        protagonist_duration = time.perf_counter() - protagonist_start_time
         print(f"The time for protagonist training  is {protagonist_duration//3600}hours-{(protagonist_duration%3600)//60}minutes-{(protagonist_duration%3600)%60}seconds. \n")
         
         protagonist_model.eval()
@@ -49,13 +50,14 @@ def start_rarl_training(algo, protagonist_id, adversary_id, training_iterations=
             adversary_model = protagonist_policy,
         )
         adversary_model.compile()
-        start_time = time.perf_counter()
+        
+        adversary_start_time = time.perf_counter()
         # 2) Train model - it takes typically at least 100 epochs for training
         adversary_policy, _ = adversary_model.fit(epochs=adversary_iterations)
-        duration = time.perf_counter() - start_time
+        
+        duration = time.perf_counter() - adversary_start_time
         print(f"The time of training is {duration//3600}hours-{(duration%3600)//60}minutes-{(duration%3600)%60}seconds. \n")
-        # 3) Benchmark the f
-        # inal policy and save results into `returns.csv`
+        
         adversary_model.eval()
     
     
@@ -65,11 +67,11 @@ if __name__ == "__main__":
     # env_id = 'DroneHoverBulletEnvWithAdversary-v0'
     # env_id = 'DroneHoverBulletEnvWithoutAdversary-v0'
     # env_id = 'DroneHoverBulletEnvWithAdversaryInitial-v0'
-    agent_id = 'Drone_Hover_Agent'
-    adversary_id = 'Drone_Hover_Adversary'
+    protagonist_id = 'Drone_Hover_Protagonist-v0'
+    adversary_id = 'Drone_Hover_Adversary-v0'
 
     # env_id = 'DroneHoverBulletFreeEnvWithAdversary-v0'
     # env_id = 'DroneHoverBulletFreeEnvWithoutAdversary-v0'
     # env_id = 'DroneHoverBulletFreeEnvWithRandomHJAdversary-v0'
     training_iterations = 10
-    start_rarl_training(algo=algorithm, protagonist_id=agent_id, adversary_id=adversary_id, training_iterations=training_iterations)
+    start_rarl_training(algo=algorithm, protagonist_id=protagonist_id, adversary_id=adversary_id, training_iterations=training_iterations)

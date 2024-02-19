@@ -73,7 +73,18 @@ register(
 )
 
 
+# Hanyang: below are envs for rarl baselines
+register(
+    id='Drone_Hover_Protagonist-v0',
+    entry_point='phoenix_drone_simulation.envs.hover_rarl:Drone_Hover_Protagonist',
+    max_episode_steps=500,
+)
 
+register(
+    id='Drone_Hover_Adversary-v0',
+    entry_point='phoenix_drone_simulation.envs.hover_rarl:Drone_Hover_Adversary',
+    max_episode_steps=500,
+)
 
 
 # ==================

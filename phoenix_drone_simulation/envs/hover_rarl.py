@@ -497,12 +497,12 @@ class Drone_Hover_Adversary(DroneHoverFreeEnv):
         return -reward
     
     
-class Drone_Hover_Agent(DroneHoverFreeEnv):
+class Drone_Hover_Protagonist(DroneHoverFreeEnv):
     def __init__(self,
                  aggregate_phy_steps=2,  # sub-steps used to calculate motor dynamics
                  control_mode='PWM',
                  **kwargs):
-        super(Drone_Hover_Agent, self).__init__(
+        super(Drone_Hover_Protagonist, self).__init__(
             aggregate_phy_steps=aggregate_phy_steps,
             control_mode=control_mode,
             drone_model='cf21x_bullet_adversary',  # CrazyFlieBulletAgentWithAdversary
@@ -513,12 +513,12 @@ class Drone_Hover_Agent(DroneHoverFreeEnv):
         )
 
 
-        self.id = 'Drone_Hover_Agent'
+        self.id = 'Drone_Hover_Protagonist'
         self.adversary_agent = True
 
 
     def _setup_task_specifics(self):
-        super(Drone_Hover_Agent, self)._setup_task_specifics()
+        super(Drone_Hover_Protagonist, self)._setup_task_specifics()
 
         # === Reset camera position
         self.bc.resetDebugVisualizerCamera(
@@ -632,7 +632,7 @@ class Drone_Hover_Agent(DroneHoverFreeEnv):
     XL: Rewrite this method from parent class (DroneBaseEnv), to enable proper rendering
     """
     def render(self, mode="human"):
-        super(Drone_Hover_Agent, self).render(mode)
+        super(Drone_Hover_Protagonist, self).render(mode)
 
     """
     XL: Rewrite this method from parent class (DroneBaseEnv), to change the criteria of done
@@ -650,5 +650,3 @@ class Drone_Hover_Agent(DroneHoverFreeEnv):
 
         done = True if rpy_limit or rpy_dot_limit or z_limit else False
         return done
-
-
