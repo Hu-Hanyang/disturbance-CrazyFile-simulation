@@ -3,7 +3,7 @@ This script extends the adversary-based drone and its physics based on the origi
 
 Author: Xilun Joe Zhang, Hanyang Hu
 Date: 2024-2-18
-Location: SFU Mars Lab, CMU Safe AI Lab
+Location: CMU Safe AI Lab, SFU Mars Lab
 """
 import time
 from phoenix_drone_simulation.algs.model_rarl import RARL_Model

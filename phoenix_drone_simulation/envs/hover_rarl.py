@@ -613,6 +613,8 @@ class Drone_Hover_Protagonist(DroneHoverFreeEnv):
             # Note:
             #   calculate observations aggregate_phy_steps-times to correctly
             #   estimate drone state (due to gyro filter)
+            # Hanyang: add rarl disturbance calculation
+            # disturbance = self.adversary(self.observation_history[-1])
             self.physics.step_forward(action, disturbance)
 
             # Note: do not delete the following line due to >100 Hz sensor noise

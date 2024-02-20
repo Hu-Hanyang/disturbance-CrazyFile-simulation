@@ -72,6 +72,12 @@ register(
     max_episode_steps=500,
 )
 
+register(
+    id='DroneHoverCurriculumEnv-v0',
+    entry_point='phoenix_drone_simulation.envs.hover_curriculum:DroneHoverCurriculumEnv',
+    max_episode_steps=500,
+)
+
 
 # Hanyang: below are envs for rarl baselines
 register(

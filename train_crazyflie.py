@@ -43,10 +43,11 @@ def start_training(algo, env_id):
     
 if __name__ == "__main__":
     algorithm = 'ppo'
-    env_id = 'DroneHoverBulletEnvWithAdversary-v0'
-    # env_id = 'DroneHoverBulletEnvWithoutAdversary-v0'
+    # env_id = 'DroneHoverBulletEnvWithAdversary-v0'
+    env_id = 'DroneHoverBulletEnvWithoutAdversary-v0'
     # env_id = 'DroneHoverBulletEnvWithAdversaryInitial-v0'
     # env_id = 'DroneHoverBulletEnvWithRandomHJAdversary-v0'
+    # env_id = 'DroneHoverCurriculumEnv-v0'
 
     # env_id = 'DroneHoverBulletFreeEnvWithAdversary-v0'
     # env_id = 'DroneHoverBulletFreeEnvWithoutAdversary-v0'

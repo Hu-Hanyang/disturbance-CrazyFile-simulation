@@ -206,6 +206,8 @@ import matplotlib.pyplot as plt
 
 
 # Test reward functions
-rpy = np.zeros(3, dtype=np.float64)
-print(rpy)
+distb_levels = np.arange(0.0, 2.1, 0.1)
+print(distb_levels.shape)
+print(type(distb_levels))
+
 

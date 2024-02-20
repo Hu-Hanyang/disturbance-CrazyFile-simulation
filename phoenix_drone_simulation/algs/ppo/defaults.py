@@ -15,7 +15,8 @@ def defaults():
         adv_estimation_method='gae',
         epochs=300,  # 3.2M steps
         gamma=0.99,
-        steps_per_epoch=32 * 1000
+        steps_per_epoch=32 * 1000,
+        # distb_level=0.0,
     )
 
 

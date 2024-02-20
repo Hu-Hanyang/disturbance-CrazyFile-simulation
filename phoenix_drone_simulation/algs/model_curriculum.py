@@ -1,18 +1,12 @@
-""" Introduce an API which is similar to keras to train RL algorithms.
-
-    Author:     Sven Gronauer
-    Date:       19.05.2020
-    Updated:    14.04.2022  - discarded multi-processing code snippets
-"""
 import torch
 import os
 from typing import Optional
-
+import numpy as np
 from phoenix_drone_simulation.utils.loggers import setup_logger_kwargs
 from phoenix_drone_simulation.utils import utils
 
 
-class Model(object):
+class Curriculum_Model(object):
 
     def __init__(self,
                  alg: str,
@@ -21,7 +15,7 @@ class Model(object):
                  init_seed: int,
                  algorithm_kwargs: dict = {},
                  use_mpi: bool = False,
-                 adversary_model = None  #TODO: Joe add the adversary model here
+                 distb_level: float = 0.0
                  ) -> None:
         """ Class Constructor  """
         self.alg = alg
@@ -42,15 +36,17 @@ class Model(object):
         self.logger_kwargs = None  # defined by compile (a specific seed might be passed)
         self.env_alg_path = os.path.join(self.env_id, self.alg)
 
+        # Hanyang: curriculum learning
+        self.kwargs['distb_level'] = distb_level
+        
         # assigned by class methods
         self.actor_critic = None
         self.env = None
-        self.adversary_policy = adversary_model
 
     def _evaluate_model(self) -> None:
         from phoenix_drone_simulation.utils.evaluation import EnvironmentEvaluator
         evaluator = EnvironmentEvaluator(log_dir=self.logger_kwargs['log_dir'])
-        evaluator.eval(env=self.env, ac=self.actor_critic, num_evaluations=128 ,adv_policy=self.adversary_policy)
+        evaluator.eval(env=self.env, ac=self.actor_critic, num_evaluations=128)
         # Close opened files to avoid number of open files overflow
         evaluator.close()
 

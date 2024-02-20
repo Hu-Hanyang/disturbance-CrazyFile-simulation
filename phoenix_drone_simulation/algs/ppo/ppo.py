@@ -53,6 +53,7 @@ def learn(
 ) -> tuple:
     defaults = utils.get_defaults_kwargs(alg='ppo', env_id=env_id)
     defaults.update(**kwargs)
+    print(f"In ppo.py file, the dist level is {defaults['distb_level']}")
     alg = ProximalPolicyOptimizationAlgorithm(
         env_id=env_id,
         **defaults
