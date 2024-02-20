@@ -28,7 +28,7 @@ def start_curriculum_training(algo, env_id):
     # random_seed = 40226
 
     # I usually save my results into the following directory:
-    default_log_dir = f"curriculum_crazyflie_results"
+    default_log_dir = f"results_curriculum_crazyflie"
     
     distb_levels = np.arange(0.0, 2.1, 0.1)
     
@@ -63,7 +63,7 @@ def start_curriculum_training(algo, env_id):
         duration = time.perf_counter() - start_time
         print(f"The time of training is {duration//3600}hours-{(duration%3600)//60}minutes-{(duration%3600)%60}seconds. \n")
         
-    #     torch.save(model.state_dict(), f'{default_log_dir}/curriculum_models/model_{distb_level}.pth')
+        torch.save(model.state_dict(), f'{default_log_dir}/curriculum_models/model_{distb_level}.pth')
 
     # model.eval()
     

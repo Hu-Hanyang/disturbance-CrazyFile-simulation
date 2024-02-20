@@ -13,7 +13,7 @@ from phoenix_drone_simulation.algs.model_rarl import RARL_Model
 def start_rarl_training(algo, protagonist_id, adversary_id, training_iterations=10, protagonist_iterations=101, adversary_iterations=101):
     
     random_seed = int(time.time()) % 2 ** 16   # 40226 
-    default_log_dir = f"rarl_crazyflie_results"
+    default_log_dir = f"results_rarl_crazyflie"
     
     #TODO: the model initialization should be a torch model rather than only None
     protagonist_policy = None
