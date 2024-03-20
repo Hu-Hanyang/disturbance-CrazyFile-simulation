@@ -23,6 +23,7 @@ import phoenix_drone_simulation.utils.mpi_tools as mpi_tools
 import phoenix_drone_simulation.algs.utils as U
 import phoenix_drone_simulation.utils.loggers as loggers
 from phoenix_drone_simulation.envs.hover_curriculum import DroneHoverCurriculumEnv
+from phoenix_drone_simulation.envs.hover_rarl import Drone_Hover_Adversary, Drone_Hover_Protagonist
 
 
 class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
@@ -80,10 +81,10 @@ class IWPGAlgorithm(core.OnPolicyGradientAlgorithm):
             if self.env_id == 'DroneHoverCurriculumEnv-v0':
                 self.env = DroneHoverCurriculumEnv(**kwargs)
             # for rarl
-            elif self.env_id == 'DroneHoverBulletEnvWithAdversary-v0':
-                self.env = gym.make(env_id, **kwargs)
-            elif self.env_id == 'DroneHoverBulletEnv-v0':
-                self.env = gym.make(env_id, **kwargs)
+            elif self.env_id == 'Drone_Hover_Adversary-v0':
+                self.env = Drone_Hover_Adversary(**kwargs)
+            elif self.env_id == 'Drone_Hover_Protagonist-v0':
+                self.env = Drone_Hover_Protagonist(**kwargs)
             # for others
             else:
                 self.env = gym.make(env_id, **kwargs)

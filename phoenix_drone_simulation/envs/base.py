@@ -44,7 +44,8 @@ class DroneBaseEnv(gym.Env, abc.ABC):
             observation_history_size: int = 1,  # Hanyang: the number of history to be used for observation to the policy input
             observation_noise=0.0,  # default: no noise added to obs
             sim_freq: int = 200,
-            distb_level: float = 0.0  #Hanayng: add this parameter
+            distb_level: float = 0.0,  #Hanayng: add this parameter for curriculum learning
+            adv_policy=None  #Hanayng: add this parameter for rarl
     ):
         """
 

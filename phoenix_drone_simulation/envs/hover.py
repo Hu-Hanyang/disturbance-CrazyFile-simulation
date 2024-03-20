@@ -20,7 +20,7 @@ class DroneHoverBaseEnv(DroneBaseEnv):
             control_mode: str,
             drone_model: str,
             observation_noise=1,  # must be positive in order to add noise
-            domain_randomization: float = 0.10,  # use 10% DR as default
+            domain_randomization: float = -1,  # use 10% DR as default
             target_pos: np.ndarray = np.array([0, 0, 1.0], dtype=np.float32),
             target_xyz_dot: np.ndarray = np.array([0, 0, 0], dtype=np.float32),  # Hanyang: target velocity
             target_rpy: np.ndarray = np.array([0, 0, 0], dtype=np.float32),  # Hanyang: target orientation
@@ -455,7 +455,7 @@ class DroneHoverBulletEnvWithAdversary(DroneHoverBaseEnv):
         # combine angles and angular rates together to form a [6,1] list
         states = np.concatenate((angles, angular_rates), axis=0)
         _, dstb = distur_gener(states, self.disturbance_level) 
-
+        # print("The disturbance shape is: ", len(dstb))
         for _ in range(self.aggregate_phy_steps):
             # Note:
             #   calculate observations aggregate_phy_steps-times to correctly

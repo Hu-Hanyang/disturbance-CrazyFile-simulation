@@ -9,13 +9,12 @@ import time
 from phoenix_drone_simulation.algs.model_rarl import RARL_Model
 
 
-
 def start_rarl_training(algo, protagonist_id, adversary_id, training_iterations=10, protagonist_iterations=101, adversary_iterations=101):
     
     random_seed = int(time.time()) % 2 ** 16   # 40226 
     default_log_dir = f"results_rarl_crazyflie"
     
-    #TODO: the model initialization should be a torch model rather than only None
+    #TODO: the model initialization should be a torch model rather than only None?
     protagonist_policy = None
     adversary_policy = None
 
@@ -39,7 +38,7 @@ def start_rarl_training(algo, protagonist_id, adversary_id, training_iterations=
         protagonist_duration = time.perf_counter() - protagonist_start_time
         print(f"The time for protagonist training  is {protagonist_duration//3600}hours-{(protagonist_duration%3600)//60}minutes-{(protagonist_duration%3600)%60}seconds. \n")
         
-        protagonist_model.eval()
+        protagonist_policy.eval()
         
         # traning the adversary
         adversary_model = RARL_Model(
@@ -58,7 +57,7 @@ def start_rarl_training(algo, protagonist_id, adversary_id, training_iterations=
         duration = time.perf_counter() - adversary_start_time
         print(f"The time of training is {duration//3600}hours-{(duration%3600)//60}minutes-{(duration%3600)%60}seconds. \n")
         
-        adversary_model.eval()
+        adversary_policy.eval()
     
     
     
@@ -70,8 +69,11 @@ if __name__ == "__main__":
     protagonist_id = 'Drone_Hover_Protagonist-v0'
     adversary_id = 'Drone_Hover_Adversary-v0'
 
-    # env_id = 'DroneHoverBulletFreeEnvWithAdversary-v0'
-    # env_id = 'DroneHoverBulletFreeEnvWithoutAdversary-v0'
-    # env_id = 'DroneHoverBulletFreeEnvWithRandomHJAdversary-v0'
-    training_iterations = 10
-    start_rarl_training(algo=algorithm, protagonist_id=protagonist_id, adversary_id=adversary_id, training_iterations=training_iterations)
+    
+    training_iterations = 1
+    protagonist_iterations=1
+    adversary_iterations=1
+    
+    start_rarl_training(algo=algorithm, protagonist_id=protagonist_id, 
+                        adversary_id=adversary_id, training_iterations=training_iterations, 
+                        protagonist_iterations=protagonist_iterations, adversary_iterations=adversary_iterations)

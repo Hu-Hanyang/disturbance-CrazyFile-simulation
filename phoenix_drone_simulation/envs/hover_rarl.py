@@ -1,6 +1,7 @@
 import os
 import gym
 import time
+import torch
 import numpy as np
 import pybullet as pb
 import pybullet_data
@@ -311,6 +312,7 @@ class Drone_Hover_Adversary(DroneHoverFreeEnv):
         )
 
         self.id = 'Drone_Hover_Adversary'
+        self.adv_policy = kwargs['adv_policy']
 
 
     """
@@ -424,6 +426,10 @@ class Drone_Hover_Adversary(DroneHoverFreeEnv):
             # Note:
             #   calculate observations aggregate_phy_steps-times to correctly
             #   estimate drone state (due to gyro filter)
+            
+            # Hanyang: add rarl disturbance calculation
+            current_obs = self.observation_history[-1]
+            disturbance = self.adv_policy.step(torch.as_tensor(current_obs, dtype=torch.float32))
             self.physics.step_forward(action, disturbance)
 
             # Note: do not delete the following line due to >100 Hz sensor noise
@@ -514,7 +520,7 @@ class Drone_Hover_Protagonist(DroneHoverFreeEnv):
 
 
         self.id = 'Drone_Hover_Protagonist'
-        self.adversary_agent = True
+        self.adv_policy = kwargs['adv_policy']
 
 
     def _setup_task_specifics(self):
@@ -613,8 +619,10 @@ class Drone_Hover_Protagonist(DroneHoverFreeEnv):
             # Note:
             #   calculate observations aggregate_phy_steps-times to correctly
             #   estimate drone state (due to gyro filter)
+            
             # Hanyang: add rarl disturbance calculation
-            # disturbance = self.adversary(self.observation_history[-1])
+            current_obs = self.observation_history[-1]
+            disturbance = self.adv_policy.step(torch.as_tensor(current_obs, dtype=torch.float32))
             self.physics.step_forward(action, disturbance)
 
             # Note: do not delete the following line due to >100 Hz sensor noise

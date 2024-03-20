@@ -14,8 +14,8 @@ def start_training(algo, env_id):
     env_id = env_id
 
     # Create a seed for the random number generator
-    random_seed = int(time.time()) % 2 ** 16   # 40226 
-    # random_seed = 40226
+    # random_seed = int(time.time()) % 2 ** 16   # 40226 
+    random_seed = 40226
 
     # I usually save my results into the following directory:
     default_log_dir = f"results_train_crazyflie"
@@ -44,9 +44,9 @@ def start_training(algo, env_id):
 if __name__ == "__main__":
     algorithm = 'ppo'
     # env_id = 'DroneHoverBulletEnvWithAdversary-v0'
-    env_id = 'DroneHoverBulletEnvWithoutAdversary-v0'
+    # env_id = 'DroneHoverBulletEnvWithoutAdversary-v0'
     # env_id = 'DroneHoverBulletEnvWithAdversaryInitial-v0'
-    # env_id = 'DroneHoverBulletEnvWithRandomHJAdversary-v0'
+    env_id = 'DroneHoverBulletEnvWithRandomHJAdversary-v0'
     # env_id = 'DroneHoverCurriculumEnv-v0'
 
     # env_id = 'DroneHoverBulletFreeEnvWithAdversary-v0'

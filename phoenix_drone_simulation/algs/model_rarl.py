@@ -45,7 +45,8 @@ class RARL_Model(object):
         # assigned by class methods
         self.actor_critic = None
         self.env = None
-        self.adversary_policy = adversary_model
+        self.kwargs['adv_policy'] = adversary_model
+        self.adversary_policy = adversary_model  # Hanyang: no use, but Joe add it to the EnvironmentEvaluator
 
     def _evaluate_model(self) -> None:
         #TODO: Check whether to make another new file for evaluation

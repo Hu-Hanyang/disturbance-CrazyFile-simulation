@@ -174,6 +174,39 @@ def play_and_save(actor_critic, env, trained_env, trained_distb, episodes=2, noi
         save_videos(images[episode], env, episode, trained_env, trained_distb)
         episode += 1
         print(f'Episode {episode}\t Return: {ret}\t Length: {episode_length}\t Costs:{costs}')
+
+
+def play_and_test(actor_critic, env, trained_env, trained_distb, episodes=2, noise=False):
+    # Hanyang: add function to save the images and generate videos, not finished, 2023.9.20
+    if not noise:
+        actor_critic.eval()  # Set in evaluation mode before playing
+    episode = 0
+    # images = [ [] for _ in range(episodes)]
+    # pb.setRealTimeSimulation(1)
+    original_actions = [[] for _ in range(episodes)]
+    while episode < episodes:
+        # env.render()
+        done = False
+        # images[episode].append(env.capture_image()) # initial image
+        x = env.reset()
+        ret = 0.
+        costs = 0.
+        episode_length = 0
+        while not done:
+            # env.render()
+            # images[episode].append(env.capture_image())
+            obs = torch.as_tensor(x, dtype=torch.float32)
+            action, *_ = actor_critic(obs)
+            original_actions[episode].append(action)
+            x, r, done, info = env.step(action)
+            costs += info.get('cost', 0.)
+            ret += r
+            episode_length += 1
+            time.sleep(1./120)  # 0.0083 second
+        
+        # save_videos(images[episode], env, episode, trained_env, trained_distb)
+        episode += 1
+        print(f"Episode {episode}\t Return: {ret}\t Length: {episode_length}, Costs:{costs}\t max_action: {np.max(original_actions[episode-1])} \t min_action: {np.min(original_actions[episode-1])} \t Shape of obs:{obs.shape}")
     
 
 def play_and_gif(actor_critic, env, trained_env, trained_distb, episodes=2, noise=False):
@@ -240,6 +273,8 @@ if __name__ == '__main__':
                         help='whether to save the images and generate videos')
     parser.add_argument('--gif', action='store_true',
                         help='whether to save the images as gif files')
+    parser.add_argument('--test', action='store_true',
+                        help='whether to show the performances')
     args = parser.parse_args()
     env_id = None
     use_graphics = False if args.no_render else True
@@ -288,6 +323,19 @@ if __name__ == '__main__':
         print("-"*150)
 
         play_and_gif(actor_critic=ac, env=env, trained_env=trained_env, trained_distb=env_distb, episodes=4, noise=args.noise)
+    
+    elif args.test:
+        assert args.ckpt, 'Define a checkpoint for non-random play!'  # Hanyang: maybe not necessary?
+        ac, trained_env, env_distb = utils.load_actor_critic_and_env_from_disk(args.ckpt)
+        env = gym.make(args.env)
+        print("-"*150)
+        print(f"The trained environement is {trained_env.id} with {env_distb} disturbance from {args.ckpt}. \n ")
+        print(f"The testing environment is {env.id} with {env.disturbance_level} disturbance. \n ")
+        print(f"Now we are saving the videos.")
+        print("-"*150)
+
+        play_and_test(actor_critic=ac, env=env, trained_env=trained_env, trained_distb=env_distb, episodes=4, noise=args.noise)
+
 
     else:  # display
         assert args.ckpt, 'Define a checkpoint for non-random play!'

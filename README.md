@@ -56,41 +56,41 @@ Logs of method1:
 | ------------|-----------|------------|-----------| ----------- |----------- |----------- |----------- |----------- |
 | | | DroneHoverBulletEnvWithAdversary-v0 | ppo |  | None | Unknown | 1.5 | Nothing. |
 #### Method2 `python adversaryhover_phoenix.py`
-Its default logdir is `train_results_phoenix`.
+Its default logdir is `results_train_crazyflie`.
 Logs of the env 'DroneHoverBulletEnvWithAdversary':
 | time | seed | environment | algorithm | train logdir | test (log and command) | performance | distb level |else | 
 | ------------|-----------|------------|-----------| ----------- |----------- |----------- | ----------- |----------- |
-| 2023_08_31_11_44 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 | None | Not bad | 1.5 | Nothing. |
-| 2023_09_02_13_22 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_02_13_22/seed_40226 | None | Unknown | 2.0 | Nothing. |
-| 2023_09_03_12_11 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_03_12_11/seed_40226 | None | Unknown | 1.0 | Nothing. |
-| 2023_09_04_11_24 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_04_11_24/seed_40226 | None | Unknown | 0.5 | Nothing. |
-| 2023_09_05_10_18 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_05_10_18/seed_40226 | None | Unknown | 0.0 | Nothing. |
-| 2023_09_05_21_49 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_05_21_49/seed_40226 | None | Bad | 2.5 | Nothing. |
-| 2023_09_07_10_25 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_07_10_25/seed_40226 | None | Bad | 3.0 | Nothing. |
+| 2023_08_31_11_44 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 | None | Not bad | 1.5 | Nothing. |
+| 2023_09_02_13_22 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_02_13_22/seed_40226 | None | Unknown | 2.0 | Nothing. |
+| 2023_09_03_12_11 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_03_12_11/seed_40226 | None | Unknown | 1.0 | Nothing. |
+| 2023_09_04_11_24 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_04_11_24/seed_40226 | None | Unknown | 0.5 | Nothing. |
+| 2023_09_05_10_18 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_05_10_18/seed_40226 | None | Unknown | 0.0 | Nothing. |
+| 2023_09_05_21_49 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_05_21_49/seed_40226 | None | Bad | 2.5 | Nothing. |
+| 2023_09_07_10_25 | 40226 | DroneHoverBulletEnvWithAdversary-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_07_10_25/seed_40226 | None | Bad | 3.0 | Nothing. |
 
 Logs of the env 'DroneHoverBulletEnvWithoutAdversary':
 | time | seed | environment | algorithm | train logdir | test (log and command) | performance | distb level |else | 
 | ------------|-----------|------------|-----------| ----------- |----------- |----------- | ----------- |----------- |
-| 2023_09_12_11_23 | 44165 | DroneHoverBulletEnvWithoutAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2023_09_12_11_23/seed_44165 | None | Good | 0.0 | Nothing. |
+| 2023_09_12_11_23 | 44165 | DroneHoverBulletEnvWithoutAdversary-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2023_09_12_11_23/seed_44165 | None | Good | 0.0 | Nothing. |
 
 
 Logs of the env 'DroneHoverBulletEnvWithAdversaryInitial':
 | time | seed | environment | algorithm | train logdir | test (log and command) | performance | distb level |else | 
 | ------------|-----------|------------|-----------| ----------- |----------- |----------- | ----------- |----------- |
-| 2023_09_14_16_00 | 37007 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_14_16_00/seed_37007 | None | not work | 1.5 | Nothing. |
-| 2023_09_15_13_42 | 49593 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_15_13_42/seed_49593 | None | not work | 1.0 | Nothing. |
-| 2023_09_17_10_41 | 14929 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_17_10_41/seed_14929 | None | not work | 2.0 | Nothing. |
-| 2023_09_25_14_10 | 63293 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_25_14_10/seed_63293 | None | unknowning | 0.5 | Nothing. |
+| 2023_09_14_16_00 | 37007 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_14_16_00/seed_37007 | None | not work | 1.5 | Nothing. |
+| 2023_09_15_13_42 | 49593 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_15_13_42/seed_49593 | None | not work | 1.0 | Nothing. |
+| 2023_09_17_10_41 | 14929 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_17_10_41/seed_14929 | None | not work | 2.0 | Nothing. |
+| 2023_09_25_14_10 | 63293 | DroneHoverBulletEnvWithAdversaryInitial-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithAdversaryInitial-v0/ppo/2023_09_25_14_10/seed_63293 | None | unknowning | 0.5 | Nothing. |
 
 
 Logs of the env 'DroneHoverBulletEnvWithRandomHJAdversaryInitial':
 | time | seed | environment | algorithm | train logdir | test (log and command) | performance | episodic random uniform distb level |else | 
 | ------------|-----------|------------|-----------| ----------- |----------- |----------- | ----------- |----------- |
-| 2023_10_11_12_04 | 61897 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_11_12_04/seed_61897 | None | Unknown | step Boltzmann distb level | Nothing. |
-| 2023_10_11_12_07 | 62086 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_11_12_07/seed_62086 | None | Unknown | step random uniform distb level | Nothing. |
-| 2023_10_11_12_33 | 63596 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_11_12_33/seed_63596 | None | Unknown | episodic Boltzmann distb level | Nothing. |
-| 2023_10_14_23_13 | 33562 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_14_23_13/seed_33562 | None | Unknown | episodic Boltzmann distb level | Add implementations to the reset function |
-| 2023_10_16_12_30 | 36701 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_16_12_30/seed_36701 | None | Unknown | episodic Boltzmann distb level | Add implementations to the reset function |
+| 2023_10_11_12_04 | 61897 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_11_12_04/seed_61897 | None | Unknown | step Boltzmann distb level | Nothing. |
+| 2023_10_11_12_07 | 62086 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_11_12_07/seed_62086 | None | Unknown | step random uniform distb level | Nothing. |
+| 2023_10_11_12_33 | 63596 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_11_12_33/seed_63596 | None | Unknown | episodic Boltzmann distb level | Nothing. |
+| 2023_10_14_23_13 | 33562 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_14_23_13/seed_33562 | None | Unknown | episodic Boltzmann distb level | Add implementations to the reset function |
+| 2023_10_16_12_30 | 36701 | DroneHoverBulletEnvWithRandomHJAdversary-v0 | ppo | results_train_crazyflie/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_16_12_30/seed_36701 | None | Unknown | episodic Boltzmann distb level | Add implementations to the reset function |
 ### 2. Test:
 Notice: the environment in test also needs to change while we want to see different disturbance level.
 
@@ -107,42 +107,48 @@ Notice: the environment in test also needs to change while we want to see differ
 5. Test with trained model in different envs and display:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'`
    example: 
-   `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'`
+   `python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'`
 
    original reward + with 34 input in 0 disturbance env benchmark:
-   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2023_09_12_11_23/seed_44165 --env 'DroneHoverBulletEnvWithoutAdversary-v0'
+   python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2023_09_12_11_23/seed_44165 --env 'DroneHoverBulletEnvWithoutAdversary-v0'
    
    original reward + with 17 input in 0 disturbance env:
-   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2024_02_04_15_51/seed_08984 --env 'DroneHoverBulletEnvWithoutAdversary-v0'
+   python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2024_02_04_15_51/seed_08984 --env 'DroneHoverBulletEnvWithoutAdversary-v0'
 
    original reward + with 34 input in distb=1.5 env:
-   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'
+   python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'
 
    original reward + with 34 input in distb=1.0 env:
-   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_03_12_11/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'
+   python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_03_12_11/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'
 
    original reward + with 34 input in Boltzman distb env:
-   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_16_12_30/seed_36701 --env 'DroneHoverBulletEnvWithAdversary-v0'
+   python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_16_12_30/seed_36701 --env 'DroneHoverBulletEnvWithAdversary-v0'
    
    test reward + with 17 input in 0 disturbance env: 
-   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2024_02_06_15_50/seed_50658 --env 'DroneHoverBulletEnvWithoutAdversary-v0'
+   python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2024_02_06_15_50/seed_50658 --env 'DroneHoverBulletEnvWithoutAdversary-v0'
 
    test reward + with 17 input in Boltzman distb env:
-   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2024_02_12_12_58/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'
+   python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2024_02_12_12_58/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'
+
+   test reward + with 17 input in Boltzman distb env:
+   python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2024_02_12_12_58/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' --test
+
+   python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2024_03_18_21_33/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'
+   
    
    
 
 6. Test with trained model in different envs and save the videos:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'  --save`
    example: 
-   `python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' --save`
-   ` python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletFreeEnvWithRandomHJAdversary-v0/ppo/2023_11_19_22_12/seed_63665 --env 'DroneHoverBulletFreeEnvWithoutAdversary-v0' --save `
+   `python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' --save`
+   ` python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletFreeEnvWithRandomHJAdversary-v0/ppo/2023_11_19_22_12/seed_63665 --env 'DroneHoverBulletFreeEnvWithoutAdversary-v0' --save `
 
    original reward + with 34 input in distb=1.0 env:
-   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_03_12_11/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' --save
+   python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_09_03_12_11/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' --save
 
    original reward + with 34 input in Boltzman distb env:
-   python -m phoenix_drone_simulation.play --ckpt train_results_phoenix/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_16_12_30/seed_36701 --env 'DroneHoverBulletEnvWithAdversary-v0' --save
+   python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2023_10_16_12_30/seed_36701 --env 'DroneHoverBulletEnvWithAdversary-v0' --save
    
 ### 3. Modifications of the environment
 #### 3.1 Reward Function Design

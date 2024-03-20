@@ -8,6 +8,7 @@ import numpy as np
 import warnings
 import gym  
 from gym.wrappers import Monitor
+from stable_baselines3.common.env_checker import check_env
 # from PIL import Image
 # local imports
 from phoenix_drone_simulation.utils import utils
@@ -205,9 +206,20 @@ import matplotlib.pyplot as plt
 # print(model_path)
 
 
-# Test reward functions
-distb_levels = np.arange(0.0, 2.1, 0.1)
-print(distb_levels.shape)
-print(type(distb_levels))
+# # Test reward functions
+# distb_levels = np.arange(0.0, 2.1, 0.1)
+
+# for distb_level in distb_levels:
+#     print(f"The distb_levels is: {(distb_level-0.1):.1f}")
 
 
+
+
+env = gym.make('DroneHoverBulletEnvWithRandomHJAdversary-v0')
+# action = env.action_space.sample()
+
+print(f"The action space is {env.action_space}")
+print(f"The observation space is {env.observation_space}")
+print(env.observation_noise)
+env.reset()
+# env.step(action)
