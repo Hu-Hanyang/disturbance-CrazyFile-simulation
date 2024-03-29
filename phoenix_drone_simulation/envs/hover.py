@@ -198,6 +198,9 @@ class DroneHoverBaseEnv(DroneBaseEnv):
         else:
             # no observation noise is applied
             obs = self.drone.get_state()
+            # Hanyang: change the obs shape to make it consistent with the result
+            obs = obs[0:13]
+            # print(f"The shape of the obs in compute_observation is: {obs.shape}")
         return obs
 
     def compute_potential(self) -> float:
@@ -348,7 +351,7 @@ class DroneHoverBulletEnvWithAdversary(DroneHoverBaseEnv):
                                         high=np.array([1*10**-3,  1*10**-3,  1*10**-4]), 
                                         dtype=np.float32)
         # self.dstb_gen   = lambda x: self.dstb_space.sample() 
-        self.disturbance_level = 1.0 # 2.0  # 1.5 # Hanyang: try different values to see the upperbound
+        self.disturbance_level = 0.5 # 2.0  # 1.5 # Hanyang: try different values to see the upperbound
         self.id = 'DroneHoverBulletEnvWithAdversary'
 
 
@@ -468,6 +471,7 @@ class DroneHoverBulletEnvWithAdversary(DroneHoverBaseEnv):
 
         # add observation and action to history..
         next_obs = self.compute_history()
+        # print(f"The next observation shape is: {next_obs.shape}")
 
         r = self.compute_reward(action)
         info = self.compute_info()

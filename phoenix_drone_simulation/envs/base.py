@@ -308,12 +308,16 @@ class DroneBaseEnv(gym.Env, abc.ABC):
         """Returns the history of the N last observations and actions.."""
 
         obs_next = self.compute_observation()
+        # print(f"The shape of obs_next is {obs_next.shape}")
         self.observation_history.append(obs_next)
+        # print(f"The shape of self.observation_history is {len(self.observation_history)}")
 
         # Concatenate state-action history of size H into one column vector:
         # history = [x(k-H)^T, u(k-H-1)^T, ..., x(k), u(k-1)]^T
         history = np.concatenate([np.concatenate([o, a]) for o, a, in zip(
             self.observation_history, self.action_history)])
+        # print(f"The history shape is {history.shape}")
+        # print(f"The shape of self.action_history is {len(self.action_history)}")
 
         # append action to action_history after history calculation such that
         # [..., x(k), u(k-1)]^T instead of  [..., x(k), u(k)]^T
@@ -501,6 +505,7 @@ class DroneBaseEnv(gym.Env, abc.ABC):
 
         # add observation and action to history..
         next_obs = self.compute_history()
+        # print(f"The next_obs shape is {next_obs.shape}")
 
         r = self.compute_reward(action)
         info = self.compute_info()

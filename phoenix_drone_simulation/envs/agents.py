@@ -295,6 +295,9 @@ class CrazyFlieAgent(AgentBase):
         torques = self.force_torque_factor_1 * current_motor_forces \
                   + self.force_torque_factor_0
         z_torque = (-torques[0] + torques[1] - torques[2] + torques[3])
+        # Hanyang: for debugging
+        print(f"The current current_motor_forces is {current_motor_forces}")
+        print(f"The current z_torque is {z_torque} \n")
         return current_motor_forces, z_torque
 
     def apply_force(self, force, frame=pb.LINK_FRAME):
