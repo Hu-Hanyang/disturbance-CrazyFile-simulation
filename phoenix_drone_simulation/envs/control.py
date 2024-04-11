@@ -98,7 +98,7 @@ class PWM(Control):
         clipped_action = np.clip(action, -1, 1)
         PWMs = 30000 + clipped_action * 30000  # PWM in [0, 60000]
         # Hanyang: check the PWMs shape
-        print(f"The shape of the PWMs is {PWMs.shape}")
+        # print(f"The shape of the PWMs is {PWMs.shape}")
         return PWMs
 
 

@@ -19,37 +19,37 @@ register(
 #  Hanyang: register our envs here
 register(
     id = 'DroneHoverBulletEnvWithAdversary-v0',
-    entry_point = 'phoenix_drone_simulation.envs.hover:DroneHoverBulletEnvWithAdversary',
+    entry_point = 'phoenix_drone_simulation.envs.hover_distb:DroneHoverFixedDistbEnv',
     max_episode_steps = 500,
 )
 
 register(
-    id='DroneHoverBulletEnvWithRandomHJAdversary-v0',
-    entry_point='phoenix_drone_simulation.envs.hover:DroneHoverBulletEnvWithRandomHJAdversary',
+    id='DroneHoverBoltzmannDistbEnv-v0',
+    entry_point='phoenix_drone_simulation.envs.hover_distb:DroneHoverBoltzmannDistbEnv',
     max_episode_steps=500,
 )
 
 register(
-    id = 'DroneHoverBulletEnvWithoutAdversary-v0',
-    entry_point = 'phoenix_drone_simulation.envs.hover:DroneHoverBulletEnvWithoutAdversary',
+    id = 'DroneHoverNoDistbEnv-v0',
+    entry_point = 'phoenix_drone_simulation.envs.hover_distb:DroneHoverNoDistbEnv',
     max_episode_steps = 500,
 )
 
 register(
-    id = 'DroneHoverBulletEnvWithRandomAdversary-v0',
-    entry_point = 'phoenix_drone_simulation.envs.hover:DroneHoverBulletEnvWithRandomAdversary',
+    id = 'DroneHoverRandomDistbEnv-v0',
+    entry_point = 'phoenix_drone_simulation.envs.hover_distb:DroneHoverRandomDistbEnv',
     max_episode_steps = 500,
 )
 
 register(
     id='DroneHoverBulletEnvWithAdversaryInitial-v0',
-    entry_point = 'phoenix_drone_simulation.envs.hover:DroneHoverBulletEnvWithAdversaryInitial',
+    entry_point = 'phoenix_drone_simulation.envs.hover_distb:DroneHoverBulletEnvWithAdversaryInitial',
     max_episode_steps = 500,
 )
 
 register(
     id='DroneHoverBulletEnvWithCurriculumHJAdversary-v0',
-    entry_point = 'phoenix_drone_simulation.envs.hover:DroneHoverBulletEnvWithCurriculumHJAdversary',
+    entry_point = 'phoenix_drone_simulation.envs.hover_distb:DroneHoverBulletEnvWithCurriculumHJAdversary',
     max_episode_steps = 500,
 )
 

@@ -25,34 +25,27 @@ class DroneBaseEnv(gym.Env, abc.ABC):
 
     def __init__(
             self,
-            physics: str,  # e.g. PyBulletPhysics or SimplifiedSimplePhysics
+            physics: str,  # e.g. PyBulletPhysics or SimplifiedSimplePhysics, forward dynamics
             control_mode: str,  # use one of: PWM, Attitude, AttitudeRate
-            drone_model: str,  # options: [cf21x_bullet, cf21x_sys_eq]
+            drone_model: str,  # options: [cf21x_bullet, cf21x_sys_eq], drone parameters
             init_xyz: np.ndarray,
             init_rpy: np.ndarray,
             init_xyz_dot: np.ndarray,
             init_rpy_dot: np.ndarray,
-            aggregate_phy_steps: int = 2,
+            aggregate_phy_steps: int = 2,  # this value is the sim_freq / observation_frequency
             debug=False,
             domain_randomization: float = -1,  # deactivated when negative value
-            enable_reset_distribution=True,
+            enable_reset_distribution=True,  # Hanyang: add this for the randomization of rest and initilization
             graphics=False,
-            latency: float = 0.015,  # [s]
-            motor_time_constant: float = 0.080,  # [s]
-            motor_thrust_noise: float = 0.05,  # noise in % added to thrusts
+            latency: float = 0.015,  # [s]  # latency is used when the latency (0.015s) >= 1 / sim_freq (0.005s), it works here
+            motor_time_constant: float = 0.080,  # [s]  # the default setting is to use the motor dynamics in the agent class
+            motor_thrust_noise: float = 0.0,  # Hanyang: default 0.05, noise in % added to thrusts?
             observation_frequency: int = 100,
             observation_history_size: int = 1,  # Hanyang: the number of history to be used for observation to the policy input
             observation_noise=0.0,  # default: no noise added to obs
-            sim_freq: int = 200,
-            distb_level: float = 0.0,  #Hanayng: add this parameter for curriculum learning
-            adv_policy=None  #Hanayng: add this parameter for rarl
+            sim_freq: int = 200
     ):
         """
-
-        ::Notes::
-        - Domain Randomization (DR) is applied when calling reset method and the
-            domain_randomization is a positive float.
-
         Parameters
         ----------
         physics: str
@@ -74,6 +67,7 @@ class DroneBaseEnv(gym.Env, abc.ABC):
         AssertionError
             If no class is found for given physics string.
         """
+        # === Basic modes and models ===
         self.debug = debug
         self.domain_randomization = domain_randomization
         self.drone_model = drone_model
@@ -81,7 +75,14 @@ class DroneBaseEnv(gym.Env, abc.ABC):
         self.input_parameters = locals()  # save setting for later reset
         self.use_graphics = graphics
 
-        # init drone state
+        # === Default simulation constants (in capital letters) === 
+        self.G = 9.8
+        self.RAD_TO_DEG = 180 / np.pi
+        self.DEG_TO_RAD = np.pi / 180
+        self.SIM_FREQ = sim_freq  # default: 200Hz
+        self.TIME_STEP = 1. / self.SIM_FREQ  # default: 0.005s
+
+        # === Initialize drone state === 
         assert np.ndim(init_xyz) == 1 and np.ndim(init_rpy) == 1
         assert np.ndim(init_xyz_dot) == 1 and np.ndim(init_rpy_dot) == 1
         self.init_xyz = init_xyz
@@ -90,32 +91,27 @@ class DroneBaseEnv(gym.Env, abc.ABC):
         self.init_xyz_dot = init_xyz_dot
         self.init_rpy_dot = init_rpy_dot
 
-        # Default simulation constants (in capital letters)
-        self.G = 9.8
-        self.RAD_TO_DEG = 180 / np.pi
-        self.DEG_TO_RAD = np.pi / 180
-        self.SIM_FREQ = sim_freq  # default: 200Hz
-        self.TIME_STEP = 1. / self.SIM_FREQ  # default: 0.002
-
-        # Physics parameters depend on the task
-        self.time_step = self.TIME_STEP
-        self.number_solver_iterations = 5
-        self.aggregate_phy_steps = aggregate_phy_steps
-        assert aggregate_phy_steps >= 1
-
         # === Setup sensor and observation settings
         self.observation_frequency = observation_frequency
         self.obs_rate = int(sim_freq // observation_frequency)
         self.gyro_lpf = LowPassFilter(gain=1., time_constant=2/sim_freq,
-                                      sample_time=1/sim_freq)
+                                      sample_time=1/sim_freq)  # Hanyang: check the function of this low pass filter
+        self.iteration = 0  # Hanyang: the number of the action applied on the drone in each episode
 
-        self.iteration = 0
+        # === Physics Engine parameters depend on the task === 
+        self.time_step = self.TIME_STEP
+        self.number_solver_iterations = 5  # Hanyang: check its function, this value will be used in the PyBullet physics engine
+        self.aggregate_phy_steps = aggregate_phy_steps
+        assert aggregate_phy_steps >= 1
+        assert self.obs_rate == self.aggregate_phy_steps, "the observation rate should be the same as the aggregate_phy_steps"
 
-        # === Initialize and setup PyBullet ===
+
+        # === Initialize and create a PyBullet process instance. ===
         self.bc = self._setup_client_and_physics(self.use_graphics)
-        self.stored_state_id = -1
+        self.stored_state_id = -1  # Hanyang: this is for restoring to a previously save state,state information and etc.
 
-        # === spawn plane and drone agent ===
+        # === Initialize drone agent which is used for dynamics and interaction with PyBullet ===
+        # === Setup the simulation physics env, the drone agent dynamics, the PyBullet interaction and the task specific tasks in the _setup_simulation function ===
         self.agent_params = dict(
             aggregate_phy_steps=self.aggregate_phy_steps,
             control_mode=control_mode,
@@ -124,8 +120,7 @@ class DroneBaseEnv(gym.Env, abc.ABC):
             motor_thrust_noise=motor_thrust_noise,
             time_step=self.time_step,
         )
-        self._setup_simulation(physics=physics)
-
+        self._setup_simulation(physics=physics)  
         self.state = np.zeros(17)
         use_observation_noise = observation_noise > 0
         self.sensor_noise = SensorNoise(bypass=not use_observation_noise)
@@ -199,7 +194,7 @@ class DroneBaseEnv(gym.Env, abc.ABC):
             self,
             physics: str,
     ) -> None:
-        r"""Create world layout, spawn agent and obstacles.
+        r"""Create world layout, generate agent and obstacles.
 
         Takes the passed parameters from the class instantiation: __init__().
         """
