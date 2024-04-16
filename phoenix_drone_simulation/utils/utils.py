@@ -273,6 +273,13 @@ def get_env_type(env_id: str):
 
     return env_type, env_id
 
+def get_separate_defaults_kwargs(alg):
+    env_type = 'defaults'
+    alg_defaults = get_alg_module(alg, 'defaults')
+    kwargs = getattr(alg_defaults, env_type)()
+
+    return kwargs
+
 
 def get_defaults_kwargs(alg, env_id):
     """ inspired by OpenAI's baselines."""

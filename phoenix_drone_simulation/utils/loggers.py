@@ -202,6 +202,57 @@ def setup_logger_kwargs(
     return logger_kwargs
 
 
+def setup_separate_logger_kwargs(
+        base_dir='/var/tmp/',  # Hanyang: need to change the base_dir
+        datestamp=False,
+        level=1,
+        use_tensor_board=True,
+        verbose=True
+) -> dict:
+    """
+    Sets up the output_dir for a logger and returns a dict for logger kwargs.
+    If no seed is given and datestamp is false,
+    ::
+        output_dir = data_dir/exp_name
+    If a seed is given and datestamp is false,
+    ::
+        output_dir = data_dir/exp_name/exp_name_s[seed]
+    If datestamp is true, amend to
+    ::
+        output_dir = data_dir/YYMMDD_exp_name/YYMMDD_HH-MM_exp_name_s[seed]
+    You can force datestamp=True by setting ``FORCE_DATESTAMP=True`` in
+    ``spinup/user_config.py``.
+    Args:
+        exp_name (string): Name for experiment.
+        seed (int): Seed for random number generators used by experiment.
+        base_dir (string): Path to folder where results should be saved.
+        datestamp (bool): Whether to include a date and timestamp in the
+            name of the save directory.
+    Returns:
+        logger_kwargs, a dict containing output_dir and exp_name.
+    """
+    # Make base path
+    if datestamp:
+        relpath = time.strftime("%Y_%m_%d_%H_%M")
+    else:
+        relpath = ''
+
+    # if seed is not None:
+    #     subfolder = '_'.join(['seed', str(seed).zfill(5)])
+    #     relpath = os.path.join(relpath, subfolder)
+    
+    # logdir = os.path.join(base_dir, relpath)
+    # if not os.path.exists(logdir):
+    #     os.makedirs(logdir)
+
+    logger_kwargs = dict(log_dir=base_dir,
+                         level=level,
+                         use_tensor_board=use_tensor_board,
+                         verbose=verbose)
+    return logger_kwargs
+
+
+
 class Logger:
     """
     A general-purpose logger.

@@ -5,14 +5,14 @@ Created:    10.10.2020
 Updated:    15.11.2020
 """
 import torch
-from phoenix_drone_simulation.algs.iwpg import iwpg
+from phoenix_drone_simulation.algs.iwpg_separate import iwpg_separate
 from phoenix_drone_simulation.utils import utils
 
 
-class ProximalPolicyOptimizationAlgorithm(iwpg.IWPGAlgorithm):
+class ProximalPolicyOptimizationAlgorithm_Separate(iwpg_separate.IWPGAlgorithm_Separate):
     def __init__(
             self,
-            alg='ppo',
+            alg='ppo_separate',
             clip_ratio: float = 0.2,
             **kwargs
     ):
@@ -40,25 +40,14 @@ class ProximalPolicyOptimizationAlgorithm(iwpg.IWPGAlgorithm):
         return loss_pi, pi_info
 
 
-def get_alg(env_id, **kwargs) -> ProximalPolicyOptimizationAlgorithm:
-    return ProximalPolicyOptimizationAlgorithm(
-        env_id=env_id,
-        **kwargs
-    )
+def get_alg(env_id, **kwargs) -> ProximalPolicyOptimizationAlgorithm_Separate:
+    return ProximalPolicyOptimizationAlgorithm_Separate(**kwargs)
 
-
-def learn(
-        env_id,
-        **kwargs
-) -> tuple:
-    defaults = utils.get_defaults_kwargs(alg='ppo', env_id=env_id)
+def learn(**kwargs) -> tuple:
+    defaults = utils.get_separate_defaults_kwargs(alg='ppo_separate')
     defaults.update(**kwargs)
     # print(f"In ppo.py file, the dist level is {defaults['distb_level']}")
-    alg = ProximalPolicyOptimizationAlgorithm(
-        env_id=env_id,
-        **defaults
-    )
-
+    alg = ProximalPolicyOptimizationAlgorithm_Separate(**defaults)
     ac, env = alg.learn()
 
     return ac, env
