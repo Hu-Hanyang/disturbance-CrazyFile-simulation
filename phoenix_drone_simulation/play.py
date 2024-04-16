@@ -20,11 +20,11 @@ from gym.wrappers import Monitor
 from phoenix_drone_simulation.utils import utils
 from phoenix_drone_simulation.utils.mpi_tools import is_root_process
 
-try:
-    import pybullet_envs  # noqa
-except ImportError:
-    if is_root_process():
-        warnings.warn('pybullet_envs package not found.')
+# try:
+#     import pybullet_envs  # noqa
+# except ImportError:
+#     if is_root_process():
+#         warnings.warn('pybullet_envs package not found.')
 
 
 def play_after_training(actor_critic, env, noise=False):

@@ -109,9 +109,6 @@ Notice: the environment in test also needs to change while we want to see differ
    example: 
    `python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithAdversary-v0/ppo/2023_08_31_11_48/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'`
 
-   original reward + with 34 input in 0 disturbance env benchmark:
-   python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2023_09_12_11_23/seed_44165 --env 'DroneHoverBulletEnvWithoutAdversary-v0'
-   
    original reward + with 17 input in 0 disturbance env:
    python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2024_02_04_15_51/seed_08984 --env 'DroneHoverBulletEnvWithoutAdversary-v0'
 
@@ -135,7 +132,8 @@ Notice: the environment in test also needs to change while we want to see differ
 
    python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2024_03_18_21_33/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0'  
 
-   python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithRandomHJAdversary-v0/ppo/2024_02_12_12_58/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' 
+
+   python -m phoenix_drone_simulation.play --ckpt training_results/boltzmann/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' 
    
 
 6. Test with trained model in different envs and save the videos:

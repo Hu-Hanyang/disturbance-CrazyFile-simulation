@@ -54,7 +54,7 @@ def start_training(distb_type, distb_level, random_seed, algo):
     # === Train the model ===
     start_time = time.perf_counter()
     
-    model.fit(epochs=1)    
+    model.fit(epochs=301)    
     
     duration = time.perf_counter() - start_time
     print(f"The time of training is {duration//3600}hours-{(duration%3600)//60}minutes-{(duration%3600)%60}seconds. \n")

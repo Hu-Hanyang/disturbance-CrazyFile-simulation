@@ -19,6 +19,7 @@ class DroneHoverFixedDistbEnv(DroneHoverBaseEnv):
                  aggregate_phy_steps=2,  # sub-steps used to calculate motor dynamics
                  control_mode='PWM',
                  observation_noise=0.0,  # must be positive in order to add noise
+                 domain_randomization: float = -1,
                  enable_reset_distribution=True,
                  distb_level=1.0,  # Hanyang: try different values to see the upperbound
                  **kwargs):
@@ -26,6 +27,7 @@ class DroneHoverFixedDistbEnv(DroneHoverBaseEnv):
             aggregate_phy_steps=aggregate_phy_steps,
             control_mode=control_mode,
             observation_noise=observation_noise,
+            domain_randomization=domain_randomization,
             drone_model='cf21x_bullet_adversary',  # CrazyFlieBulletAgentWithAdversary
             physics='PybulletPhysicsWithAdversary',  # physics env, not the concept in rl
             observation_frequency=100,  # use 100Hz PWM control loop
@@ -39,20 +41,6 @@ class DroneHoverFixedDistbEnv(DroneHoverBaseEnv):
         self.disturbance_level = distb_level # 2.0  # 1.5 # Hanyang: try different values to see the upperbound
         self.id = 'DroneHoverFixedDistbEnv'
 
-
-    # """
-    # XL: Rewrite this method from parent class
-    # """
-    # def _setup_task_specifics(self):
-    #     super(DroneHoverFixedDistbEnv, self)._setup_task_specifics()
-
-    #     # === Reset camera position
-    #     self.bc.resetDebugVisualizerCamera(
-    #         cameraTargetPosition=(0.0, 0.0, 0.0),
-    #         cameraDistance=1.8,
-    #         cameraYaw=10,
-    #         cameraPitch=-50
-    #     )
 
     """
     XL: Rewrite this method from parent class (DroneBaseEnv), to include adversary agent and physics
@@ -160,22 +148,6 @@ class DroneHoverFixedDistbEnv(DroneHoverBaseEnv):
         self.last_action = action
         return next_obs, r, done, info
     
-    # """
-    # XL: Rewrite this method from parent class (DroneBaseEnv), to change the criteria of done
-    # """
-    # def compute_done(self) -> bool:
-    #     """ Note: the class is wrapped by Gym's Time-wrapper, which returns
-    #     done=True when T >= time_limit."""
-    #     rp = self.drone.rpy[:2]  # [rad]
-    #     d = deg2rad(75) # by default 60 deg
-    #     z_limit = self.drone.xyz[2] < 0.2
-    #     rpy_limit = rp[np.abs(rp) > d].any()
-
-    #     rpy_dot = self.drone.rpy_dot  # in rad/s
-    #     rpy_dot_limit = rpy_dot[rad2deg(np.abs(rpy_dot)) > 1000].any() # by default 300 deg/s, increase it to handle more adversary effect
-
-    #     done = True if rpy_limit or rpy_dot_limit or z_limit else False
-    #     return done
 
 
 
@@ -183,6 +155,9 @@ class DroneHoverBoltzmannDistbEnv(DroneHoverBaseEnv):
     def __init__(self,
                  aggregate_phy_steps=2,  # sub-steps used to calculate motor dynamics
                  control_mode='PWM',
+                 observation_noise=0.0,  # must be positive in order to add noise
+                 domain_randomization: float = -1,  # use 10% DR as default
+                 enable_reset_distribution=True, 
                  **kwargs):
         super(DroneHoverBoltzmannDistbEnv, self).__init__(
             aggregate_phy_steps=aggregate_phy_steps,
@@ -191,6 +166,9 @@ class DroneHoverBoltzmannDistbEnv(DroneHoverBaseEnv):
             physics='PybulletPhysicsWithAdversary',  # physics env, not the concept in rl
             observation_frequency=100,  # use 100Hz PWM control loop
             sim_freq=200,  # but step physics with 200Hz
+            observation_noise=observation_noise,
+            domain_randomization=domain_randomization,
+            enable_reset_distribution=enable_reset_distribution,
             **kwargs
         )
 
