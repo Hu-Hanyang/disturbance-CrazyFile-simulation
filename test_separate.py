@@ -1,13 +1,11 @@
 import cv2
-import gym
 import time
 import time
 import argparse
 import os
 import torch
+import imageio
 import numpy as np
-import warnings
-from gym.wrappers import Monitor
 
 # local imports
 from phoenix_drone_simulation.utils.utils import get_file_contents
@@ -121,6 +119,14 @@ def load_actor_critic(file_name_path: str) -> tuple:
     return ac, env, env_distb
 
 
+# Function to create GIF
+def create_gif(image_list, filename, duration=0.1):
+    images = []
+    for img in image_list:
+        images.append(img.astype(np.uint8))  # Convert to uint8 for imageio
+    imageio.mimsave(f'{filename}', images, duration=duration)
+
+
 def save_videos(images, env, id, foldername):
     """Hanyang
     Input:
@@ -130,8 +136,7 @@ def save_videos(images, env, id, foldername):
     # Define the output video parameters
     fps = 50  # Frames per second
     frame_width, frame_height = env.render_width, env.render_height
-    save_path = 'test_results_videos'
-    filename = f'episode{id+1}.mp4'
+    filename = f'episode{id+1}-{len(images)}.mp4'
 
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # You can use other codecs as well (e.g., 'XVID')
@@ -151,6 +156,8 @@ def play_and_save(actor_critic, env, episodes, foldername):
     episode = 0
     images = [ [] for _ in range(episodes)]
     # pb.setRealTimeSimulation(1)
+    print(f"[INFO] The test starts (saving). \n")
+    np.random.seed(42)
     while episode < episodes:
         # env.render()
         done = False
@@ -159,8 +166,11 @@ def play_and_save(actor_critic, env, episodes, foldername):
         ret = 0.
         costs = 0.
         episode_length = 0
-        while not done:
+        # while not done:
+        while not done and episode_length < 500:
             # env.render()
+            # print(f"Episode {episode}, Step {episode_length}")
+            # print(f"Episode {episode}, Step {episode_length}, done: {done}")
             images[episode].append(env.capture_image())
             obs = torch.as_tensor(x, dtype=torch.float32)
             action, *_ = actor_critic(obs)
@@ -170,47 +180,17 @@ def play_and_save(actor_critic, env, episodes, foldername):
             episode_length += 1
             time.sleep(1./120)  # 0.0083 second
         
-        save_videos(images[episode], env, episode, foldername)
-        episode += 1
         print(f'Episode {episode}\t Return: {ret}\t Length: {episode_length}\t Costs:{costs}')
-
-
-def play_and_test(actor_critic, env, episodes):
-    # Hanyang: add function to save the images and generate videos, not finished, 2023.9.20
-    actor_critic.eval()  # Set in evaluation mode before playing
-    episode = 0
-    # images = [ [] for _ in range(episodes)]
-    # pb.setRealTimeSimulation(1)
-    original_actions = [[] for _ in range(episodes)]
-    while episode < episodes:
-        # env.render()
-        done = False
-        # images[episode].append(env.capture_image()) # initial image
-        x = env.reset()
-        ret = 0.
-        costs = 0.
-        episode_length = 0
-        while not done:
-            # env.render()
-            # images[episode].append(env.capture_image())
-            obs = torch.as_tensor(x, dtype=torch.float32)
-            action, *_ = actor_critic(obs)
-            original_actions[episode].append(action)
-            x, r, done, info = env.step(action)
-            costs += info.get('cost', 0.)
-            ret += r
-            episode_length += 1
-            time.sleep(1./120)  # 0.0083 second
-        
-        # save_videos(images[episode], env, episode, trained_env, trained_distb)
+        save_videos(images[episode], env, episode, foldername)
+        # create_gif(images[episode], f'{foldername}/episode{episode}-{episode_length}steps.gif', duration=0.01)
         episode += 1
-        print(f"Episode {episode}\t Return: {ret}\t Length: {episode_length}, Costs:{costs}\t max_action: {np.max(original_actions[episode-1])} \t min_action: {np.min(original_actions[episode-1])} \t Shape of obs:{obs.shape}")
-    
+
 
 def play_after_training(actor_critic, env):
     actor_critic.eval()  # Set in evaluation mode before playing
     i = 0
-
+    print(f"[INFO] The test starts \n.")
+    
     while True:
         done = False
         env.render()
@@ -234,13 +214,13 @@ def play_after_training(actor_critic, env):
             f'Episode {i}\t Return: {ret}\t Length: {episode_length}\t Costs:{costs}')
 
 
-def test(train_distb_type, train_distb_level, train_seed, test_distb_type, test_distb_level, num_videos, save):
+def test(train_distb_type, train_distb_level, train_seed, obs_noise, test_distb_type, test_distb_level, num_videos, save):
 
     #### Load the trained model ###################################
     if train_distb_type == 'fixed' or None:
-        file_name_path = f"training_results/fixed-{train_distb_level}/seed_{train_seed}"
+        file_name_path = f"training_results/fixed-{train_distb_level}/seed_{train_seed}/obs_noise_{int(obs_noise)}"
     else:  # 'boltzmann', 'random', 'rarl', 'rarl-population'
-        file_name_path = f"training_results/{train_distb_type}/seed_{train_seed}"
+        file_name_path = f"training_results/{train_distb_type}/seed_{train_seed}/obs_noise_{int(obs_noise)}"
     assert os.path.exists(file_name_path), f"[ERROR] The path '{file_name_path}' does not exist, please check the loading path or train one first."
     
     ac, training_env, env_distb = load_actor_critic(file_name_path)
@@ -248,10 +228,13 @@ def test(train_distb_type, train_distb_level, train_seed, test_distb_type, test_
     #### Create the environment and make save path ################################
     if test_distb_type == 'fixed' or None:
         env = DroneHoverFixedDistbEnv(distb_level=test_distb_level)
-        foldername = os.path.join('test_results/' + 'fixed'+'-'+f'distb_level_{test_distb_level}', f'using-{train_distb_type}-distb_level_{train_distb_level}_model') 
+        obs_noise = env.observation_noise
+        foldername = os.path.join('test_results/' + 'fixed'+'-'+f'distb_level_{test_distb_level}', f'obs_noise{obs_noise}', 
+                                  f'using-{train_distb_type}-distb_level_{train_distb_level}_model') 
     else:  # 'boltzmann', 'random', 'rarl', 'rarl-population'
         env = DroneHoverBoltzmannDistbEnv()
-        foldername = os.path.join('test_results_/' + test_distb_type, f'using-{train_distb_type}-distb_level_{train_distb_level}_model')
+        foldername = os.path.join('test_results_/' + test_distb_type, f'obs_noise{obs_noise}', 
+                                  f'using-{train_distb_type}-distb_level_{train_distb_level}_model')
     if not os.path.exists(foldername):
         os.makedirs(foldername+'/')
     
@@ -260,7 +243,6 @@ def test(train_distb_type, train_distb_level, train_seed, test_distb_type, test_
 
     #### Play the trained model in the test environment ################################
     if not save:
-        # play_and_test(ac, env, num_videos)
         play_after_training(ac, env)
     else:
         play_and_save(ac, env, num_videos, foldername)
@@ -303,13 +285,14 @@ if __name__ == '__main__':
     parser.add_argument('--train_distb_type',         default="boltzmann",      type=str,           help='Type of disturbance to be applied to the drones [None, "fixed", "boltzmann", "random", "rarl", "rarl-population"] (default: "fixed")', metavar='')
     parser.add_argument('--train_distb_level',        default=0.0,          type=float,         help='Level of disturbance to be applied to the drones (default: 0.0)', metavar='')
     parser.add_argument('--train_seed',               default=40226,        type=int,           help='Seed for the random number generator (default: 40226)', metavar='')
+    parser.add_argument('--obs_noise',                default=1,          type=int,         help='Observation noise level (default: 0.0)', metavar='')
     parser.add_argument('--test_distb_type',    default="fixed",      type=str,           help='Type of disturbance in the test environment', metavar='')
     parser.add_argument('--test_distb_level',   default=1.0,          type=float,         help='Level of disturbance in the test environment', metavar='')
     parser.add_argument('--num_videos',         default=3,            type=int,           help='Number of videos to generate in the test environment', metavar='')
     parser.add_argument('--save',              default=True,         type=str2bool,          help='Save the videos or not', metavar='')
     args = parser.parse_args()
 
-    test(train_distb_type=args.train_distb_type, train_distb_level=args.train_distb_level, train_seed=args.train_seed, 
-        test_distb_type=args.test_distb_type, test_distb_level=args.test_distb_level, 
-        num_videos=args.num_videos, save=args.save)
+    test(train_distb_type=args.train_distb_type, train_distb_level=args.train_distb_level, 
+         train_seed=args.train_seed, obs_noise=args.obs_noise, test_distb_type=args.test_distb_type, 
+         test_distb_level=args.test_distb_level, num_videos=args.num_videos, save=args.save)
  # test(train_distb_type, train_distb_level, train_seed, test_distb_type, test_distb_level, num_videos, save):

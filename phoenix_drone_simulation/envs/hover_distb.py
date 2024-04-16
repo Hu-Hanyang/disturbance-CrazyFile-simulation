@@ -18,7 +18,7 @@ class DroneHoverFixedDistbEnv(DroneHoverBaseEnv):
     def __init__(self,
                  aggregate_phy_steps=2,  # sub-steps used to calculate motor dynamics
                  control_mode='PWM',
-                 observation_noise=0.0,  # must be positive in order to add noise
+                 observation_noise=1,  # must be positive in order to add noise
                  domain_randomization: float = -1,
                  enable_reset_distribution=True,
                  distb_level=1.0,  # Hanyang: try different values to see the upperbound
@@ -155,7 +155,7 @@ class DroneHoverBoltzmannDistbEnv(DroneHoverBaseEnv):
     def __init__(self,
                  aggregate_phy_steps=2,  # sub-steps used to calculate motor dynamics
                  control_mode='PWM',
-                 observation_noise=0.0,  # must be positive in order to add noise
+                 observation_noise=1,  # must be positive in order to add noise
                  domain_randomization: float = -1,  # use 10% DR as default
                  enable_reset_distribution=True, 
                  **kwargs):

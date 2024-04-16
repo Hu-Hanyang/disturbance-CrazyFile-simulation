@@ -23,16 +23,19 @@ def start_training(distb_type, distb_level, random_seed, algo):
     # === Set up the environment, saving directory, and loggers ===
     if distb_type == "fixed" or None:
         env = DroneHoverFixedDistbEnv(distb_level=distb_level)
-        default_log_dir = os.path.join('training_results/' + 'fixed'+'-'+f'distb_level_{distb_level}', 'seed_'+f"{random_seed}") 
+        obs_noise = env.observation_noise
+        default_log_dir = os.path.join('training_results/' + 'fixed'+'-'+f'distb_level_{distb_level}', 'seed_'+f"{random_seed}", 'obs_noise_'+f"{obs_noise}") 
         
     elif distb_type == "boltzmann":
         env = DroneHoverBoltzmannDistbEnv()
-        default_log_dir = os.path.join('training_results/' + distb_type, 'seed_'+f"{random_seed}") 
+        obs_noise = env.observation_noise
+        default_log_dir = os.path.join('training_results/' + distb_type, 'seed_'+f"{random_seed}", 'obs_noise_'+f"{obs_noise}") 
         
     elif distb_type == "random":
         # Hanyang: not finished yet
         env = DroneHoverRandomDistbEnv()
-        default_log_dir = os.path.join('training_results/' + distb_type, 'seed_'+f"{random_seed}")
+        obs_noise = env.observation_noise
+        default_log_dir = os.path.join('training_results/' + distb_type, 'seed_'+f"{random_seed}", 'obs_noise_'+f"{obs_noise}")
         
     else:
         print("The required disturbance type is not supported yet. \n")
@@ -65,7 +68,7 @@ if __name__ == "__main__":
 
     parser.add_argument('--distb_type',         default="boltzmann",      type=str,           help='Type of disturbance to be applied to the drones [None, "fixed", "boltzmann", "random", "rarl", "rarl-population"] (default: "fixed")', metavar='')
     parser.add_argument('--distb_level',        default=0.0,          type=float,         help='Level of disturbance to be applied to the drones (default: 0.0)', metavar='')
-    parser.add_argument('--seed',               default=40226,        type=int,           help='Seed for the random number generator (default: 40226)', metavar='')
+    parser.add_argument('--seed',               default=42,        type=int,           help='Seed for the random number generator (default: 40226)', metavar='')
     parser.add_argument('--algo',         default="ppo_separate",      type=str,           help='Type of training algorithms (default: "ppo_separate")', metavar='')
     
     args = parser.parse_args()
