@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
     parser.add_argument('--distb_type',         default="boltzmann",      type=str,           help='Type of disturbance to be applied to the drones [None, "fixed", "boltzmann", "random", "rarl", "rarl-population"] (default: "fixed")', metavar='')
     parser.add_argument('--distb_level',        default=0.0,          type=float,         help='Level of disturbance to be applied to the drones (default: 0.0)', metavar='')
-    parser.add_argument('--seed',               default=42,        type=int,           help='Seed for the random number generator (default: 40226)', metavar='')
+    parser.add_argument('--seed',               default=40226,        type=int,           help='Seed for the random number generator (default: 40226)', metavar='')
     parser.add_argument('--algo',         default="ppo_separate",      type=str,           help='Type of training algorithms (default: "ppo_separate")', metavar='')
     
     args = parser.parse_args()

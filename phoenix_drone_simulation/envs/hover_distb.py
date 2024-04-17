@@ -150,7 +150,6 @@ class DroneHoverFixedDistbEnv(DroneHoverBaseEnv):
     
 
 
-
 class DroneHoverBoltzmannDistbEnv(DroneHoverBaseEnv):
     def __init__(self,
                  aggregate_phy_steps=2,  # sub-steps used to calculate motor dynamics

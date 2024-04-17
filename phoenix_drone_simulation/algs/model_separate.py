@@ -7,11 +7,10 @@
 import torch
 import os
 from typing import Optional
-
 from phoenix_drone_simulation.utils.loggers import setup_separate_logger_kwargs
 from phoenix_drone_simulation.utils import utils
 
-#TODO: Hanyang: add the env into the models!
+
 class ModelS(object):
 
     def __init__(self,
