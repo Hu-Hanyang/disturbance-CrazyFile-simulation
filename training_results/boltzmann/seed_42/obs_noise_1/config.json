@@ -56,10 +56,10 @@
             "aggregate_phy_steps":	2,
             "bc":	"pybullet",
             "debug":	false,
-            "disturbance_level":	0.2,
+            "disturbance_level":	0.6,
             "domain_randomization":	-1,
             "drone":	{
-                "<phoenix_drone_simulation.envs.agents.CrazyFlieBulletAgentWithAdversary object at 0x7f594f302640>":	{
+                "<phoenix_drone_simulation.envs.agents.CrazyFlieBulletAgentWithAdversary object at 0x7ff01cb24670>":	{
                     "A":	"[0.9375 0.9375 0.9375 0.9375]",
                     "B":	"[0.0625 0.0625 0.0625 0.0625]",
                     "COLLISION_H":	0.025,
@@ -120,7 +120,7 @@
                     "buf_size":	2,
                     "color":	"[1. 1. 1. 1.]",
                     "control":	{
-                        "<phoenix_drone_simulation.envs.control.PWM object at 0x7f594f302520>":	{
+                        "<phoenix_drone_simulation.envs.control.PWM object at 0x7ff01cb24550>":	{
                             "bc":	"pybullet",
                             "control_counter":	0,
                             "drone":	"Already dumped elsewhere (stop recursion)",
@@ -147,7 +147,7 @@
                     "rpy_dot":	"[0. 0. 0.]",
                     "self_collision":	false,
                     "thrust_noise":	{
-                        "<phoenix_drone_simulation.envs.utils.OUNoise object at 0x7f594f36b880>":	{
+                        "<phoenix_drone_simulation.envs.utils.OUNoise object at 0x7ff01cb8e8b0>":	{
                             "action_dimension":	4,
                             "mu":	0,
                             "sigma":	0.0,
@@ -171,11 +171,11 @@
             "enable_reset_distribution":	true,
             "g":	9.8,
             "gyro_lpf":	{
-                "<phoenix_drone_simulation.envs.utils.LowPassFilter object at 0x7f594f302460>":	{
+                "<phoenix_drone_simulation.envs.utils.LowPassFilter object at 0x7ff01cb24490>":	{
                     "K":	1.0,
                     "T":	0.01,
                     "T_s":	0.005,
-                    "_x":	"[ 0.00021553 -0.01781644  0.00447484]"
+                    "_x":	"[ 0.0825693  -0.03372561  0.00653519]"
                 }
             },
             "id":	"DroneHoverBoltzmannDistbEnv",
@@ -245,7 +245,7 @@
             "penalty_z":	0.0,
             "penalty_z_log":	0.0,
             "physics":	{
-                "<phoenix_drone_simulation.envs.physics.PybulletPhysicsWithAdversary object at 0x7f594f36bb80>":	{
+                "<phoenix_drone_simulation.envs.physics.PybulletPhysicsWithAdversary object at 0x7ff1e43f95b0>":	{
                     "G":	9.81,
                     "bc":	"pybullet",
                     "drone":	"Already dumped elsewhere (stop recursion)",
@@ -259,11 +259,11 @@
             "roll_pitch_limit":	0.17453292519943295,
             "rpy_dot_limit":	3.490658503988659,
             "sensor_noise":	{
-                "<phoenix_drone_simulation.envs.sensors.SensorNoise object at 0x7f5b16ca5490>":	{
+                "<phoenix_drone_simulation.envs.sensors.SensorNoise object at 0x7ff1e44c54f0>":	{
                     "acc_dynamic_noise_ratio":	0.005,
                     "acc_static_noise_std":	0.002,
                     "bypass":	false,
-                    "gyro_bias":	"[-2.43411554e-05 -1.47705604e-04  9.58737058e-05]",
+                    "gyro_bias":	"[ 1.18273949e-04 -1.22139126e-04  3.48347494e-05]",
                     "gyro_bias_correlation_time":	1000.0,
                     "gyro_noise_density":	0.000175,
                     "gyro_random_walk":	0.0105,
@@ -276,7 +276,7 @@
                     "vel_unif_range":	0.0
                 }
             },
-            "state":	"[ 3.60257075e-03 -3.50216427e-03  1.00001740e+00  9.00007538e-04\n -5.17219936e-04 -1.88687869e-05  9.99999461e-01  1.90304791e-02\n  1.42572226e-02  1.36181654e-02  4.31062401e-04 -3.56328865e-02\n  8.94968831e-03  0.00000000e+00  0.00000000e+00  0.00000000e+00\n  0.00000000e+00]",
+            "state":	"[ 2.53613905e-03 -6.29209489e-04  1.00343469e+00 -9.46294825e-04\n -2.09800283e-03  1.05256468e-04  9.99997346e-01 -3.17248422e-03\n  1.15199461e-02 -3.30940658e-04  1.65138599e-01 -6.74512229e-02\n  1.30703761e-02  0.00000000e+00  0.00000000e+00  0.00000000e+00\n  0.00000000e+00]",
             "stored_state_id":	-1,
             "target_pos":	"[0. 0. 1.]",
             "target_rpy":	"[0. 0. 0.]",
@@ -290,7 +290,7 @@
             "z_lim":	1.2
         }
     },
-    "epochs":	301,
+    "epochs":	1,
     "gamma":	0.99,
     "lam":	0.95,
     "logger_kwargs":	{

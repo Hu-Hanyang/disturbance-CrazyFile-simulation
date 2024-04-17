@@ -120,14 +120,14 @@ def load_actor_critic(file_name_path: str) -> tuple:
 
 
 # Function to create GIF
-def create_gif(image_list, filename, duration=0.1):
+def generate_gifs(image_list, filename, duration=0.1):
     images = []
     for img in image_list:
         images.append(img.astype(np.uint8))  # Convert to uint8 for imageio
     imageio.mimsave(f'{filename}', images, duration=duration)
 
 
-def save_videos(images, env, id, foldername):
+def generate_videos(images, env, id, foldername):
     """Hanyang
     Input:
         images: list, a list contains a sequence of numpy ndarrays
@@ -157,6 +157,7 @@ def play_and_save(actor_critic, env, episodes, foldername):
     images = [ [] for _ in range(episodes)]
     # pb.setRealTimeSimulation(1)
     print(f"[INFO] The test starts (saving). \n")
+    # Hanayng: add random seed here
     np.random.seed(42)
     while episode < episodes:
         # env.render()
@@ -181,7 +182,7 @@ def play_and_save(actor_critic, env, episodes, foldername):
             time.sleep(1./120)  # 0.0083 second
         
         print(f'Episode {episode}\t Return: {ret}\t Length: {episode_length}\t Costs:{costs}')
-        save_videos(images[episode], env, episode, foldername)
+        generate_videos(images[episode], env, episode, foldername)
         # create_gif(images[episode], f'{foldername}/episode{episode}-{episode_length}steps.gif', duration=0.01)
         episode += 1
 
@@ -248,35 +249,6 @@ def test(train_distb_type, train_distb_level, train_seed, obs_noise, test_distb_
         play_and_save(ac, env, num_videos, foldername)
 
 
-# def generate_videos(frames, save_path, idx, fps):
-#     # Initialize video writer
-#     video_path = f'{save_path}/output{idx}.mp4'
-#     # out = cv2.VideoWriter(video_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (frames[0].shape[1], frames[0].shape[0]))
-#     # # Write each frame to the video
-#     # for frame in frames:
-#     #     # Convert RGBA to BGR
-#     #     bgr_frame = cv2.cvtColor((frame * 255).astype(np.uint8), cv2.COLOR_RGBA2BGR)
-#     #     out.write(bgr_frame)
-#     fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # You can use other codecs as well (e.g., 'XVID')
-#     out = cv2.VideoWriter(video_path, fourcc, fps, (frames[0].shape[1], frames[0].shape[0]))
-
-#     # Write frames to the video file
-#     for image in frames:
-#         image = np.asarray(image, dtype=np.uint8)
-#         out.write(image)
-#     # Release video writer
-#     out.release()
-#     print(f"[INFO] The video {idx} is saved as: {video_path}.")
-
-
-# # Function to create GIF
-# def generate_gifs(frames, save_path, idx, duration=0.1):
-#     images = []
-#     for frame in frames:
-#         images.append(frame.astype(np.uint8))  # Convert to uint8 for imageio
-#     imageio.mimsave(f'{save_path}/gif{idx+1}.gif', images, duration=duration)
-
-
 
 if __name__ == '__main__':
     #### Define and parse (optional) arguments for the script ##
@@ -295,4 +267,3 @@ if __name__ == '__main__':
     test(train_distb_type=args.train_distb_type, train_distb_level=args.train_distb_level, 
          train_seed=args.train_seed, obs_noise=args.obs_noise, test_distb_type=args.test_distb_type, 
          test_distb_level=args.test_distb_level, num_videos=args.num_videos, save=args.save)
- # test(train_distb_type, train_distb_level, train_seed, test_distb_type, test_distb_level, num_videos, save):
