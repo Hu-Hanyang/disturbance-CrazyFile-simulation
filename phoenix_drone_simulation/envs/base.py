@@ -38,7 +38,7 @@ class DroneBaseEnv(gym.Env, abc.ABC):
             graphics=False,
             latency: float = 0.015,  # [s]  # latency is used when the latency (0.015s) >= 1 / sim_freq (0.005s), it works here
             motor_time_constant: float = 0.080,  # [s]  # the default setting is to use the motor dynamics in the agent class
-            motor_thrust_noise: float = 0.0,  # Hanyang: default 0.05, noise in % added to thrusts?
+            motor_thrust_noise: float = 0.05,  # Hanyang: default 0.05, noise in % added to thrusts?
             observation_frequency: int = 100,
             observation_history_size: int = 1,  # Hanyang: the number of history to be used for observation to the policy input
             observation_noise=0.0,  # default: no noise added to obs
