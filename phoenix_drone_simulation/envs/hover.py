@@ -253,6 +253,8 @@ class DroneHoverBaseEnv(DroneBaseEnv):
         quat = self.init_quaternion.copy()
 
         if self.enable_reset_distribution:  # Hanyang: default True
+            #TODO: Hanyang: add one attribute to make the result reproducible
+            # np.random.seed(self.initial_seed)
             pos_lim = 0.25   # should be at least 0.15 for hover task since position PID shoots up to (0,0,1.15)
 
             pos += np.random.uniform(-pos_lim, pos_lim, size=3)

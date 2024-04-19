@@ -20,7 +20,7 @@ class DroneHoverFixedDistbEnv(DroneHoverBaseEnv):
                  control_mode='PWM',
                  observation_noise=1,  # must be positive in order to add noise
                  domain_randomization: float = -1,
-                 enable_reset_distribution=True,
+                 enable_reset_distribution=True,  # Hanyang: enable randomized intial states
                  distb_level=1.0,  # Hanyang: try different values to see the upperbound
                  **kwargs):
         super(DroneHoverFixedDistbEnv, self).__init__(
@@ -156,7 +156,7 @@ class DroneHoverBoltzmannDistbEnv(DroneHoverBaseEnv):
                  control_mode='PWM',
                  observation_noise=1,  # must be positive in order to add noise
                  domain_randomization: float = -1,  # use 10% DR as default
-                 enable_reset_distribution=True, 
+                 enable_reset_distribution=True, # Hanyang: enable randomized intial states
                  **kwargs):
         super(DroneHoverBoltzmannDistbEnv, self).__init__(
             aggregate_phy_steps=aggregate_phy_steps,
