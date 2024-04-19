@@ -256,7 +256,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--train_distb_type',         default="boltzmann",      type=str,           help='Type of disturbance to be applied to the drones [None, "fixed", "boltzmann", "random", "rarl", "rarl-population"] (default: "fixed")', metavar='')
     parser.add_argument('--train_distb_level',        default=0.0,          type=float,         help='Level of disturbance to be applied to the drones (default: 0.0)', metavar='')
-    parser.add_argument('--train_seed',               default=40226,        type=int,           help='Seed for the random number generator (default: 40226)', metavar='')
+    parser.add_argument('--train_seed',               default=42        type=int,           help='Seed for the random number generator (default: 40226)', metavar='')
     parser.add_argument('--obs_noise',                default=1,          type=int,         help='Observation noise level (default: 0.0)', metavar='')
     parser.add_argument('--test_distb_type',    default="fixed",      type=str,           help='Type of disturbance in the test environment', metavar='')
     parser.add_argument('--test_distb_level',   default=1.0,          type=float,         help='Level of disturbance in the test environment', metavar='')
