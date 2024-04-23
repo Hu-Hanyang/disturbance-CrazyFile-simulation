@@ -135,6 +135,11 @@ Notice: the environment in test also needs to change while we want to see differ
 
    python -m phoenix_drone_simulation.play --ckpt training_results/boltzmann/seed_40226 --env 'DroneHoverBulletEnvWithAdversary-v0' 
    
+   python -m phoenix_drone_simulation.play --ckpt results_train_crazyflie/DroneHoverBulletEnvWithoutAdversary-v0/ppo/2024_02_06_15_50/seed_50658 --env 'DroneHoverBulletEnvWithAdversary-v0' --save
+
+   python -m phoenix_drone_simulation.play --ckpt training_results/boltzmann/seed_40226/obs_noise_1backup --env 'DroneHoverBulletEnvWithAdversary-v0' --save
+   
+   training_results/boltzmann/seed_40226/obs_noise_1backup
 
 6. Test with trained model in different envs and save the videos:
    `python -m phoenix_drone_simulation.play --ckpt PATH_TO_CKPT --env 'DroneHoverBulletEnvWithAdversary-v0'  --save`

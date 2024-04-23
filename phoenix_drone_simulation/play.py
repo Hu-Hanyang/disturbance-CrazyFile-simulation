@@ -309,7 +309,7 @@ if __name__ == '__main__':
         print(f"Now we are saving the videos.")
         print("-"*150)
 
-        play_and_save(actor_critic=ac, env=env, trained_env=trained_env, trained_distb=env_distb, episodes=4, noise=args.noise)
+        play_and_save(actor_critic=ac, env=env, trained_env=trained_env, trained_distb=env_distb, episodes=3, noise=args.noise)
     
     elif args.gif:
         #TODO: not finished save the images using render function

@@ -310,7 +310,8 @@ class UAVSolution(object):
         self.targ = self.FasTrackTarget(self.grid, [2], np.zeros(6)) 
         small_number = 1e-5
         tau = np.arange(start=0, stop=self.lookback_length + small_number, step=self.t_step)
-        compMethods = { "TargetSetMode": "maxVWithV0"}  # In this example, we compute based on FasTrack 
+        #TODO: Hanyang: check the TargetSetMode, it should be "minVWithV0" for reaching problem
+        compMethods = { "TargetSetMode": "minVWithV0"}  # "maxVWithV0" In this example, we compute based on FasTrack 
         slice = int((self.grid_num_1-1)/2)
         self.po = PlotOptions(do_plot=False, plot_type="3d_plot", plotDims=[0,1,2], slicesCut=[int((self.grid_num_1-1)/2),int((self.grid_num_1-1)/2),int((self.grid_num_1-1)/2)])
         self.result = HJSolver(self.dyn, self.grid, self.targ, tau, compMethods, self.po, saveAllTimeSteps=False)

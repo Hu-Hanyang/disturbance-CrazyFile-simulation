@@ -509,6 +509,7 @@ class DroneHoverBulletEnvWithRandomHJAdversary(DroneHoverBaseEnv):
     def __init__(self,
                  aggregate_phy_steps=2,  # sub-steps used to calculate motor dynamics
                  control_mode='PWM',
+                 observation_noise=1.0,
                  **kwargs):
         super(DroneHoverBulletEnvWithRandomHJAdversary, self).__init__(
             aggregate_phy_steps=aggregate_phy_steps,
@@ -517,6 +518,7 @@ class DroneHoverBulletEnvWithRandomHJAdversary(DroneHoverBaseEnv):
             physics='PybulletPhysicsWithAdversary',  # physics env, not the concept in rl
             observation_frequency=100,  # use 100Hz PWM control loop
             sim_freq=200,  # but step physics with 200Hz
+            observation_noise=observation_noise,
             **kwargs
         )
 
