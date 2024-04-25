@@ -15,7 +15,7 @@ def start_training(algo, env_id):
 
     # Create a seed for the random number generator
     # random_seed = int(time.time()) % 2 ** 16   # 40226 
-    random_seed = 40226
+    random_seed = 42
 
     # I usually save my results into the following directory:
     default_log_dir = f"results_train_crazyflie"
@@ -30,16 +30,16 @@ def start_training(algo, env_id):
     )
     model.compile()  # set up the logger and the parallelized environment
 
-    # start_time = time.perf_counter()
+    start_time = time.perf_counter()
 
-    # # 2) Train model - it takes typically at least 100 epochs for training
-    # model.fit(epochs=301)
+    # 2) Train model - it takes typically at least 100 epochs for training
+    model.fit(epochs=301)
 
-    # duration = time.perf_counter() - start_time
-    # print(f"The time of training is {duration//3600}hours-{(duration%3600)//60}minutes-{(duration%3600)%60}seconds. \n")
-    # # 3) Benchmark the f
-    # # inal policy and save results into `returns.csv`
-    # model.eval()
+    duration = time.perf_counter() - start_time
+    print(f"The time of training is {duration//3600}hours-{(duration%3600)//60}minutes-{(duration%3600)%60}seconds. \n")
+    # 3) Benchmark the f
+    # inal policy and save results into `returns.csv`
+    model.eval()
     
 if __name__ == "__main__":
     algorithm = 'ppo'
