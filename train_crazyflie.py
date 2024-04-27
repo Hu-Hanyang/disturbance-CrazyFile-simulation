@@ -39,7 +39,7 @@ def start_training(algo, env_id):
     print(f"The time of training is {duration//3600}hours-{(duration%3600)//60}minutes-{(duration%3600)%60}seconds. \n")
     # 3) Benchmark the f
     # inal policy and save results into `returns.csv`
-    model.eval()
+    # model.eval()
     
 if __name__ == "__main__":
     algorithm = 'ppo'
