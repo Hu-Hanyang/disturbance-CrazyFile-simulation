@@ -7,25 +7,26 @@
 import torch
 import os
 from typing import Optional
-
-from phoenix_drone_simulation.utils.loggers import setup_logger_kwargs
+from phoenix_drone_simulation.utils.loggers import setup_separate_logger_kwargs
 from phoenix_drone_simulation.utils import utils
 
 
-class RARL_Model(object):
+class ModelS(object):
 
     def __init__(self,
                  alg: str,
-                 env_id: str,
+                 env,
+                 distb_type: str,
+                 distb_level: float,
                  log_dir: str,
                  init_seed: int,
                  algorithm_kwargs: dict = {},
-                 use_mpi: bool = False,
-                 adversary_model = None
+                 use_mpi: bool = False
                  ) -> None:
         """ Class Constructor  """
         self.alg = alg
-        self.env_id = env_id
+        self.distb_type = distb_type
+        self.distb_level = distb_level
         self.log_dir = log_dir
         self.init_seed = init_seed
         self.num_cores = 1  # set by compile()-method
@@ -33,32 +34,25 @@ class RARL_Model(object):
         self.compiled = False
         self.trained = False
         self.use_mpi = use_mpi
-
-        self.default_kwargs = utils.get_defaults_kwargs(alg=alg,
-                                                        env_id=env_id)
+        self.env = env
+        self.default_kwargs = utils.get_separate_defaults_kwargs(alg=alg)
         self.kwargs = self.default_kwargs.copy()
         self.kwargs['seed'] = init_seed
+        self.kwargs['distb_type'] = distb_type
+        self.kwargs['distb_level'] = distb_level
         self.kwargs.update(**algorithm_kwargs)
         self.logger_kwargs = None  # defined by compile (a specific seed might be passed)
-        self.env_alg_path = os.path.join(self.env_id, self.alg)
 
-        # assigned by class methods
-        self.actor_critic = None
-        self.env = None
-        self.kwargs['adv_policy'] = adversary_model
-        self.adversary_policy = adversary_model  # Hanyang: no use, but Joe add it to the EnvironmentEvaluator
 
     def _evaluate_model(self) -> None:
-        #TODO: Check whether to make another new file for evaluation
         from phoenix_drone_simulation.utils.evaluation import EnvironmentEvaluator
         evaluator = EnvironmentEvaluator(log_dir=self.logger_kwargs['log_dir'])
-        evaluator.eval(env=self.env, ac=self.actor_critic, num_evaluations=128 ,adv_policy=self.adversary_policy)
+        evaluator.eval(env=self.trained_env, ac=self.actor_critic, num_evaluations=128 ,adv_policy=self.adversary_policy)
         # Close opened files to avoid number of open files overflow
         evaluator.close()
 
     def compile(self,
                 num_cores=os.cpu_count(),
-                exp_name: Optional[str] = None,
                 **kwargs_update
                 ) -> object:
         """Compile the model.
@@ -76,28 +70,20 @@ class RARL_Model(object):
 
         """
         self.kwargs.update(kwargs_update)
-        _seed = self.kwargs.get('seed', self.init_seed)
-
-        if exp_name is not None:
-            exp_name = os.path.join(self.env_alg_path, exp_name)
-        else:
-            exp_name = self.env_alg_path
-        self.logger_kwargs = setup_logger_kwargs(base_dir=self.log_dir,
-                                                 exp_name=exp_name,
-                                                 seed=_seed)
+        self.logger_kwargs = dict(log_dir=self.log_dir, level=1, use_tensor_board=True, verbose=True)
         self.compiled = True
         self.num_cores = num_cores
         return self
 
     def _eval_once(self, actor_critic, env, render) -> tuple:
         done = False
-        self.env.render() if render else None
-        x = self.env.reset()
+        self.trained_env.render() if render else None
+        x = self.trained_env.reset()
         ret = 0.
         costs = 0.
         episode_length = 0
         while not done:
-            self.env.render() if render else None
+            self.trained_env.render() if render else None
             obs = torch.as_tensor(x, dtype=torch.float32)
             action, value, info = actor_critic(obs)
             x, r, done, info = env.step(action)
@@ -135,21 +121,19 @@ class RARL_Model(object):
         else:
             self.kwargs.pop('epochs')  # pop to avoid double kwargs
 
-        # fit() can also take a custom env, e.g. a virtual environment
-        env_id = self.env_id if env is None else env
-
-        learn_func = utils.get_learn_function(self.alg)  # the learn_func is outside the class of the algorithm
+        learn_func = utils.get_learn_function(self.alg)  # Hanyang: the learn_func is outside the class of the algorithm
         ac, env = learn_func(
-            env_id=env_id,
-            logger_kwargs=self.logger_kwargs,
+            env=self.env,
+            logger_kwargs=self.logger_kwargs,  # Hanyang: self.logger_kwargs is initialized in model.compile()
             epochs=epochs,
             **self.kwargs
         )
         self.actor_critic = ac
-        self.env = env
+        self.trained_env = env
         self.trained = True
+        self.actor_critic.eval()
         
-        return self.actor_critic, self.env
+        return self.actor_critic, self.trained_env
 
     def play(self) -> None:
         """ Visualize model after training."""
