@@ -44,14 +44,15 @@ class ModelS(object):
         self.logger_kwargs = None  # defined by compile (a specific seed might be passed)
 
 
-    def _evaluate_model(self) -> None:
+    def _evaluate_model(self, adv_policy) -> None:
         from phoenix_drone_simulation.utils.evaluation import EnvironmentEvaluator
         evaluator = EnvironmentEvaluator(log_dir=self.logger_kwargs['log_dir'])
-        evaluator.eval(env=self.trained_env, ac=self.actor_critic, num_evaluations=128 ,adv_policy=self.adversary_policy)
+        evaluator.eval(env=self.trained_env, ac=self.actor_critic, num_evaluations=128 ,adv_policy=adv_policy)
         # Close opened files to avoid number of open files overflow
         evaluator.close()
 
     def compile(self,
+                env=None,
                 num_cores=os.cpu_count(),
                 **kwargs_update
                 ) -> object:
@@ -73,12 +74,10 @@ class ModelS(object):
         self.logger_kwargs = dict(log_dir=self.log_dir, level=1, use_tensor_board=True, verbose=True)
         self.compiled = True
         self.num_cores = num_cores
+        print ('using ', num_cores, ' cores')
+        if env is not None:
+            self.env = env
         return self
-    
-    def update_env(self, env):
-        self.env = env
-        self.compiled = True
-        return
 
     def _eval_once(self, actor_critic, env, render) -> tuple:
         done = False

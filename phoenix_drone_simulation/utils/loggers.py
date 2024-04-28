@@ -293,48 +293,48 @@ class Logger:
         # only the MPI root process is allowed to print information to console
         self.verbose = verbose if proc_id() == 0 else False
 
-        if proc_id() == 0:
-            os.makedirs(self.log_dir, exist_ok=True)
-            self.output_file = open(osp.join(self.log_dir, output_fname), 'w')
-            atexit.register(self.output_file.close)
-            print(colorize(f"Logging data to {self.output_file.name}",
-                           'cyan', bold=True))
-            
-            # Hanyang: log the information in each episode with a csv file 
-            self.episodic_file = osp.join(self.log_dir, "episodic_data.csv")
-            with open(self.episodic_file, mode='w', newline='') as episodic_csv:
-                writer = csv.writer(episodic_csv)
-                header = ['Episode', 'disturbance_level', 'Steps', 'Returns']
-                # Write the header to the CSV file
-                writer.writerow(header)
-            episodic_csv.close()
-            print(f"The {self.episodic_file} is created. \n")
+        # if proc_id() == 0:
+        os.makedirs(self.log_dir, exist_ok=True)
+        self.output_file = open(osp.join(self.log_dir, output_fname), 'w')
+        atexit.register(self.output_file.close)
+        print(colorize(f"Logging data to {self.output_file.name}",
+                        'cyan', bold=True))
+        
+        # Hanyang: log the information in each episode with a csv file 
+        self.episodic_file = osp.join(self.log_dir, "episodic_data.csv")
+        with open(self.episodic_file, mode='w', newline='') as episodic_csv:
+            writer = csv.writer(episodic_csv)
+            header = ['Episode', 'disturbance_level', 'Steps', 'Returns']
+            # Write the header to the CSV file
+            writer.writerow(header)
+        episodic_csv.close()
+        print(f"The {self.episodic_file} is created. \n")
 
-            # Hanyang: log the validation results with a csv file
-            self.validation_file = osp.join(self.log_dir, "validation_results.csv")
-            with open(self.validation_file, mode='w', newline='') as validation_csv:
-                writer = csv.writer(validation_csv)
-                header = ['Training_Epoch', 'disturbance_level', 'Steps', 'Returns', 'Costs']
-                # Write the header to the CSV file
-                writer.writerow(header)
-            validation_csv.close()
-            print(f"The {self.validation_file} is created. \n")
+        # Hanyang: log the validation results with a csv file
+        self.validation_file = osp.join(self.log_dir, "validation_results.csv")
+        with open(self.validation_file, mode='w', newline='') as validation_csv:
+            writer = csv.writer(validation_csv)
+            header = ['Training_Epoch', 'disturbance_level', 'Steps', 'Returns', 'Costs']
+            # Write the header to the CSV file
+            writer.writerow(header)
+        validation_csv.close()
+        print(f"The {self.validation_file} is created. \n")
 
-            # Hanyang: log the penalty (reward components) in each step with a csv file
-            self.penalty_file = osp.join(self.log_dir, "penalty_data.csv")
-            with open(self.penalty_file, mode='w', newline='') as penalty_csv:
-                writer = csv.writer(penalty_csv)
-                header = ['Step', 'Penalty_crash', 'Penalty_rpy', 'Penalty_rpy_dot', 'Penalty_z', 'Penalty_velocity', 'Penalty']
-                writer.writerow(header)
-            penalty_csv.close()
-            print(f"The {self.penalty_file} is created. \n")
+        # Hanyang: log the penalty (reward components) in each step with a csv file
+        self.penalty_file = osp.join(self.log_dir, "penalty_data.csv")
+        with open(self.penalty_file, mode='w', newline='') as penalty_csv:
+            writer = csv.writer(penalty_csv)
+            header = ['Step', 'Penalty_crash', 'Penalty_rpy', 'Penalty_rpy_dot', 'Penalty_z', 'Penalty_velocity', 'Penalty']
+            writer.writerow(header)
+        penalty_csv.close()
+        print(f"The {self.penalty_file} is created. \n")
 
-            # Hanyang: mkdir to store the gifs of validation
-            os.makedirs(os.path.join(self.log_dir, 'validation_gifs'), exist_ok=True)
-            self.validation_gifs = os.path.join(self.log_dir, 'validation_gifs')
+        # Hanyang: mkdir to store the gifs of validation
+        os.makedirs(os.path.join(self.log_dir, 'validation_gifs'), exist_ok=True)
+        self.validation_gifs = os.path.join(self.log_dir, 'validation_gifs')
 
-        else:
-            self.output_file = None
+        # else:
+        #     self.output_file = None
 
         self.epoch = 0
         self.first_row = True
