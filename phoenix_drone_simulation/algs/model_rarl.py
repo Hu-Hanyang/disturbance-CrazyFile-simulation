@@ -29,7 +29,7 @@ class ModelS(object):
         self.distb_level = distb_level
         self.log_dir = log_dir
         self.init_seed = init_seed
-        self.num_cores = 1  # set by compile()-method
+        self.num_cores = 128  # set by compile()-method
         self.training = False
         self.compiled = False
         self.trained = False
@@ -74,6 +74,11 @@ class ModelS(object):
         self.compiled = True
         self.num_cores = num_cores
         return self
+    
+    def update_env(self, env):
+        self.env = env
+        self.compiled = True
+        return
 
     def _eval_once(self, actor_critic, env, render) -> tuple:
         done = False
@@ -119,7 +124,7 @@ class ModelS(object):
         if epochs is None:
             epochs = self.kwargs.pop('epochs')
         else:
-            self.kwargs.pop('epochs')  # pop to avoid double kwargs
+            self.kwargs.pop('epochs', None)  # pop to avoid double kwargs
 
         learn_func = utils.get_learn_function(self.alg)  # Hanyang: the learn_func is outside the class of the algorithm
         ac, env = learn_func(
@@ -131,7 +136,7 @@ class ModelS(object):
         self.actor_critic = ac
         self.trained_env = env
         self.trained = True
-        self.actor_critic.eval()
+        # self.actor_critic.eval()
         
         return self.actor_critic, self.trained_env
 

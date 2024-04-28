@@ -2,6 +2,7 @@ import os
 import gym
 import time
 import numpy as np
+import torch
 import pybullet as pb
 import pybullet_data
 import phoenix_drone_simulation.envs.physics as phoenix_physics
@@ -128,7 +129,6 @@ class DroneHoverEnv(DroneHoverBaseEnv):
         angles = quat2euler(self.drone.get_state()[3:7])
         angular_rates = self.drone.get_state()[10:13]
         states = np.concatenate((angles, angular_rates), axis=0)
-
         for _ in range(self.aggregate_phy_steps):
             # Note:
             #   calculate observations aggregate_phy_steps-times to correctly
@@ -136,7 +136,7 @@ class DroneHoverEnv(DroneHoverBaseEnv):
             if self.adv_policy is None:
                 distb = np.zeros_like(action)
             else:
-                distb,_,_ = self.adv_policy(states)
+                distb,_,_ = self.adv_policy(torch.tensor(self.compute_history()).to(torch.float32))
             self.physics.step_forward(action, distb)
 
             # Note: do not delete the following line due to >100 Hz sensor noise
@@ -279,7 +279,7 @@ class DroneAdvEnv(DroneHoverBaseEnv):
             if self.env_policy is None:
                 distb = np.zeros_like(action)
             else:
-                distb, _, _ = self.env_policy(states)
+                distb, _, _ = self.env_policy(torch.tensor(self.compute_history()).to(torch.float32))
             self.physics.step_forward(action, distb)
 
             # Note: do not delete the following line due to >100 Hz sensor noise

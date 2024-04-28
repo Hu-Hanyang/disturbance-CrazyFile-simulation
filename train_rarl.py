@@ -31,47 +31,44 @@ def start_training(random_seed,algo):
     if not os.path.exists(default_log_dir_adv):
         os.makedirs(default_log_dir_adv+'/')
         
-        
-    ## set up training model hover 
+    env = DroneHoverEnv(distb_level=0)
+    env_adv = DroneAdvEnv(distb_level=0)
+    
+    model_hover = ModelS(
+        alg=algo, 
+        env = env,
+        log_dir=default_log_dir_hover,
+        init_seed=random_seed,
+        distb_type = "rarl",
+        distb_level = 0,
+    )
+    model_hover.compile()  # set up the logger and the parallelized environment
+    
+    # set up training model adv
+    model_adv = ModelS(
+        alg=algo, 
+        env = env_adv,
+        log_dir=default_log_dir_adv,
+        init_seed=random_seed,
+        distb_type = "rarl",
+        distb_level = 0,
+    )
+    model_adv.compile()  # set up the logger and the parallelized environment
+    hover_policy, _ = model_hover.fit(epochs=50)
+    dist_policy, _ = model_adv.fit(epochs=50)
 
-    for i in range(1):
-        if i == 0:
-            env = DroneHoverEnv(distb_level=0)
-            env_adv = DroneAdvEnv(distb_level=0)
-        else:
-            env = DroneHoverEnv(distb_level=0, adv_policy = dist_policy)
-            env_adv = DroneAdvEnv(distb_level=0, env_policy = hover_policy)
+
+    for i in range(8):
         
-        model_hover = ModelS(
-            alg=algo, 
-            env = env,
-            log_dir=default_log_dir_hover,
-            init_seed=random_seed,
-            distb_type = "rarl",
-            distb_level = 0,
-        )
-        model_hover.compile()  # set up the logger and the parallelized environment
-        
+        env = DroneHoverEnv(distb_level=0, adv_policy = dist_policy)
+        env_adv = DroneAdvEnv(distb_level=0, env_policy = hover_policy)
+        model_hover.update_env(env=env)
+        model_adv.update_env(env=env_adv)
         # === Train the model ===
         start_time = time.perf_counter()
-        hover_policy, _ = model_hover.fit(epochs=301)
-        duration = time.perf_counter() - start_time
-        print(f"The time of training is {duration//3600}hours-{(duration%3600)//60}minutes-{(duration%3600)%60}seconds. \n")
-        
-        ## set up training model adv
-        model_adv = ModelS(
-            alg=algo, 
-            env = env_adv,
-            log_dir=default_log_dir_adv,
-            init_seed=random_seed,
-            distb_type = "rarl",
-            distb_level = 0,
-        )
-        model_adv.compile()  # set up the logger and the parallelized environment
-        
+        hover_policy, _ = model_hover.fit(epochs=30)
         # === Train the model ===
-        start_time = time.perf_counter()
-        dist_policy, _ = model_adv.fit(epochs=301)
+        dist_policy, _ = model_adv.fit(epochs=30)
         duration = time.perf_counter() - start_time
         print(f"The time of training is {duration//3600}hours-{(duration%3600)//60}minutes-{(duration%3600)%60}seconds. \n")
         
