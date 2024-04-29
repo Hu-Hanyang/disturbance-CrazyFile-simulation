@@ -12,6 +12,7 @@ import argparse
 import numpy as np
 import psutil
 import sys
+import torch
 from phoenix_drone_simulation.utils.mpi_tools import mpi_fork
 # from phoenix_drone_simulation.algs.model import Model
 from phoenix_drone_simulation.utils import utils
@@ -45,9 +46,6 @@ def start_training(random_seed,algo):
         os.makedirs(default_log_dir_hover+'/')
     if not os.path.exists(default_log_dir_adv):
         os.makedirs(default_log_dir_adv+'/')
-        
-    env = DroneHoverEnv(distb_level=0)
-    env_adv = DroneAdvEnv(distb_level=0)
     
     model_hover = ModelS(
         alg=algo, 
@@ -72,22 +70,25 @@ def start_training(random_seed,algo):
     )
     model_adv.compile(num_cores=USE_CORES)  # set up the logger and the parallelized environment
     hover_policy, _ = model_hover.fit(epochs=50)
-    dist_policy, _ = model_adv.fit(epochs=20)
+    dist_policy, _ = model_adv.fit(epochs=45)
 
 
-    for _ in range(8):
+    for _ in range(15):
         
-        env = DroneHoverEnv(distb_level=0, adv_policy = dist_policy)
-        env_adv = DroneAdvEnv(distb_level=0, env_policy = hover_policy)
+        env = DroneHoverEnv(distb_level=0, adv_policy = dist_policy.eval())
+        env_adv = DroneAdvEnv(distb_level=0, env_policy = hover_policy.eval())
         model_hover.compile(env=env, num_cores=USE_CORES)
         model_adv.compile(env=env_adv, num_cores=USE_CORES)
         # === Train the model ===
         start_time = time.perf_counter()
-        hover_policy, _ = model_hover.fit(epochs=30)
+        hover_policy, _ = model_hover.fit(epochs=30,updated_policy=hover_policy.train())
         # === Train the model ===
-        dist_policy, _ = model_adv.fit(epochs=30)
+        dist_policy, _ = model_adv.fit(epochs=30,updated_policy=dist_policy.train())
         duration = time.perf_counter() - start_time
         print(f"The time of training is {duration//3600}hours-{(duration%3600)//60}minutes-{(duration%3600)%60}seconds. \n")
+        
+    ## save actor critic
+    torch.save(hover_policy, 'hover_policy.pt')
         
     # # === Evaluate the model ===
     # model_hover._evaluate_model(dist_policy)

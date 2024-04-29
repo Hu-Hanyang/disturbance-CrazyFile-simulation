@@ -114,6 +114,11 @@ def load_actor_critic(file_name_path: str) -> tuple:
     else:
         print("No trained model!")
 
+    # model_path = '/home/xilun/disturbance-CrazyFlie-simulation/hover_policy.pt'
+    model_path = '/home/xilun/disturbance-CrazyFlie-simulation/training_results/HoverMulti-CORE/seed_42/torch_save/model29.pt'
+    # model_path = '/home/xilun/disturbance-CrazyFlie-simulation/training_results/AdvMulti-CORE/seed_42/torch_save/model29.pt'
+    # model_path = '/home/xilun/disturbance-CrazyFlie-simulation/training_results/HoverMulti-CORE/seed_42/model49.pt'
+    # ac = torch.load(model_path)
     ac.load_state_dict(torch.load(model_path), strict=False)
     print(f'Successfully loaded model from: {model_path}')
 
@@ -219,7 +224,7 @@ def play_after_training(actor_critic, env):
 def test(train_distb_type, train_distb_level, train_seed, obs_noise, test_distb_type, test_distb_level, num_videos, save):
 
     #### Load the trained model ###################################
-    file_name_path = '/home/xilun/disturbance-CrazyFlie-simulation/training_results/HoverMulti-CORE/seed_42'
+    file_name_path = '/home/xilun/disturbance-CrazyFlie-simulation/training_results/AdvMulti-CORE/seed_42'
     ac, training_env, env_distb = load_actor_critic(file_name_path)
     
     #### Create the environment and make save path ################################

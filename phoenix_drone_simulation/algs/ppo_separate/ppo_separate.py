@@ -14,9 +14,10 @@ class ProximalPolicyOptimizationAlgorithm_Separate(iwpg_separate.IWPGAlgorithm_S
             self,
             alg='ppo_separate',
             clip_ratio: float = 0.2,
+            updated_policy = None,
             **kwargs
     ):
-        super().__init__(alg=alg, **kwargs)
+        super().__init__(alg=alg, updated_policy=updated_policy, **kwargs)
         self.clip_ratio = clip_ratio
 
     def compute_loss_pi(self, data):
@@ -43,11 +44,11 @@ class ProximalPolicyOptimizationAlgorithm_Separate(iwpg_separate.IWPGAlgorithm_S
 def get_alg(env_id, **kwargs) -> ProximalPolicyOptimizationAlgorithm_Separate:
     return ProximalPolicyOptimizationAlgorithm_Separate(**kwargs)
 
-def learn(**kwargs) -> tuple:
+def learn(updated_policy, **kwargs) -> tuple:
     defaults = utils.get_separate_defaults_kwargs(alg='ppo_separate')
     defaults.update(**kwargs)
     # print(f"In ppo.py file, the dist level is {defaults['distb_level']}")
-    alg = ProximalPolicyOptimizationAlgorithm_Separate(**defaults)
+    alg = ProximalPolicyOptimizationAlgorithm_Separate(updated_policy=updated_policy, **defaults)
     ac, env = alg.learn()
 
     return ac, env

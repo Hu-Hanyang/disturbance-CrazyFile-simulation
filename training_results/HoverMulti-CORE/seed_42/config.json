@@ -88,7 +88,7 @@
                                 "shape":	[
                                     17
                                 ],
-                                "training":	true
+                                "training":	false
                             }
                         },
                         "pi":	{
@@ -116,7 +116,7 @@
                                 "act_dim":	4,
                                 "obs_dim":	17,
                                 "shared":	null,
-                                "training":	true,
+                                "training":	false,
                                 "weight_initialization":	"kaiming_uniform"
                             }
                         },
@@ -147,7 +147,7 @@
                                 "shape":	[
                                     1
                                 ],
-                                "training":	true
+                                "training":	false
                             }
                         },
                         "v":	{
@@ -170,7 +170,7 @@
                                 "_parameters":	{},
                                 "_state_dict_hooks":	{},
                                 "_state_dict_pre_hooks":	{},
-                                "training":	true
+                                "training":	false
                             }
                         }
                     },
@@ -197,7 +197,7 @@
                     "obs_shape":	[
                         17
                     ],
-                    "training":	true
+                    "training":	false
                 }
             },
             "agent_params":	{
@@ -214,7 +214,7 @@
             "disturbance_level":	0,
             "domain_randomization":	-1,
             "drone":	{
-                "<phoenix_drone_simulation.envs.agents.CrazyFlieBulletAgentWithAdversary object at 0x7f2077020160>":	{
+                "<phoenix_drone_simulation.envs.agents.CrazyFlieBulletAgentWithAdversary object at 0x7f05004101f0>":	{
                     "A":	"[0.9375 0.9375 0.9375 0.9375]",
                     "B":	"[0.0625 0.0625 0.0625 0.0625]",
                     "COLLISION_H":	0.025,
@@ -275,7 +275,7 @@
                     "buf_size":	2,
                     "color":	"[1. 1. 1. 1.]",
                     "control":	{
-                        "<phoenix_drone_simulation.envs.control.PWM object at 0x7f2076fbf850>":	{
+                        "<phoenix_drone_simulation.envs.control.PWM object at 0x7f0500410e20>":	{
                             "bc":	"pybullet",
                             "control_counter":	0,
                             "drone":	"Already dumped elsewhere (stop recursion)",
@@ -302,7 +302,7 @@
                     "rpy_dot":	"[0. 0. 0.]",
                     "self_collision":	false,
                     "thrust_noise":	{
-                        "<phoenix_drone_simulation.envs.utils.OUNoise object at 0x7f2076fbff70>":	{
+                        "<phoenix_drone_simulation.envs.utils.OUNoise object at 0x7f05004446a0>":	{
                             "action_dimension":	4,
                             "mu":	0,
                             "sigma":	0.010000000000000002,
@@ -326,11 +326,11 @@
             "enable_reset_distribution":	true,
             "g":	9.8,
             "gyro_lpf":	{
-                "<phoenix_drone_simulation.envs.utils.LowPassFilter object at 0x7f2077020e20>":	{
+                "<phoenix_drone_simulation.envs.utils.LowPassFilter object at 0x7f050042ee50>":	{
                     "K":	1.0,
                     "T":	0.01,
                     "T_s":	0.005,
-                    "_x":	"[-0.03290298 -0.00737567  0.00871716]"
+                    "_x":	"[-0.06624279 -0.14923461 -0.01469625]"
                 }
             },
             "id":	"DroneHoverFixedDistbEnv",
@@ -402,7 +402,7 @@
             "penalty_z":	0.0,
             "penalty_z_log":	0.0,
             "physics":	{
-                "<phoenix_drone_simulation.envs.physics.PybulletPhysicsWithAdversary object at 0x7f2076fbf790>":	{
+                "<phoenix_drone_simulation.envs.physics.PybulletPhysicsWithAdversary object at 0x7f0500444cd0>":	{
                     "G":	9.81,
                     "bc":	"pybullet",
                     "drone":	"Already dumped elsewhere (stop recursion)",
@@ -416,11 +416,11 @@
             "roll_pitch_limit":	0.17453292519943295,
             "rpy_dot_limit":	3.490658503988659,
             "sensor_noise":	{
-                "<phoenix_drone_simulation.envs.sensors.SensorNoise object at 0x7f2076fbfdf0>":	{
+                "<phoenix_drone_simulation.envs.sensors.SensorNoise object at 0x7f0500444880>":	{
                     "acc_dynamic_noise_ratio":	0.005,
                     "acc_static_noise_std":	0.002,
                     "bypass":	false,
-                    "gyro_bias":	"[-4.85188024e-06  3.62114585e-04  1.80710084e-04]",
+                    "gyro_bias":	"[ 1.00169770e-04  2.85659048e-04 -8.21411900e-05]",
                     "gyro_bias_correlation_time":	1000.0,
                     "gyro_noise_density":	0.000175,
                     "gyro_random_walk":	0.0105,
@@ -433,7 +433,7 @@
                     "vel_unif_range":	0.0
                 }
             },
-            "state":	"[-1.78086607e-03  4.85224400e-04  1.00153919e+00  3.14081447e-04\n  1.24580172e-03 -1.23189067e-03  9.99998416e-01  1.46962611e-02\n -1.51882357e-02  4.74854193e-03 -6.58059688e-02 -1.47513425e-02\n  1.74343201e-02  0.00000000e+00  0.00000000e+00  0.00000000e+00\n  0.00000000e+00]",
+            "state":	"[ 8.87942723e-04  2.43837489e-03  1.00037555e+00 -7.41885029e-04\n -1.02694624e-03  4.99200442e-04  9.99999073e-01  1.01168004e-03\n -1.01870478e-02 -5.27201693e-03 -1.32485579e-01 -2.98469217e-01\n -2.93925028e-02  0.00000000e+00  0.00000000e+00  0.00000000e+00\n  0.00000000e+00]",
             "stored_state_id":	-1,
             "target_pos":	"[0. 0. 1.]",
             "target_rpy":	"[0. 0. 0.]",
@@ -468,6 +468,199 @@
     "train_pi_iterations":	80,
     "train_v_iterations":	5,
     "trust_region":	"plain",
+    "updated_policy":	{
+        "ActorCritic(\n  (obs_oms): OnlineMeanStd()\n  (pi): MLPGaussianActor(\n    (net): Sequential(\n      (0): Linear(in_features=17, out_features=50, bias=True)\n      (1): ReLU()\n      (2): Linear(in_features=50, out_features=50, bias=True)\n      (3): ReLU()\n      (4): Linear(in_features=50, out_features=4, bias=True)\n      (5): Identity()\n    )\n  )\n  (v): MLPCritic(\n    (net): Sequential(\n      (0): Linear(in_features=17, out_features=64, bias=True)\n      (1): Tanh()\n      (2): Linear(in_features=64, out_features=64, bias=True)\n      (3): Tanh()\n      (4): Linear(in_features=64, out_features=1, bias=True)\n      (5): Identity()\n    )\n  )\n  (ret_oms): OnlineMeanStd()\n)":	{
+            "_backward_hooks":	{},
+            "_backward_pre_hooks":	{},
+            "_buffers":	{},
+            "_forward_hooks":	{},
+            "_forward_hooks_always_called":	{},
+            "_forward_hooks_with_kwargs":	{},
+            "_forward_pre_hooks":	{},
+            "_forward_pre_hooks_with_kwargs":	{},
+            "_is_full_backward_hook":	null,
+            "_load_state_dict_post_hooks":	{},
+            "_load_state_dict_pre_hooks":	{},
+            "_modules":	{
+                "obs_oms":	{
+                    "OnlineMeanStd()":	{
+                        "_backward_hooks":	{},
+                        "_backward_pre_hooks":	{},
+                        "_buffers":	{},
+                        "_forward_hooks":	{},
+                        "_forward_hooks_always_called":	{},
+                        "_forward_hooks_with_kwargs":	{},
+                        "_forward_pre_hooks":	{},
+                        "_forward_pre_hooks_with_kwargs":	{},
+                        "_is_full_backward_hook":	null,
+                        "_load_state_dict_post_hooks":	{},
+                        "_load_state_dict_pre_hooks":	{},
+                        "_modules":	{},
+                        "_non_persistent_buffers_set":	"set()",
+                        "_parameters":	{
+                            "count":	"Parameter containing:\ntensor([10240000.])",
+                            "mean":	"Parameter containing:\ntensor([ 1.3330e-02,  1.2505e-02,  1.0650e+00,  1.1536e-03, -1.2844e-03,\n         7.9528e-03,  6.1988e-01,  6.8432e-04,  1.8278e-03, -1.5361e-02,\n        -1.4067e+01,  2.0765e+01, -9.7260e-02,  1.0971e-01,  1.1357e-01,\n         1.0903e-01,  1.1213e-01])",
+                            "std":	"Parameter containing:\ntensor([ 0.3375,  0.3044,  0.6153,  0.1560,  0.1555,  0.6904,  0.3020,  0.4252,\n         0.3964,  0.3866, 16.8880, 17.3408,  9.0175,  0.1498,  0.1423,  0.1462,\n         0.1431])"
+                        },
+                        "_state_dict_hooks":	{},
+                        "_state_dict_pre_hooks":	{},
+                        "bound":	10,
+                        "eps":	1e-05,
+                        "shape":	[
+                            17
+                        ],
+                        "training":	false
+                    }
+                },
+                "pi":	{
+                    "MLPGaussianActor(\n  (net): Sequential(\n    (0): Linear(in_features=17, out_features=50, bias=True)\n    (1): ReLU()\n    (2): Linear(in_features=50, out_features=50, bias=True)\n    (3): ReLU()\n    (4): Linear(in_features=50, out_features=4, bias=True)\n    (5): Identity()\n  )\n)":	{
+                        "_backward_hooks":	{},
+                        "_backward_pre_hooks":	{},
+                        "_buffers":	{},
+                        "_forward_hooks":	{},
+                        "_forward_hooks_always_called":	{},
+                        "_forward_hooks_with_kwargs":	{},
+                        "_forward_pre_hooks":	{},
+                        "_forward_pre_hooks_with_kwargs":	{},
+                        "_is_full_backward_hook":	null,
+                        "_load_state_dict_post_hooks":	{},
+                        "_load_state_dict_pre_hooks":	{},
+                        "_modules":	{
+                            "net":	{
+                                "Sequential(\n  (0): Linear(in_features=17, out_features=50, bias=True)\n  (1): ReLU()\n  (2): Linear(in_features=50, out_features=50, bias=True)\n  (3): ReLU()\n  (4): Linear(in_features=50, out_features=4, bias=True)\n  (5): Identity()\n)":	{
+                                    "_backward_hooks":	"max_convert_depth_reached",
+                                    "_backward_pre_hooks":	"max_convert_depth_reached",
+                                    "_buffers":	"max_convert_depth_reached",
+                                    "_forward_hooks":	"max_convert_depth_reached",
+                                    "_forward_hooks_always_called":	"max_convert_depth_reached",
+                                    "_forward_hooks_with_kwargs":	"max_convert_depth_reached",
+                                    "_forward_pre_hooks":	"max_convert_depth_reached",
+                                    "_forward_pre_hooks_with_kwargs":	"max_convert_depth_reached",
+                                    "_is_full_backward_hook":	"max_convert_depth_reached",
+                                    "_load_state_dict_post_hooks":	"max_convert_depth_reached",
+                                    "_load_state_dict_pre_hooks":	"max_convert_depth_reached",
+                                    "_modules":	"max_convert_depth_reached",
+                                    "_non_persistent_buffers_set":	"max_convert_depth_reached",
+                                    "_parameters":	"max_convert_depth_reached",
+                                    "_state_dict_hooks":	"max_convert_depth_reached",
+                                    "_state_dict_pre_hooks":	"max_convert_depth_reached",
+                                    "training":	"max_convert_depth_reached"
+                                }
+                            }
+                        },
+                        "_non_persistent_buffers_set":	"set()",
+                        "_parameters":	{
+                            "log_std":	"Parameter containing:\ntensor([-3.6256, -3.6256, -3.6256, -3.6256])"
+                        },
+                        "_state_dict_hooks":	{},
+                        "_state_dict_pre_hooks":	{},
+                        "act_dim":	4,
+                        "obs_dim":	17,
+                        "shared":	null,
+                        "training":	false,
+                        "weight_initialization":	"kaiming_uniform"
+                    }
+                },
+                "ret_oms":	{
+                    "OnlineMeanStd()":	{
+                        "_backward_hooks":	{},
+                        "_backward_pre_hooks":	{},
+                        "_buffers":	{},
+                        "_forward_hooks":	{},
+                        "_forward_hooks_always_called":	{},
+                        "_forward_hooks_with_kwargs":	{},
+                        "_forward_pre_hooks":	{},
+                        "_forward_pre_hooks_with_kwargs":	{},
+                        "_is_full_backward_hook":	null,
+                        "_load_state_dict_post_hooks":	{},
+                        "_load_state_dict_pre_hooks":	{},
+                        "_modules":	{},
+                        "_non_persistent_buffers_set":	"set()",
+                        "_parameters":	{
+                            "count":	"Parameter containing:\ntensor([10240000.])",
+                            "mean":	"Parameter containing:\ntensor([-104.3276])",
+                            "std":	"Parameter containing:\ntensor([45.5047])"
+                        },
+                        "_state_dict_hooks":	{},
+                        "_state_dict_pre_hooks":	{},
+                        "bound":	10,
+                        "eps":	1e-05,
+                        "shape":	[
+                            1
+                        ],
+                        "training":	false
+                    }
+                },
+                "v":	{
+                    "MLPCritic(\n  (net): Sequential(\n    (0): Linear(in_features=17, out_features=64, bias=True)\n    (1): Tanh()\n    (2): Linear(in_features=64, out_features=64, bias=True)\n    (3): Tanh()\n    (4): Linear(in_features=64, out_features=1, bias=True)\n    (5): Identity()\n  )\n)":	{
+                        "_backward_hooks":	{},
+                        "_backward_pre_hooks":	{},
+                        "_buffers":	{},
+                        "_forward_hooks":	{},
+                        "_forward_hooks_always_called":	{},
+                        "_forward_hooks_with_kwargs":	{},
+                        "_forward_pre_hooks":	{},
+                        "_forward_pre_hooks_with_kwargs":	{},
+                        "_is_full_backward_hook":	null,
+                        "_load_state_dict_post_hooks":	{},
+                        "_load_state_dict_pre_hooks":	{},
+                        "_modules":	{
+                            "net":	{
+                                "Sequential(\n  (0): Linear(in_features=17, out_features=64, bias=True)\n  (1): Tanh()\n  (2): Linear(in_features=64, out_features=64, bias=True)\n  (3): Tanh()\n  (4): Linear(in_features=64, out_features=1, bias=True)\n  (5): Identity()\n)":	{
+                                    "_backward_hooks":	"max_convert_depth_reached",
+                                    "_backward_pre_hooks":	"max_convert_depth_reached",
+                                    "_buffers":	"max_convert_depth_reached",
+                                    "_forward_hooks":	"max_convert_depth_reached",
+                                    "_forward_hooks_always_called":	"max_convert_depth_reached",
+                                    "_forward_hooks_with_kwargs":	"max_convert_depth_reached",
+                                    "_forward_pre_hooks":	"max_convert_depth_reached",
+                                    "_forward_pre_hooks_with_kwargs":	"max_convert_depth_reached",
+                                    "_is_full_backward_hook":	"max_convert_depth_reached",
+                                    "_load_state_dict_post_hooks":	"max_convert_depth_reached",
+                                    "_load_state_dict_pre_hooks":	"max_convert_depth_reached",
+                                    "_modules":	"max_convert_depth_reached",
+                                    "_non_persistent_buffers_set":	"max_convert_depth_reached",
+                                    "_parameters":	"max_convert_depth_reached",
+                                    "_state_dict_hooks":	"max_convert_depth_reached",
+                                    "_state_dict_pre_hooks":	"max_convert_depth_reached",
+                                    "training":	"max_convert_depth_reached"
+                                }
+                            }
+                        },
+                        "_non_persistent_buffers_set":	"set()",
+                        "_parameters":	{},
+                        "_state_dict_hooks":	{},
+                        "_state_dict_pre_hooks":	{},
+                        "training":	false
+                    }
+                }
+            },
+            "_non_persistent_buffers_set":	"set()",
+            "_parameters":	{},
+            "_state_dict_hooks":	{},
+            "_state_dict_pre_hooks":	{},
+            "ac_kwargs":	{
+                "pi":	{
+                    "activation":	"relu",
+                    "hidden_sizes":	[
+                        50,
+                        50
+                    ]
+                },
+                "val":	{
+                    "activation":	"tanh",
+                    "hidden_sizes":	[
+                        64,
+                        64
+                    ]
+                }
+            },
+            "obs_shape":	[
+                17
+            ],
+            "training":	false
+        }
+    },
     "use_entropy":	false,
     "use_exploration_noise_anneal":	true,
     "use_kl_early_stopping":	false,

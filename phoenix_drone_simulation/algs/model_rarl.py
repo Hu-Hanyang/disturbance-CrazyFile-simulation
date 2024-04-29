@@ -74,7 +74,6 @@ class ModelS(object):
         self.logger_kwargs = dict(log_dir=self.log_dir, level=1, use_tensor_board=True, verbose=True)
         self.compiled = True
         self.num_cores = num_cores
-        print ('using ', num_cores, ' cores')
         if env is not None:
             self.env = env
         return self
@@ -101,7 +100,7 @@ class ModelS(object):
         self._evaluate_model()
         self.actor_critic.train()  # switch back to train mode
 
-    def fit(self, epochs=None, env=None) -> None:
+    def fit(self, epochs=None, env=None, updated_policy=None) -> None:
         """ Train the model for a given number of epochs.
 
         Parameters
@@ -119,7 +118,6 @@ class ModelS(object):
 
         """
         assert self.compiled, 'Call model.compile() before model.fit()'
-
         if epochs is None:
             epochs = self.kwargs.pop('epochs')
         else:
@@ -130,6 +128,7 @@ class ModelS(object):
             env=self.env,
             logger_kwargs=self.logger_kwargs,  # Hanyang: self.logger_kwargs is initialized in model.compile()
             epochs=epochs,
+            updated_policy=updated_policy,
             **self.kwargs
         )
         self.actor_critic = ac

@@ -64,6 +64,7 @@ class IWPGAlgorithm_Separate(core.OnPolicyGradientAlgorithm):
             seed: int = 0,
             video_freq: int = -1,  # set to positive integer for video recording
             val_freq: int = 50,  # Hanyang: set to positive integer for validation
+            updated_policy=None,
             **kwargs  # use to log parameters from child classes
     ):
 
@@ -107,7 +108,7 @@ class IWPGAlgorithm_Separate(core.OnPolicyGradientAlgorithm):
         self.use_standardized_advantages = use_standardized_advantages
         self.video_freq = video_freq
         self.vf_lr = vf_lr
-        
+        self.updated_policy = updated_policy
         # Hanyang: record the information in each episode
         self.num_episodes = 0
 
@@ -129,16 +130,19 @@ class IWPGAlgorithm_Separate(core.OnPolicyGradientAlgorithm):
         self.env.seed(seed=seed)
 
         # === Setup actor-critic module
-        self.ac = core.ActorCritic(
-            actor_type=actor,
-            observation_space=self.env.observation_space,
-            action_space=self.env.action_space,
-            use_standardized_obs=use_standardized_obs,
-            use_scaled_rewards=use_reward_scaling,
-            use_shared_weights=use_shared_weights,
-            weight_initialization=weight_initialization,
-            ac_kwargs=ac_kwargs
-        )
+        if updated_policy:
+            self.ac = updated_policy
+        else:
+            self.ac = core.ActorCritic(
+                actor_type=actor,
+                observation_space=self.env.observation_space,
+                action_space=self.env.action_space,
+                use_standardized_obs=use_standardized_obs,
+                use_scaled_rewards=use_reward_scaling,
+                use_shared_weights=use_shared_weights,
+                weight_initialization=weight_initialization,
+                ac_kwargs=ac_kwargs
+            )
 
         # === set up MPI specifics
         self._init_mpi()
@@ -371,7 +375,15 @@ class IWPGAlgorithm_Separate(core.OnPolicyGradientAlgorithm):
             next_o, r, d, info = self.env.step(a)
             ep_ret += r
             ep_len += 1
-
+            # print ('###############logp##############: ', logp, type(logp))
+            if isinstance(logp, np.ndarray):
+                logp = np.mean(logp)
+            elif isinstance(logp, list):
+                logp = sum(logp) / len(logp)
+            else:
+                logp = logp
+                
+            # print ('###############logp##############: ', logp, type(logp))
             # save and log
             # Notes:
             #   - raw observations are stored to buffer (later transformed)
