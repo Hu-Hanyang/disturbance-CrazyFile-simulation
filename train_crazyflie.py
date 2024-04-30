@@ -15,7 +15,7 @@ def start_training(algo, env_id):
 
     # Create a seed for the random number generator
     # random_seed = int(time.time()) % 2 ** 16   # 40226 
-    random_seed = 42
+    random_seed = 2024
 
     # I usually save my results into the following directory:
     default_log_dir = f"results_train_crazyflie"
