@@ -1,6 +1,5 @@
 import cv2
 import time
-import time
 import argparse
 import os
 import torch
